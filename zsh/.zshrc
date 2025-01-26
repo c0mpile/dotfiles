@@ -1,10 +1,6 @@
 # zsh configuration          
 # https://github.com/c0mpile/ 
 
-# pywal
-(cat ~/.cache/wallust/sequences &)
-source ~/.cache/wallust/colors-tty.sh # tty support
-
 # Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -21,15 +17,14 @@ HISTSIZE='100000'
 HISTFILE="$HOME/.zsh_history"
 SAVEHIST="$HISTSIZE"
 HISTDUP="erase"
-GHOSTTY_RESOURCES="$HOME/.config/ghostty/themes"
 
 # Load powerlevel10k
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
 
-if [[ $TERM =~ "^(xterm-256color|xterm-kitty|xterm-ghostty|foot|alacritty)$" ]]; then
-  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [[ $TERM_PROGRAM =~ iTerm ]] || [[ $COLORTERM = truecolor ]]; then
+  source ~/.p10k.zsh
 else
-  [[ ! -f ~/.p10k-ascii-8color.zsh ]] || source ~/.p10k-ascii-8color.zsh
+  source ~/.p10k-ascii-8color.zsh
 fi
 
 # set options
