@@ -7,7 +7,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Environment variables
-PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$HOME/.fzf/bin:$PATH" 
+PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$HOME/.fzf/bin:/opt:$PATH" 
 ZDOTDIR="$HOME/.config/zsh"
 ZPLUGINDIR="${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}"
 ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${ZDOTDIR:-$HOME/.config/zsh}/cache}"
@@ -107,5 +107,7 @@ alias sudo='sudo '
 alias mkdir='mkdir -pv'
 alias fu='fuck'
 alias rsync='rsync -a --info=progress2'
+alias reboot='systemctl reboot'
+alias poweroff='systemctl poweroff'
 alias wgu='sudo wg-quick up wg0'
 alias wgd='sudo wg-quick down wg0'

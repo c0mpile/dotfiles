@@ -16,17 +16,17 @@ TEMPLATE_SRC = {
     "light": os.path.join(SCRIPT_DIR, "light.lua")
 }
 TEMPLATE_DST = {
-    "dark": f"{HOME_DIR}/.config/wallust/templates/base46-dark.lua",
-    "light": f"{HOME_DIR}/.config/wallust/templates/base46-light.lua"
+    "dark": f"{HOME_DIR}/.config/wal/templates/base46-dark.lua",
+    "light": f"{HOME_DIR}/.config/wal/templates/base46-light.lua"
 }
 CACHE_SRC = {
-    "dark": f"{HOME_DIR}/.cache/wallust/base46-dark.lua",
-    "light": f"{HOME_DIR}/.cache/wallust/base46-light.lua"
+    "dark": f"{HOME_DIR}/.cache/wal/base46-dark.lua",
+    "light": f"{HOME_DIR}/.cache/wal/base46-light.lua"
 }
 CACHE_DST = f"{HOME_DIR}/.local/share/nvim/lazy/base46/lua/base46/themes/chadwal.lua"
 FALLBACK_THEME = f"{HOME_DIR}/.local/share/nvim/lazy/base46/lua/base46/themes/gruvchad.lua"
 LOCK_FILE = "/tmp/wal_nvim_lock"
-COLORS_FILE = f"{HOME_DIR}/.cache/wallust/colors"
+COLORS_FILE = f"{HOME_DIR}/.cache/wal/colors"
 
 # Utility functions
 def is_dark(hex_color):
