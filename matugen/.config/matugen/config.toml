@@ -43,11 +43,11 @@ output_path = '~/.config/rofi/colors.rasi'
 
 [templates.qt5ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
-output_path = '~/.config/qt5ct/colors/matugen.conf'
+output_path = '~/.config/qt5ct/colors.conf'
 
 [templates.qt6ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
-output_path = '~/.config/qt6ct/colors/matugen.conf'
+output_path = '~/.config/qt6ct/colors.conf'
 
 [templates.pywalsh]
 input_path = '~/.config/matugen/templates/colors.sh'
