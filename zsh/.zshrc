@@ -18,7 +18,6 @@ export HISTFILE="$HOME/.zsh_history"
 export SAVEHIST="$HISTSIZE"
 export HISTDUP="erase"
 export AUTOSWITCH_DEFAULT_PYTHON="/usr/bin/python3"
-export AUTOSWITCH_DEFAULTENV="defaultvenv-kaqt"
 
 # Load powerlevel10k
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
@@ -66,6 +65,9 @@ source $ZPLUGINDIR/my-zsh-plugins/sudo.zsh
 
 # Load zypper plugin
 source $ZPLUGINDIR/my-zsh-plugins/zypper.zsh
+
+# Load dots plugin
+source $ZPLUGINDIR/my-zsh-plugins/dots.zsh
 
 # Load python venv autoswitcher
 source $ZPLUGINDIR/zsh-autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh

@@ -8,3 +8,11 @@
 lazylock.json
 .ssh
 .swp
+wlogout/.config/wlogout/colors.css
+waybar/.config/waybar/colors.css
+rofi/.config/rofi/colors.rasi
+yazi/.config/yazi/theme.toml
+gtk/.config/gtk-4.0/gtk.css
+gtk/.config/gtk-3.0/gtk.css
+hyprland/.config/hypr/colors.conf
+kitty/.config/kitty/colors.conf
