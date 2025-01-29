@@ -6,7 +6,9 @@ kitty = true
 gtk_theme = true
 
 [config.wallpaper]
-set = false
+command = "swww"
+arguments = ["img", "-t", "outer", "--transition-duration", "1.5", "--transition-step", "255", "--transition-fps", "60", "-f", "Nearest"]
+set = false 
 
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland-colors.conf'
@@ -62,5 +64,9 @@ post_hook = "pywalfox update &"
 
 [templates.nvim]
 input_path = '~/.config/nvim/pywal/matugen.lua'
-output_path = '~/.cache/wal/base46-dark.lua'
-post_hook = 'killall -SIGUSER1 nvim'
+output_path = '~/.local/share/nvim/lazy/base46/lua/base46/themes/chadwal.lua'
+post_hook = 'killall -SIGUSR1 nvim'
+
+[templates.yazi]
+input_path = '~/.config/matugen/templates/colors-yazi.toml'
+output_path = '~/.config/yazi/theme.toml'

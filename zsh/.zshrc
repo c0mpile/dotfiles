@@ -65,6 +65,11 @@ source $ZPLUGINDIR/my-zsh-plugins/sudo.zsh
 # Load zypper plugin
 source $ZPLUGINDIR/my-zsh-plugins/zypper.zsh
 
+# Load python venv autoswitcher
+source $ZPLUGINDIR/zsh-autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
+
+
+
 # Style completions
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' menu no
