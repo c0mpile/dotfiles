@@ -7,16 +7,18 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Environment variables
-PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$HOME/.fzf/bin:/opt:$PATH" 
-ZDOTDIR="$HOME/.config/zsh"
-ZPLUGINDIR="${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}"
-ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${ZDOTDIR:-$HOME/.config/zsh}/cache}"
-EDITOR="nvim"
-VISUAL="nvim"
-HISTSIZE='100000'
-HISTFILE="$HOME/.zsh_history"
-SAVEHIST="$HISTSIZE"
-HISTDUP="erase"
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$HOME/.fzf/bin:/opt:$PATH" 
+export ZDOTDIR="$HOME/.config/zsh"
+export ZPLUGINDIR="${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}"
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${ZDOTDIR:-$HOME/.config/zsh}/cache}"
+export EDITOR="nvim"
+export VISUAL="nvim"
+export HISTSIZE='100000'
+export HISTFILE="$HOME/.zsh_history"
+export SAVEHIST="$HISTSIZE"
+export HISTDUP="erase"
+export AUTOSWITCH_DEFAULT_PYTHON="/usr/bin/python3"
+export AUTOSWITCH_DEFAULTENV="defaultvenv-kaqt"
 
 # Load powerlevel10k
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
