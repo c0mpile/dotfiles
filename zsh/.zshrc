@@ -8,16 +8,17 @@ fi
 
 # Environment variables
 export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$HOME/.fzf/bin:/opt:$PATH" 
-export ZDOTDIR="$HOME/.config/zsh"
-export ZPLUGINDIR="${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}"
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${ZDOTDIR:-$HOME/.config/zsh}/cache}"
+ZDOTDIR="$HOME/.config/zsh"
+ZPLUGINDIR="${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}"
+ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${ZDOTDIR:-$HOME/.config/zsh}/cache}"
 export EDITOR="nvim"
 export VISUAL="nvim"
-export HISTSIZE='100000'
-export HISTFILE="$HOME/.zsh_history"
-export SAVEHIST="$HISTSIZE"
-export HISTDUP="erase"
-export AUTOSWITCH_DEFAULT_PYTHON="/usr/bin/python3"
+HISTSIZE='100000'
+HISTFILE="$HOME/.zsh_history"
+SAVEHIST="$HISTSIZE"
+HISTDUP="erase"
+WORDCHARS='*?\'
+AUTOSWITCH_DEFAULT_PYTHON="/usr/bin/python3"
 
 # Load powerlevel10k
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
@@ -33,14 +34,10 @@ setopt autocd
 setopt glob_dots
 setopt appendhistory
 setopt sharehistory
-setopt hist_ignore_space
 setopt hist_ignore_all_dups
+setopt hist_ignore_space
 setopt hist_save_no_dups
 setopt hist_ignore_dups
-
-# Enable completion features
-autoload -Uz compinit
-compinit
 
 # Load zsh-completions
 fpath=(
@@ -65,9 +62,6 @@ source $ZPLUGINDIR/my-zsh-plugins/sudo.zsh
 
 # Load zypper plugin
 source $ZPLUGINDIR/my-zsh-plugins/zypper.zsh
-
-# Load dots plugin
-source $ZPLUGINDIR/my-zsh-plugins/dots.zsh
 
 # Load python venv autoswitcher
 source $ZPLUGINDIR/zsh-autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
@@ -95,9 +89,6 @@ eval $(thefuck --alias)
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Functions
-#source "$ZDOTDIR/functions.zsh"
 
 # Aliases
 alias v='nvim'
