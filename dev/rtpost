@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -i 's/network.port_range.set = [0-9]*-[0-9]*/network.port_range.set = '"$VOPONO_FORWARDED_PORT"'-'"$VOPONO_FORWARDED_PORT"'/g' ~/.rtorrent.rc
