@@ -87,9 +87,6 @@ bindkey  "^[[3~"  delete-char
 # Configure thefuck
 eval $(thefuck --alias)
 
-# Enable fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # Aliases
 alias v='nvim'
 alias vi='nvim'
@@ -102,7 +99,7 @@ alias la='eza --icons=always -a --group-directories-first --no-quotes'
 alias ll='eza --icons=always -lah --smart-group --group-directories-first --no-quotes'
 alias ldot='eza --icons=always -ldh --group-directories-first --no-quotes .*'
 alias tree='tree -a -I .git'
-
+alias cat='bat'
 alias sudo='sudo '
 alias mkdir='mkdir -pv'
 alias fu='fuck'
