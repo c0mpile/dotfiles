@@ -1,3 +1,0 @@
-#!/bin/bash
-
-sed -i 's/portrange = ([0-9]*, [0-9]*)/portrange = ('"$VOPONO_FORWARDED_PORT"', '"$VOPONO_FORWARDED_PORT"')/g' ~/.config/nicotine/config
