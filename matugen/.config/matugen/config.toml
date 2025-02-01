@@ -2,13 +2,13 @@
 reload_apps = true
 
 [config.reload_apps_list]
-kitty = true
+kitty = true 
 gtk_theme = true
 
 [config.wallpaper]
-command = "swww"
-arguments = ["img", "-t", "outer", "--transition-duration", "1.5", "--transition-step", "255", "--transition-fps", "60", "-f", "Nearest"]
-set = false 
+command = "hyprctl"
+arguments = ["hyprpaper", "wallpaper", ","]
+set = true
 
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland-colors.conf'
@@ -21,17 +21,17 @@ output_path = '~/.config/kitty/colors.conf'
 post_hook = "killall -SIGUSR1 kitty &"
 
 [templates.gtk3]
-input_path = '~/.config/matugen/templates/gtk-colors.css'
+input_path = '~/.config/matugen/templates/gtk3-colors.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
 
 [templates.gtk4]
-input_path = '~/.config/matugen/templates/gtk-colors.css'
+input_path = '~/.config/matugen/templates/gtk4-colors.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
 
 [templates.waybar]
 input_path = '~/.config/matugen/templates/waybar-colors.css'
 output_path = '~/.config/waybar/colors.css'
-post_hook = 'pkill -SIGUSR2 waybar'
+#post_hook = 'pkill -SIGUSR2 waybar'
 
 [templates.wlogout]
 input_path = '~/.config/matugen/templates/colors.css'

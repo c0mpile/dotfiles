@@ -1,0 +1,72 @@
+[config]
+reload_apps = true
+
+[config.reload_apps_list]
+kitty = true 
+gtk_theme = true
+
+[config.wallpaper]
+command = "hyprctl"
+arguments = ["hyprpaper", "wallpaper", ",~/.config/hypr/wallpaper.png"]
+set = true
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/colors.conf'
+post_hook = 'hyprctl reload'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+post_hook = "killall -SIGUSR1 kitty &"
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk3-colors.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk4-colors.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.waybar]
+input_path = '~/.config/matugen/templates/waybar-colors.css'
+output_path = '~/.config/waybar/colors.css'
+#post_hook = 'pkill -SIGUSR2 waybar'
+
+[templates.wlogout]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/wlogout/colors.css'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.qt5ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt5ct/colors.conf'
+
+[templates.qt6ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors.conf'
+
+[templates.pywalsh]
+input_path = '~/.config/matugen/templates/colors.sh'
+output_path = '~/.cache/wal/colors.sh'
+
+[templates.pywalwalfile]
+input_path = '~/.config/matugen/templates/wal'
+output_path = '~/.cache/wal/wal'
+
+[templates.pywaljson]
+input_path = '~/.config/matugen/templates/pywal-colors.json'
+output_path = '~/.cache/wal/colors.json'
+post_hook = "pywalfox update &"
+
+[templates.nvim]
+input_path = '~/.config/nvim/pywal/matugen.lua'
+output_path = '~/.local/share/nvim/lazy/base46/lua/base46/themes/chadwal.lua'
+post_hook = 'killall -SIGUSR1 nvim'
+
+[templates.yazi]
+input_path = '~/.config/matugen/templates/colors-yazi.toml'
+output_path = '~/.config/yazi/theme.toml'

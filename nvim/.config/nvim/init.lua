@@ -35,3 +35,27 @@ require "nvchad.autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
+-- Hyprlang LSP
+vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+		pattern = {"*.hl", "hypr*.conf"},
+		callback = function(event)
+				print(string.format("starting hyprls for %s", vim.inspect(event)))
+				vim.lsp.start {
+						name = "hyprlang",
+						cmd = {"hyprls"},
+						root_dir = vim.fn.getcwd(),
+				}
+		end
+})
+
+os.execute("python ~/.config/nvim/pywal/chadwal.py &> /dev/null &")
+
+local autocmd = vim.api.nvim_create_autocmd
+
+autocmd("Signal", {
+  pattern = "SIGUSR1",
+  callback = function()
+    require('nvchad.utils').reload()
+  end
+})

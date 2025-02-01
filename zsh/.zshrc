@@ -108,3 +108,6 @@ alias reboot='systemctl reboot'
 alias poweroff='systemctl poweroff'
 alias wgu='sudo wg-quick up wg0'
 alias wgd='sudo wg-quick down wg0'
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/kevin/.lmstudio/bin"
