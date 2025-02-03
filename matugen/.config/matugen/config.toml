@@ -70,3 +70,7 @@ post_hook = 'killall -SIGUSR1 nvim'
 [templates.yazi]
 input_path = '~/.config/matugen/templates/colors-yazi.toml'
 output_path = '~/.config/yazi/theme.toml'
+
+[templates.chromium]
+input_path = '~/.config/matugen/templates/chromium-manifest.json'
+output_path = '~/.cache/wal/material-chromium/manifest.json'

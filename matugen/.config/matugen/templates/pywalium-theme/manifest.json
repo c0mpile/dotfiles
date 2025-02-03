@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"version": "1.0",
+	"name": "Pywalium Theme",
+	"theme": {
+		"colors": {
+			"background_tab": [String to trim must be of format "rgb(r, g, b)"],
+			"background_tab_inactive": [String to trim must be of format "rgb(r, g, b)"],
+			"bookmark_text": [String to trim must be of format "rgb(r, g, b)"],
+			"button_background": [String to trim must be of format "rgb(r, g, b)"],
+			"frame": [String to trim must be of format "rgb(r, g, b)"],
+			"frame_inactive": [String to trim must be of format "rgb(r, g, b)"],
+			"ntp_background": [String to trim must be of format "rgb(r, g, b)"],
+			"ntp_header": [31, 31, 31],
+			"ntp_link": [154, 180, 184],
+			"ntp_text": [String to trim must be of format "rgb(r, g, b)"],
+			"omnibox_background": [61, 61, 61],
+			"omnibox_text": [String to trim must be of format "rgb(r, g, b)"],
+			"omnibox_text_inactive": [String to trim must be of format "rgb(r, g, b)"],
+			"tab_background_text": [String to trim must be of format "rgb(r, g, b)"],
+			"tab_background_text_inactive": [String to trim must be of format "rgb(r, g, b)"],
+   			"tab_text": [String to trim must be of format "rgb(r, g, b)"],
+   			"toolbar": [31, 31, 31],
+   			"toolbar_button_icon": [154, 180, 184],
+   			"toolbar_text": [String to trim must be of format "rgb(r, g, b)"]
+		}
+	}
+}

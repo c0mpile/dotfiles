@@ -29,7 +29,7 @@ window {
     padding:                     0px;
     border:                      2px solid;
     border-radius:               0px;
-    border-color:                @normal-background;
+    border-color:                @selected-normal-background;
     cursor:                      "default";
     background-color:            @background;
 }
@@ -40,7 +40,7 @@ mainbox {
     spacing:                     10px;
     margin:                      0px;
     padding:                     30px;
-    background-color:            transparent;
+    background-color:            @normal-background; 
     children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
 }
 
@@ -65,7 +65,7 @@ textbox-prompt-colon {
     enabled:                     true;
     padding:                     0px;
     expand:                      false;
-    str:                         "";
+    str:                         "";
     background-color:            inherit;
     text-color:                  inherit;
 }
@@ -111,7 +111,7 @@ element {
     margin:                      0px;
     padding:                     6px;
     border-radius:               0px;
-    background-color:            transparent;
+    background-color:            @normal-background;
     text-color:                  @normal-foreground;
     cursor:                      pointer;
 }
@@ -182,7 +182,7 @@ message {
     text-color:                  @normal-foreground;
 }
 textbox {
-    background-color:            transparent;
+    background-color:            @normal-background; 
     text-color:                  @normal-foreground;
     vertical-align:              0.5;
     horizontal-align:            0.0;

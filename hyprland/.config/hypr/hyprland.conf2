@@ -9,8 +9,8 @@ source = ~/.config/hypr/colors.conf
 ### MONITORS ###
 ################
 
-monitor=,highres@hifreq,auto,auto # automatically run all monitors at highest supported resolution and refresh rate
-
+monitor=DP-1,2560x1440@165,0x0,1 
+monitor=DP-2,2560x1440@165,2560x0,1 
 
 ############
 ### APPS ###
@@ -19,21 +19,20 @@ monitor=,highres@hifreq,auto,auto # automatically run all monitors at highest su
 $terminal = kitty
 $fileManager = kitty -e yazi 
 $menu = rofi
-$browser = firefox-developer-edition
+$browser = firefox
 
 #################
 ### AUTOSTART ###
 #################
 
-exec-once = hyprpanel > ~/.config/hyprpanel/logs.txt 2>&1
+exec-once = hyprpanel > $HOME/.config/hyprpanel/logs.txt 2>&1
 exec-once = hypridle
 exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 
-exec-once = waypaper-engine daemon --format 
-exec-once = rm $XDG_RUNTIME_DIR/swww.socket
 #exec-once = nm-applet
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = mako
-
+exec-once = hyprpaper &
+exec-once = matugen -t scheme-neutral image "$HOME/.config/hypr/wallpaper.png"
 
 #############################
 ### ENVIRONMENT VARIABLES ###
@@ -195,9 +194,7 @@ bind = $mainMod SHIFT, W, exec, $browser
 bind = $mainMod, Q, killactive,
 bind = $mainMod SHIFT, M, exit,
 bind = $mainMod SHIFT, L, exec, hyprlock 
-
-#bind = $mainMod, W, exec, $HOME/.config/hypr/scripts/wallpaper.sh
-bind = $mainMod, Y, exec, waypaper-engine random
+bind = $mainMod, Y, exec, matugen -t scheme-neutral image "$HOME/.config/hypr/wallpaper.png"
 
 bind = $mainMod, Space, togglefloating,
 bind = $mainMod, P, pseudo,
@@ -263,4 +260,4 @@ bindl = , XF86AudioPrev, exec, playerctl previous
 ##############################
 
 windowrulev2 = suppressevent maximize, class:.* # ignore maximize requests from apps
-#windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0 # fix XWayland window dragging issues
+windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0 # fix XWayland window dragging issues

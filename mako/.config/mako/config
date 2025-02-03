@@ -1,0 +1,26 @@
+### Mako config ###
+
+max-history=100
+sort=-time
+on-button-left=dismiss
+on-button-middle=none
+on-button-right=dismiss-all
+on-touch=dismiss
+font=LiterationMono Nerd Font 10
+width=300
+height=100
+margin=10
+padding=15
+border-size=2
+border-radius=0
+icons=0
+markup=1
+actions=1
+history=1
+text-alignment=left
+default-timeout=60
+ignore-timeout=0
+max-visible=5
+layer=overlay
+anchor=top-right
+

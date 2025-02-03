@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"version": "1.0",
+	"name": "Matugen Theme",
+	"theme": {
+		"colors": {
+			"background_tab": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"background_tab_inactive": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"bookmark_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+			"button_background": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"frame": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"frame_inactive": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"ntp_background": "[{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}]",
+			"ntp_header": "[{{colors.background.default.red | set_lightness: -12.0}}, {{colors.background.default.green | set_lightness: -12.0}}, {{colors.background.default.blue | set_lightness: -12.0}}]",
+			"ntp_link": "[{{colors.background.default.red | set_lightness: -10.0}}, {{colors.background.default.green | set_lightness: -10.0}}, {{colors.background.default.blue | set_lightness: -10.0}}]",
+			"ntp_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+			"omnibox_background": "[{{colors.background.default.red | set_lightness: -24.0}}, {{colors.background.default.green | set_lightness: -24.0}}, {{colors.background.default.blue | set_lightness: -24.0}}]",
+			"omnibox_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+			"omnibox_text_inactive": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+			"tab_background_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+			"tab_background_text_inactive": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+   			"tab_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]",
+   			"toolbar": "[{{colors.background.default.red | set_lightness: -12.0}}, {{colors.background.default.green | set_lightness: -12.0}}, {{colors.background.default.blue | set_lightness: -12.0}}]",
+   			"toolbar_button_icon": "[{{colors.background.default.red | set_lightness: -10.0}}, {{colors.background.default.green | set_lightness: -10.0}}, {{colors.background.default.blue | set_lightness: -10.0}}]",
+   			"toolbar_text": "[{{colors.foreground.default.red}}, {{colors.foreground.default.green}}, {{colors.foreground.default.blue}}]"
+		}
+	}
+}

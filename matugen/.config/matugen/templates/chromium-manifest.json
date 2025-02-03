@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "version": "1.0",
+  "name": "Matugen Theme",
+  "theme": {
+    "colors": {
+      "background_tab": [{{colors.surface.default.red}}, {{colors.surface.default.green}}, {{colors.surface.default.blue}}],
+      "background_tab_inactive": [{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}],
+      "bookmark_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "button_background": [{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}],
+      "frame": [{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}],
+      "frame_inactive": [{{colors.surface_variant.default.red}}, {{colors.surface_variant.default.green}}, {{colors.surface_variant.default.blue}}],
+      "ntp_background": [{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}],
+      "ntp_header": [{{colors.on_background.default.red | set_lightness: -12.0}}, {{colors.on_background.default.green | set_lightness: -12.0}}, {{colors.on_background.default.blue | set_lightness: -12.0}}],
+      "ntp_link": [{{colors.on_background.default.red | set_lightness: -10.0}}, {{colors.on_background.default.green | set_lightness: -10.0}}, {{colors.on_background.default.blue | set_lightness: -10.0}}],
+      "ntp_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "omnibox_background": [{{colors.surface_variant.default.red}}, {{colors.surface_variant.default.green}}, {{colors.surface_variant.default.blue}}],
+      "omnibox_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "omnibox_text_inactive": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "tab_background_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "tab_background_text_inactive": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "tab_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "toolbar": [{{colors.background.default.red}}, {{colors.background.default.green}}, {{colors.background.default.blue}}],
+      "toolbar_button_icon": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}],
+      "toolbar_text": [{{colors.on_background.default.red}}, {{colors.on_background.default.green}}, {{colors.on_background.default.blue}}]
+    }
+  },
+  "content_security_policy": {}
+}

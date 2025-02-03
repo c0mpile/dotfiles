@@ -49,6 +49,8 @@ vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
 		end
 })
 
+--require'lspconfig'."json-lsp".setup{}
+
 os.execute("python ~/.config/nvim/pywal/chadwal.py &> /dev/null &")
 
 local autocmd = vim.api.nvim_create_autocmd
