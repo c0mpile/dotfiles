@@ -90,7 +90,7 @@ eval $(thefuck --alias)
 # Aliases
 alias v='nvim'
 alias vi='nvim'
-alias vim='nvim'
+#alias vim='nvim'
 alias nv='nvim'
 
 alias l='eza --icons=always -a --group-directories-first --no-quotes'

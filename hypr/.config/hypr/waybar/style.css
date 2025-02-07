@@ -1,0 +1,161 @@
+/* 
+ * waybar configuration
+ * https://github.com/c0mpile/dotfiles
+*/
+
+/** colors **/
+@import "./colors.css";
+
+/** fonts **/
+* {
+    font-family: "LiterationSans Nerd Font", "FontAwesome", sans-serif;
+}
+
+/** main bar **/
+window#waybar {
+    background-color: @background;
+	color: @foreground;
+    opacity: 0.85;
+    border-bottom: 2px solid @background-alt1;
+}
+
+window#waybar.hidden {
+    opacity: 0.5;
+}
+
+
+/** idle inhibitor **/
+#idle_inhibitor {
+	color: @magenta;
+	font-size: 18px;
+	margin: 0px 0px 0px 0px;
+	padding: 2px 8px 2px 8px;
+}
+#idle_inhibitor.deactivated {
+    color: @red;
+}
+
+/** tray **/
+#tray {
+    margin: 6px 4px 6px 4px;
+    padding: 0px 4px 0px 4px;
+
+}
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+#tray > .active {
+}
+
+/** audio **/
+#pulseaudio.bluetooth {
+	color: @cyan;
+}
+#pulseaudio.muted {
+	color: @red;
+}
+
+#pulseaudio.2 {
+}
+#pulseaudio.2.bluetooth {
+}
+#pulseaudio.2.muted {
+}
+
+/** backlight **/
+#backlight {
+	color: @magenta;
+}
+
+/** battery **/
+#battery {
+	color: @cyan;
+}
+#battery.charging {
+}
+#battery.plugged {
+}
+@keyframes blink {
+    to {
+        color: @foreground;
+    }
+}
+#battery.critical:not(.charging) {
+}
+#battery.2.critical:not(.charging) {
+    color: @red;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/** network **/
+#network {
+	color: @magenta;
+}
+#network.disconnected,#network.disabled {
+	color: @red;
+}
+#network.linked {
+}
+#network.ethernet {
+}
+#network.wifi {
+}
+
+/** hyprland workspaces **/
+#workspaces {
+	background-color: @background;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 6px 4px 6px 4px;
+}
+#workspaces button{
+	color: @magenta;
+}
+#workspaces button.active{
+	color: @foreground;
+}
+#workspaces button.urgent{
+	color: @green;
+}
+#workspaces button.hidden{
+	color: @yellow;
+}
+
+/** Window title **/
+#window {
+    color: @foreground;
+    font-size: 14px;
+    margin: 6px 4px 6px 4px;
+}
+
+/** Common style **/
+#backlight, 
+#battery,
+#clock,
+#pulseaudio,
+#network {
+	font-size: 14px;
+    color: @magenta;
+	font-weight: bold;
+    margin: 6px 4px 6px 4px;
+    padding: 0px 2px 0px 4px;
+}
+
+#backlight.2, 
+#battery.2,
+#clock.2,
+#pulseaudio.2,
+#network.2 {
+	color: @foreground;
+	font-size: 14px;
+	font-weight: bold;
+    margin: 6px 6px 6px 0px;
+    padding: 0px 6px 0px 0px;
+}
