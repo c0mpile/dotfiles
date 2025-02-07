@@ -14,25 +14,24 @@
 /** main bar **/
 window#waybar {
     background-color: @background;
-	color: @foreground;
-    opacity: 0.85;
+  	color: @foreground;
     border-bottom: 2px solid @background-alt1;
 }
 
 window#waybar.hidden {
-    opacity: 0.5;
+    opacity: 0.85;
 }
 
 
 /** idle inhibitor **/
 #idle_inhibitor {
-	color: @magenta;
+	color: @red;
 	font-size: 18px;
 	margin: 0px 0px 0px 0px;
 	padding: 2px 8px 2px 8px;
 }
 #idle_inhibitor.deactivated {
-    color: @red;
+    color: @magenta;
 }
 
 /** tray **/
