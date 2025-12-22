@@ -1,0 +1,5 @@
+.zsh_secrets
+.stow-local-ignore
+**/*zsh_secrets
+**/dot_zsh_secrets
+**/executable_dot_zsh_secrets

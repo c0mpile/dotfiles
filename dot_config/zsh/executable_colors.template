@@ -1,0 +1,8 @@
+typeset -g ZSH_THEME_PRIMARY='{{colors.primary.default.hex}}'
+typeset -g ZSH_THEME_SECONDARY='{{colors.secondary.default.hex}}'
+typeset -g ZSH_THEME_ERROR='{{colors.error.default.hex}}'
+typeset -g ZSH_THEME_SURFACE='{{colors.surface.default.hex}}'
+typeset -g ZSH_THEME_ON_SURFACE='{{colors.on_surface.default.hex}}'
+typeset -g ZSH_THEME_ON_SURFACE_VARIANT='{{colors.on_surface_variant.default.hex}}'
+typeset -g ZSH_THEME_OUTLINE='{{colors.outline.default.hex}}'
+typeset -g ZSH_THEME_OUTLINE_VARIANT='{{colors.outline_variant.default.hex}}'

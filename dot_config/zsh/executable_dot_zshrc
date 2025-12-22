@@ -1,0 +1,162 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of $HOME/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Set Zsh dots directory if not already set (relying on correct environment, but safety check)
+ZDOTDIR=${ZDOTDIR:-$HOME/.config/zsh}
+
+# Enhanced Prompt Configuration
+# Determine if we have truecolor support
+if [[ $terminfo[Tc] == yes ]] || [[ -n $COLORTERM ]]; then
+  # Enable truecolor if not explicitly set but detected
+  if [[ -z $COLORTERM ]]; then
+    export COLORTERM=truecolor
+  fi
+  # Prefer the truecolor config
+  typeset -g p10k_config="$ZDOTDIR/.p10k.zsh"
+else
+  # Fallback to 8-color config
+  typeset -g p10k_config="$ZDOTDIR/.p10k-ascii-8color.zsh"
+fi
+
+# Pre-source the config file if it exists so p10k picks it up immediately upon load
+[[ -f $p10k_config ]] && source $p10k_config
+
+# Antidote Configuration
+# Set the location of the antidote plugin manager
+zstyle ':antidote:bundle' use-friendly-names 'yes'
+zstyle ':antidote:static' file "$ZDOTDIR/.zsh_plugins.zsh"
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all'
+
+if [[ ! -f "$ZDOTDIR/.antidote/antidote.zsh" ]]; then
+    # Clone antidote if missing
+    git clone --depth=1 https://github.com/mattmc3/antidote.git "$ZDOTDIR/.antidote"
+fi
+
+source "$ZDOTDIR/.antidote/antidote.zsh"
+antidote load "$ZDOTDIR/.zsh_plugins.txt"
+
+# Color Changes & Dynamic Reloading
+# Use built-in zstat for valid commands (stat without fork overhead)
+zmodload zsh/stat
+typeset -g _ZSH_THEME_LAST_UPDATE
+
+function _update_zsh_theme() {
+    local color_file="$ZDOTDIR/colors.zsh"
+    
+    # Load matched wallpaper colors if available
+    if [[ -f "$color_file" ]]; then
+        source "$color_file"
+    fi
+
+    if [[ -n "$ZSH_THEME_OUTLINE_VARIANT" ]]; then
+       # Use Matugen colors for autosuggestions
+       # outline_variant is the dimmest standard foreground token
+       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=${ZSH_THEME_OUTLINE_VARIANT}"
+    else
+       # Fallback: Attempt to detect background or default to high contrast
+       if [[ "$COLORFGBG" == *";15" ]] || [[ "$COLORFGBG" == *"white"* ]]; then
+          ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+       else
+          # Darker gray for dark backgrounds (was 245)
+          ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+       fi
+    fi
+
+    # Syntax Highlighting: Error color for invalid tokens (softer but very red)
+    typeset -gA ZSH_HIGHLIGHT_STYLES
+    ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=167,bold'
+
+    # Valid commands (Matugen primary or fallback green)
+    if [[ -n "$ZSH_THEME_PRIMARY" ]]; then
+        ZSH_HIGHLIGHT_STYLES[command]="fg=${ZSH_THEME_PRIMARY}"
+        ZSH_HIGHLIGHT_STYLES[alias]="fg=${ZSH_THEME_PRIMARY}"
+        ZSH_HIGHLIGHT_STYLES[builtin]="fg=${ZSH_THEME_PRIMARY}"
+        ZSH_HIGHLIGHT_STYLES[function]="fg=${ZSH_THEME_PRIMARY}"
+        
+        # P10k Directory Colors: Reload config if using unicode prompt
+        if [[ "${p10k_config:t}" == ".p10k.zsh" || -z "${p10k_config}" ]]; then
+             if [[ -f "${p10k_config:-$ZDOTDIR/.p10k.zsh}" ]]; then
+                 source "${p10k_config:-$ZDOTDIR/.p10k.zsh}"
+             fi
+        fi
+    else
+        ZSH_HIGHLIGHT_STYLES[command]="fg=113"
+        ZSH_HIGHLIGHT_STYLES[alias]="fg=113"
+        ZSH_HIGHLIGHT_STYLES[builtin]="fg=113"
+        ZSH_HIGHLIGHT_STYLES[function]="fg=113"
+        
+        # Restore P10k defaults (via reload) if primary color is unset
+        if [[ "${p10k_config:t}" == ".p10k.zsh" || -z "${p10k_config}" ]]; then
+             if [[ -f "${p10k_config:-$ZDOTDIR/.p10k.zsh}" ]]; then
+                 source "${p10k_config:-$ZDOTDIR/.p10k.zsh}"
+             fi
+        fi
+    fi
+
+    # Update timestamp using builtin
+    if [[ -f "$color_file" ]]; then
+        _ZSH_THEME_LAST_UPDATE=$(zstat +mtime "$color_file" 2>/dev/null || echo 0)
+    fi
+}
+
+function _check_zsh_theme_update() {
+    local color_file="$ZDOTDIR/colors.zsh"
+    local current_update
+    
+    if [[ -f "$color_file" ]]; then
+        # Use builtin zstat to avoid fork/exec overhead
+        current_update=$(zstat +mtime "$color_file" 2>/dev/null || echo 0)
+        
+        if [[ "$current_update" != "$_ZSH_THEME_LAST_UPDATE" ]]; then
+            _update_zsh_theme
+        fi
+    fi
+}
+
+# Initial load
+_update_zsh_theme
+
+# Add to precmd to check for updates before every prompt
+# We manually prepend to precmd_functions to ensure this runs BEFORE p10k's precmd
+# otherwise the prompt will be rendered with old colors for one cycle.
+autoload -Uz add-zsh-hook
+add-zsh-hook -d precmd _check_zsh_theme_update
+precmd_functions=(_check_zsh_theme_update ${precmd_functions:#_check_zsh_theme_update})
+
+# Keybindings & Terminal Settings
+# Disable flow control to allow Ctrl-s
+[[ -t 0 ]] && stty -ixon
+# Bind Ctrl-s to sudo-command-line (requires sudo plugin)
+bindkey '^S' sudo-command-line
+
+# History Configuration
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=${XDG_CACHE_HOME:-$HOME/.cache}/zsh_history
+setopt appendhistory
+setopt sharehistory
+setopt incappendhistory
+setopt histignorealldups
+setopt histignorespace
+
+# Source aliases
+[[ -f "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
+
+# pay respects
+if command -v pay-respects >/dev/null; then
+  eval "$(pay-respects zsh)"
+fi
+
+# zoxide
+if command -v zoxide >/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+# Load secrets if the file exists
+if [[ -f "$ZDOTDIR/.zsh_secrets" ]]; then
+    source "$ZDOTDIR/.zsh_secrets"
+fi

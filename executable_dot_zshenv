@@ -1,0 +1,23 @@
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
+export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}
+export EDITOR="nvim"
+export VISUAL="$EDITOR"
+export SUDO_EDITOR="$EDITOR"
+export JAVA_HOME="/usr/lib64/jvm/java-25-openjdk"
+export CARGO_HOME="/opt/cargo"
+export CARGO_INSTALL_ROOT="/opt/cargo"
+
+# Ensure path arrays do not contain duplicates.
+typeset -U path fpath
+
+# Set path directories
+path=(
+  $HOME/.local/bin
+  $CARGO_HOME/bin
+  $HOME/.lmstudio/bin
+  $JAVA_HOME/bin
+  $path
+)

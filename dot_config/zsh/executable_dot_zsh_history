@@ -1,0 +1,6 @@
+: 1766263696:0;cd /opt/dotfiles/zsh/.config/zsh
+: 1766263697:0;ls -d ~/.antidote ~/.local/share/antidote /usr/share/zsh-antidote /usr/local/share/zsh-antidote
+: 1766263916:0;git clone --depth=1 https://github.com/mattmc3/antidote.git /opt/dotfiles/zsh/.config/zsh/.antidote
+: 1766263968:0;zsh -n /opt/dotfiles/zsh/.config/zsh/.zshrc
+: 1766263978:0;ZDOTDIR=/opt/dotfiles/zsh/.config/zsh zsh -i -c 'echo "Zsh loaded successfully"'
+: 1766264556:0;zsh -n /opt/dotfiles/zsh/.config/zsh/.zshrc
