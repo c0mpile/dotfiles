@@ -17,7 +17,7 @@ Configuration is managed for the following:
 To bootstrap a new machine, clone this repository and run the install script:
 
 ```bash
-git clone https://github.com/yourusername/dotfiles.git ~/.local/share/chezmoi
+git clone https://github.com/c0mpile/dotfiles.git ~/.local/share/chezmoi
 cd ~/.local/share/chezmoi
 ./install.sh
 ```
