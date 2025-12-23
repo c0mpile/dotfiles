@@ -68,3 +68,12 @@ alias czd='chezmoi diff'
 alias czs='chezmoi status'
 alias cza='chezmoi add'
 alias czu='chezmoi update'
+
+# Bitwarden
+alias bws='bw status'
+alias bwl='bw login'
+
+function bw-unlock() {
+    export BW_SESSION=$(bw unlock --raw)
+}
+alias bwu='bw-unlock'
