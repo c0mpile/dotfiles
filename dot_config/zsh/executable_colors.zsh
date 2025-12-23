@@ -1,8 +1,0 @@
-typeset -g ZSH_THEME_PRIMARY='#ffb68f'
-typeset -g ZSH_THEME_SECONDARY='#e6beab'
-typeset -g ZSH_THEME_ERROR='#ffb4ab'
-typeset -g ZSH_THEME_SURFACE='#131313'
-typeset -g ZSH_THEME_ON_SURFACE='#e2e2e2'
-typeset -g ZSH_THEME_ON_SURFACE_VARIANT='#c6c6c6'
-typeset -g ZSH_THEME_OUTLINE='#919191'
-typeset -g ZSH_THEME_OUTLINE_VARIANT='#474747'

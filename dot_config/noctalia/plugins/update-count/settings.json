@@ -1,0 +1,11 @@
+{
+  "updateInterval": 3600000,
+  "configuredTerminal": "kitty -e",
+  "configuredIcon": "arrow-big-down-line",
+  "hideOnZero": true,
+  "updateIntervalMinutes": 30,
+  "updateTerminalCommand": "ghostty -e",
+  "currentIconName": "world-download",
+  "customCmdGetNumUpdates": "",
+  "customCmdDoSystemUpdate": ""
+}

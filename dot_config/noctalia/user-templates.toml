@@ -1,0 +1,7 @@
+[config]
+
+[templates]
+
+[templates.zsh_colors]
+input_path = "~/.config/zsh/colors.template"
+output_path = "~/.config/zsh/colors.zsh"
