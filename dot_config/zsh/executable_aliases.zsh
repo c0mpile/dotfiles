@@ -59,3 +59,12 @@ alias inventory='sudo nvim /srv/git/saltbox/inventories/host_vars/localhost.yml'
 
 # update rust binaries
 alias cupall='cargo install-update -ag'
+
+# Chezmoi
+alias cz='chezmoi'
+alias czp='chezmoi apply'
+alias cze='chezmoi edit'
+alias czd='chezmoi diff'
+alias czs='chezmoi status'
+alias cza='chezmoi add'
+alias czu='chezmoi update'
