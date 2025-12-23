@@ -1,5 +1,7 @@
 .git
 .gitignore
+.github
+.agent
 install.sh
 README.md
 .config/quickshell/noctalia-shell/backup
