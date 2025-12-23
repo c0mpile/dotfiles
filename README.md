@@ -51,15 +51,17 @@ This enables access to secrets used in templates without entering your master pa
 
 Common `chezmoi` aliases managed in `zsh`:
 
-| Alias | Command          | Description                              |
-| ----- | ---------------- | ---------------------------------------- |
-| `cz`  | `chezmoi`        | Base command                             |
-| `czp` | `chezmoi apply`  | Apply changes to home directory          |
-| `cze` | `chezmoi edit`   | Edit a file in the source directory      |
-| `czd` | `chezmoi diff`   | View differences between source and home |
-| `czs` | `chezmoi status` | Check status of managed files            |
-| `cza` | `chezmoi add`    | Add a file to be managed                 |
-| `czu` | `chezmoi update` | Pull changes from remote and apply       |
+| Alias  | Command          | Description                              |
+| ------ | ---------------- | ---------------------------------------- |
+| `cz`   | `chezmoi`        | Base command                             |
+| `czp`  | `chezmoi apply`  | Apply changes to home directory          |
+| `cze`  | `chezmoi edit`   | Edit a file in the source directory      |
+| `czd`  | `chezmoi diff`   | View differences between source and home |
+| `czs`  | `chezmoi status` | Check status of managed files            |
+| `cza`  | `chezmoi add`    | Add a file to be managed                 |
+| `czra` | `chezmoi re-add` | Re-add a file to be managed              |
+| `czf`  | `chezmoi forget` | Forget a file from being managed         |
+| `czu`  | `chezmoi update` | Pull changes from remote and apply       |
 
 ### Adding Features
 
@@ -67,6 +69,18 @@ To add a new configuration file:
 
 ```zsh
 cza ~/.config/app/config.conf
+```
+
+To re-add a configuration file:
+
+```zsh
+czra ~/.config/app/config.conf
+```
+
+To forget a configuration file:
+
+```zsh
+czf ~/.config/app/config.conf
 ```
 
 To edit an existing configuration:

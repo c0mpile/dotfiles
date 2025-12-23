@@ -67,6 +67,8 @@ alias cze='chezmoi edit'
 alias czd='chezmoi diff'
 alias czs='chezmoi status'
 alias cza='chezmoi add'
+alias czra='chezmoi re-add'
+alias czf='chezmoi forget'
 alias czu='chezmoi update'
 
 # Bitwarden
