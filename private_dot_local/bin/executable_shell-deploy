@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+SOURCE_DIR="$HOME/dev/noctalia-shell/"
+DEST_DIR="$HOME/.config/quickshell/noctalia-shell"
+
+echo "Deploying Noctalia Shell..."
+
+# Ensure destination exists
+mkdir -p "$DEST_DIR"
+
+# Sync files
+rsync -av \
+    --exclude '.git' \
+    --exclude '.gitignore' \
+    --exclude '.github' \
+    --exclude 'noctalia-shell.code-workspace' \
+    --exclude '.agent' \
+    "$SOURCE_DIR" "$DEST_DIR"
+
+# Add to chezmoi
+echo "Adding to chezmoi..."
+chezmoi add "$DEST_DIR"
+
+echo "Done!"
