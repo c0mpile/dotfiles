@@ -5,13 +5,4 @@
 install.sh
 README.md
 .config/quickshell/noctalia-shell/backup
-.config/quickshell/noctalia-shell/.github
-.config/quickshell/noctalia-shell/.git
 .config/quickshell/noctalia-shell/.agent
-.config/quickshell/noctalia-shell/nix
-.config/quickshell/noctalia-shell/shell.nix
-.config/quickshell/noctalia-shell/flake.nix
-.config/quickshell/noctalia-shell/flake.lock
-.config/quickshell/noctalia-shell/LICENSE
-.config/quickshell/noctalia-shell/README.md
-.config/quickshell/noctalia-shell/CREDITS.md

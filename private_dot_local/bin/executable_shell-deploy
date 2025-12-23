@@ -53,6 +53,15 @@ if [ "$MODE" == "deploy" ]; then
         --exclude '.git' \
         --exclude 'noctalia-shell.code-workspace' \
         --exclude '.gitignore' \
+        --exclude '.github' \
+        --exclude '.agent' \
+        --exclude 'nix' \
+        --exclude 'flake.nix' \
+        --exclude 'shell.nix' \
+        --exclude 'flake.lock' \
+        --exclude 'README.md' \
+        --exclude 'LICENSE' \
+        --exclude 'CREDITS.md' \
         "$SOURCE_DIR" "$DEST_DIR"
 
     # 3. Add to chezmoi
