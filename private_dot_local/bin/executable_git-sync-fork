@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+
+# Configuration
+UPSTREAM_REMOTE="upstream"
+LOCAL_TRACKING_BRANCH="upstream-main" 
+MY_MAIN_BRANCH="main"
+
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${YELLOW}Starting Main Branch Update Sequence...${NC}"
+
+# 1. Safety Check: Working Directory Must Be Clean
+if ! git diff-index --quiet HEAD --; then
+    echo -e "${RED}Error: You have uncommitted changes.${NC}"
+    echo "Please commit or stash them before running this script."
+    exit 1
+fi
+
+# 2. Check Remote
+if ! git remote | grep -q "^${UPSTREAM_REMOTE}$"; then
+    echo -e "${RED}Error: Remote '${UPSTREAM_REMOTE}' not found.${NC}"
+    exit 1
+fi
+
+# 3. Fetch Upstream Data
+echo -e "${GREEN}Fetching latest data from ${UPSTREAM_REMOTE}...${NC}"
+git fetch "$UPSTREAM_REMOTE"
+
+# 4. Detect Upstream Default Branch
+DETECTED_BRANCH=$(git remote show "$UPSTREAM_REMOTE" | awk '/HEAD branch/ {print $NF}')
+
+if [ -z "$DETECTED_BRANCH" ] || [ "$DETECTED_BRANCH" == "(unknown)" ]; then
+    if git rev-parse --verify "${UPSTREAM_REMOTE}/main" >/dev/null 2>&1; then
+        DETECTED_BRANCH="main"
+    elif git rev-parse --verify "${UPSTREAM_REMOTE}/master" >/dev/null 2>&1; then
+        DETECTED_BRANCH="master"
+    else
+        echo -e "${RED}Error: Could not detect upstream default branch.${NC}"
+        exit 1
+    fi
+fi
+echo -e "${YELLOW}Detected upstream source: ${DETECTED_BRANCH}${NC}"
+
+# 5. Update Local Tracking Branch
+if git show-ref --verify --quiet "refs/heads/$LOCAL_TRACKING_BRANCH"; then
+    echo -e "${GREEN}Updating ${LOCAL_TRACKING_BRANCH}...${NC}"
+    git checkout "$LOCAL_TRACKING_BRANCH" > /dev/null 2>&1
+    git reset --hard "$UPSTREAM_REMOTE/$DETECTED_BRANCH" > /dev/null 2>&1
+else
+    echo -e "${GREEN}Creating ${LOCAL_TRACKING_BRANCH}...${NC}"
+    git checkout -b "$LOCAL_TRACKING_BRANCH" "$UPSTREAM_REMOTE/$DETECTED_BRANCH" > /dev/null 2>&1
+fi
+
+# 6. Switch to Your Main Branch
+echo -e "${GREEN}Switching to ${MY_MAIN_BRANCH}...${NC}"
+git checkout "$MY_MAIN_BRANCH" > /dev/null 2>&1
+
+# 7. Create Backup
+BACKUP_BRANCH="backup/${MY_MAIN_BRANCH}/$(date +%s)"
+echo -e "${GREEN}Creating backup: ${BACKUP_BRANCH}${NC}"
+git branch "$BACKUP_BRANCH"
+
+# 8. Rebase
+echo -e "${GREEN}Rebasing ${MY_MAIN_BRANCH} onto ${LOCAL_TRACKING_BRANCH}...${NC}"
+if git rebase "$LOCAL_TRACKING_BRANCH"; then
+    echo -e "${GREEN}Rebase successful!${NC}"
+    git branch -D "$BACKUP_BRANCH" > /dev/null 2>&1
+    
+    # --- NEW: STATUS SUMMARY ---
+    echo -e "\n${BLUE}================ STATUS SUMMARY ================${NC}"
+    echo -e "The following custom commits are now on top of upstream:"
+    echo -e "${BLUE}------------------------------------------------${NC}"
+    # This logs the commits that exist in HEAD but NOT in upstream-main
+    # showing your custom work cleanly.
+    git log --oneline --graph --decorate --color "$LOCAL_TRACKING_BRANCH"..HEAD
+    echo -e "${BLUE}================================================${NC}\n"
+    # ---------------------------
+
+else
+    echo -e "${RED}Rebase failed due to conflicts.${NC}"
+    echo -e "${YELLOW}Backup saved at: ${BACKUP_BRANCH}${NC}"
+    echo "1. Resolve conflicts manually."
+    echo "2. Run 'git rebase --continue'."
+    echo "3. To undo, run 'git rebase --abort' then 'git reset --hard ${BACKUP_BRANCH}'."
+    exit 1
+fi
+
+# 9. Force Push Prompt
+read -p "Force push ${MY_MAIN_BRANCH} to origin? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "${GREEN}Pushing...${NC}"
+    git push --force-with-lease origin "$MY_MAIN_BRANCH"
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo "Push cancelled."
+fi

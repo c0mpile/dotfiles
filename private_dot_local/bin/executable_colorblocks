@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# Function to print a color block
+# Usage: print_block [color_code]
+print_block() {
+    local color=$1
+    # \e[48;5;${color}m sets background
+    # We print the color number inside the block for reference
+    printf "\e[48;5;%sm %3s \e[0m" "$color" "$color"
+}
+
+echo ""
+echo "--- Standard 16 Colors ---"
+echo ""
+# System colors 0-7
+for i in {0..7}; do
+    print_block $i
+done
+echo ""
+# System colors 8-15 (High Intensity)
+for i in {8..15}; do
+    print_block $i
+done
+echo ""
+echo ""
+
+echo "--- 256 Color Cube (6x6x6) ---"
+echo ""
+# The 6x6x6 cube runs from 16 to 231
+for i in {16..231}; do
+    print_block $i
+    
+    # Formatting: Break lines to make 6x6 squares visible
+    # (i - 16) % 6 == 5 adds a small space between blocks
+    # (i - 16) % 36 == 35 adds a newline
+    
+    if [[ $(( (i - 16) % 6 )) == 5 ]]; then
+        printf " "
+    fi
+    if [[ $(( (i - 16) % 36 )) == 35 ]]; then
+        echo ""
+    fi
+done
+
+echo "--- Grayscale Spectrum ---"
+echo ""
+# Grayscale runs from 232 to 255
+for i in {232..255}; do
+    print_block $i
+done
+echo ""
+echo ""

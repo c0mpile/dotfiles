@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+progname=$(basename "$0")
+
+print_help() {
+  cat <<EOF
+Usage: $progname [-c] [-r] [-u username] [-p perms] <path>
+
+Options:
+  -c            Chown target (and contents if directory) to the ACL user.
+  -r            Remove the entry for the ACL user instead of adding/modifying it.
+  -u <username> Use this username for ACL/chown instead of the current user.
+  -p <perms>    ACL permissions in rwx form (e.g. rwx, rw-, r-X). Defaults to rwx.
+  -h            Show this help message.
+EOF
+}
+
+chown_flag=false
+remove_flag=false
+acl_user=""
+perms="rwx"
+
+# Parse options
+while getopts ":cru:p:h" opt; do
+  case "$opt" in
+    c) chown_flag=true ;;
+    r) remove_flag=true ;;
+    u) acl_user=$OPTARG ;;
+    p) perms=$OPTARG ;;
+    h) print_help; exit 0 ;;
+    \?)
+      printf '%s: illegal option -- %s\n' "$progname" "$OPTARG" >&2
+      print_help >&2
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+target=$1
+if [ -z "$target" ]; then
+  echo "Error: missing <path>" >&2
+  print_help
+  exit 1
+fi
+
+# Determine ACL user if not overridden with -u
+if [ -z "$acl_user" ]; then
+  if [ -n "$SUDO_USER" ]; then
+    acl_user=$SUDO_USER
+  else
+    acl_user=$USER
+  fi
+fi
+
+# If target doesn't exist, create it as a directory (escalate only if needed)
+if [ ! -e "$target" ]; then
+  if ! mkdir -p "$target" 2>/dev/null; then
+    sudo mkdir -p "$target"
+  fi
+fi
+
+# Helper to run commands with sudo fallback
+run_cmd() {
+  if ! "$@" 2>/dev/null; then
+    sudo "$@"
+  fi
+}
+
+# Helper to run setfacl with sudo fallback
+run_setfacl() {
+  if ! setfacl "$@" 2>/dev/null; then
+    sudo setfacl "$@"
+  fi
+}
+
+if [ -d "$target" ]; then
+  if [ "$remove_flag" = true ]; then
+    # Directory: remove ACL entries for this user from dir, contents, and default ACLs
+    run_setfacl -R -x u:"$acl_user" "$target"
+    run_setfacl -d -x u:"$acl_user" "$target" 2>/dev/null || true
+  else
+    # Directory: set default ACL and recursive ACL for existing contents
+    run_setfacl -d -m u:"$acl_user":$perms "$target"
+    run_setfacl -R -m u:"$acl_user":$perms "$target"
+
+    # Optionally chown directory (and contents) to that user
+    if [ "$chown_flag" = true ]; then
+      run_cmd chown -R "$acl_user":"$acl_user" "$target"
+    fi
+  fi
+elif [ -f "$target" ]; then
+  if [ "$remove_flag" = true ]; then
+    # File: remove ACL entry for this user
+    run_setfacl -x u:"$acl_user" "$target"
+  else
+    # File: just set ACL on the file
+    run_setfacl -m u:"$acl_user":$perms "$target"
+
+    # Optionally chown the file
+    if [ "$chown_flag" = true ]; then
+      run_cmd chown "$acl_user":"$acl_user" "$target"
+    fi
+  fi
+else
+  echo "Error: '$target' is not a regular file or directory." >&2
+  exit 1
+fi

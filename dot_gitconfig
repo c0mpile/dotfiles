@@ -1,0 +1,11 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[user]
+	name = c0mpile
+	email = c0mpile@disroot.org
+[alias]
+	sync-fork = !~/.local/bin/git-sync-fork
