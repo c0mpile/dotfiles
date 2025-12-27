@@ -114,12 +114,92 @@ Loader {
             property string currentLayout: KeyboardLayoutService.currentLayout
           }
 
+          // Cached wallpaper path
+          property string resolvedWallpaperPath: ""
+
+          // Request preprocessed wallpaper when lock screen becomes active or dimensions change
+          Component.onCompleted: {
+            if (screen) {
+              Qt.callLater(requestCachedWallpaper);
+            }
+          }
+
+          onWidthChanged: {
+            if (screen && width > 0 && height > 0) {
+              Qt.callLater(requestCachedWallpaper);
+            }
+          }
+
+          onHeightChanged: {
+            if (screen && width > 0 && height > 0) {
+              Qt.callLater(requestCachedWallpaper);
+            }
+          }
+
+          // Listen for wallpaper changes
+          Connections {
+            target: WallpaperService
+            function onWallpaperChanged(screenName, path) {
+              if (screen && screenName === screen.name) {
+                Qt.callLater(requestCachedWallpaper);
+              }
+            }
+          }
+
+          // Listen for display scale changes
+          Connections {
+            target: CompositorService
+            function onDisplayScalesChanged() {
+              if (screen && width > 0 && height > 0) {
+                Qt.callLater(requestCachedWallpaper);
+              }
+            }
+          }
+
+          function requestCachedWallpaper() {
+            if (!screen || width <= 0 || height <= 0) {
+              return;
+            }
+
+            if (!WallpaperCacheService || !WallpaperCacheService.initialized) {
+              // Fallback to original if services not ready
+              resolvedWallpaperPath = WallpaperService.getWallpaper(screen.name)  || "";
+              return;
+            }
+
+            resolvedWallpaperPath = WallpaperService.getWallpaper(screen.name)  || "";
+            if (resolvedWallpaperPath === "") {
+              return;
+            }
+
+            const compositorScale = CompositorService.getDisplayScale(screen.name);
+            const targetWidth = Math.round(width * compositorScale);
+            const targetHeight = Math.round(height * compositorScale);
+            if (targetWidth <= 0 || targetHeight <= 0) {
+              return;
+            }
+
+            WallpaperCacheService.getPreprocessed(resolvedWallpaperPath, screen.name, targetWidth, targetHeight, function (cachedPath, success) {
+              if (success) {
+                resolvedWallpaperPath = cachedPath;
+              }
+            });
+
+          }
+
+          // Black backgound, in case image fails to load or takes a while
+          Rectangle {
+            anchors.fill: parent
+            color: "#000000"
+          }
+
           Image {
             id: lockBgImage
+            visible: source !== ""
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: screen ? WallpaperService.getWallpaper(screen.name) : ""
-            cache: true
+            source: resolvedWallpaperPath
+            cache: false
             smooth: true
             mipmap: false
             antialiasing: true

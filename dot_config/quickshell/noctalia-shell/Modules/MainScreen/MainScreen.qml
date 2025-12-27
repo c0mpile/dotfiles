@@ -85,6 +85,12 @@ PanelWindow {
     if (!root.isPanelOpen) {
       return WlrKeyboardFocus.None;
     }
+    
+    // If panel is collapsed, don't capture exclusive focus so user can type in other windows
+    if (PanelService.openedPanel && PanelService.openedPanel.isCollapsed) {
+      return WlrKeyboardFocus.OnDemand;
+    }
+    
     return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
   }
 
@@ -134,19 +140,48 @@ PanelWindow {
   // Make everything click-through except bar
   mask: Region {
     id: clickableMask
+    
+    // Helper properties for mask sizing
+    readonly property bool isCollapsed: PanelService.openedPanel && PanelService.openedPanel.isCollapsed
+    readonly property var panelItem: isCollapsed ? PanelService.openedPanel.panelRegion : null
 
-    // Cover entire window (everything is masked/click-through)
+    // Start with EMPTY base region (pass-through everything)
     x: 0
     y: 0
-    width: root.width
-    height: root.height
-    intersection: Intersection.Xor
+    width: 0
+    height: 0
+    
+    // Use Union to ADD clickable regions
+    intersection: Intersection.Union
+    
+    regions: [panelMaskRegion, backgroundMaskRegion, barMaskRegion]
+    
+    // 1. Add Panel Region (Always clickable if open)
+    Region {
+      id: panelMaskRegion
+      // When collapsed, we add the specific panel rect
+      // When expanded, this is redundant if background covers it, but safe to add
+      property var item: PanelService.openedPanel ? PanelService.openedPanel.panelRegion : null
+      
+      x: item ? item.x : 0
+      y: item ? item.y : 0
+      width: item ? item.width : 0
+      height: item ? item.height : 0
+      intersection: Intersection.Union
+    }
 
-    // Only include regions that are actually needed
-    // panelRegions is handled by PanelService, bar is local to this screen
-    regions: [barMaskRegion, backgroundMaskRegion]
+    // 2. Add Background Region (Only if Expanded)
+    Region {
+      id: backgroundMaskRegion
+      x: 0
+      y: 0
+      // If expanded: Full Screen. If collapsed: Empty.
+      width: (root.isPanelOpen && !isPanelClosing && !clickableMask.isCollapsed) ? root.width : 0
+      height: (root.isPanelOpen && !isPanelClosing && !clickableMask.isCollapsed) ? root.height : 0
+      intersection: Intersection.Union
+    }
 
-    // Bar region - subtract bar area from mask (only if bar should be shown on this screen)
+    // 3. Subtract Bar Region (Always a hole)
     Region {
       id: barMaskRegion
 
@@ -156,16 +191,6 @@ PanelWindow {
       // Set width/height to 0 if bar shouldn't show on this screen (makes region empty)
       width: root.barShouldShow ? barPlaceholder.width : 0
       height: root.barShouldShow ? barPlaceholder.height : 0
-      intersection: Intersection.Subtract
-    }
-
-    // Background region for click-to-close - reactive sizing
-    Region {
-      id: backgroundMaskRegion
-      x: 0
-      y: 0
-      width: root.isPanelOpen && !isPanelClosing ? root.width : 0
-      height: root.isPanelOpen && !isPanelClosing ? root.height : 0
       intersection: Intersection.Subtract
     }
   }
@@ -518,57 +543,56 @@ PanelWindow {
     onActivated: PanelService.openedPanel.onCtrlPPressed()
   }
 
-  // Shift+Number shortcuts for SessionMenu
   Shortcut {
-    sequence: "Shift+1"
+    sequence: "1"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(1)
   }
 
   Shortcut {
-    sequence: "Shift+2"
+    sequence: "2"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(2)
   }
 
   Shortcut {
-    sequence: "Shift+3"
+    sequence: "3"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(3)
   }
 
   Shortcut {
-    sequence: "Shift+4"
+    sequence: "4"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(4)
   }
 
   Shortcut {
-    sequence: "Shift+5"
+    sequence: "5"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(5)
   }
 
   Shortcut {
-    sequence: "Shift+6"
+    sequence: "6"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(6)
   }
 
   Shortcut {
-    sequence: "Shift+7"
+    sequence: "7"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(7)
   }
 
   Shortcut {
-    sequence: "Shift+8"
+    sequence: "8"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(8)
   }
 
   Shortcut {
-    sequence: "Shift+9"
+    sequence: "9"
     enabled: root.isPanelOpen && (PanelService.openedPanel.onNumberPressed !== undefined)
     onActivated: PanelService.openedPanel.onNumberPressed(9)
   }

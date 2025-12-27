@@ -55,6 +55,10 @@
           "description": "Kies hoe je wilt dat deze waarde wordt weergegeven.",
           "label": "Weergavemodus"
         },
+        "hide-if-not-detected": {
+          "description": "Verberg de widget als er geen batterij op het systeem wordt gedetecteerd.",
+          "label": "Verbergen indien niet gedetecteerd."
+        },
         "low-battery-threshold": {
           "description": "Toon een waarschuwing wanneer de batterij onder dit percentage komt.",
           "label": "Waarschuwingsdrempel voor lage batterij"
@@ -1197,14 +1201,18 @@
             "description": "Schrijf {filepath}"
           },
           "code": {
-            "description": "Schrijf {filepath} — het HyprLuna-thema moet handmatig worden geïnstalleerd en geactiveerd"
+            "description": "Schrijf {filepath}",
+            "description-detected": "Toegepast op standaardprofiel. Gedetecteerd: {clients}",
+            "description-missing": "Geen code-editor gedetecteerd (VSCode of VSCodium)"
           },
           "description": "Toepassingsspecifieke theming.",
           "discord": {
-            "description": "Schrijf {filepath} voor {client} — het HyprLuna-thema moet handmatig worden geactiveerd"
+            "description": "Schrijf {filepath} voor {client} — Het theme moet handmatig worden geactiveerd",
+            "description-detected": "Gedetecteerd: {clients}",
+            "description-missing": "Geen Discord-client gedetecteerd"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standaard: ~/.emacs.d/themes/noctalia.el<br>Handmatig toepassen: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standaard: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "Schrijf {filepath} en herlaad"
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "Analoog",
+          "binary": "Binair",
           "description": "Kies de weergavestijl van de klok.",
           "digital": "Digitaal",
           "label": "Klokstijl",
@@ -1916,6 +1925,24 @@
           "label": "Duur van meldingen"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "Meldingen met kritieke prioriteit opslaan in de geschiedenis.",
+          "label": "Kritieke urgentie opslaan in geschiedenis"
+        },
+        "low-urgency": {
+          "description": "Meldingen met lage prioriteit opslaan in de geschiedenis.",
+          "label": "Lage urgentie opslaan in geschiedenis"
+        },
+        "normal-urgency": {
+          "description": "Meldingen met normale prioriteit opslaan in de geschiedenis.",
+          "label": "Normale urgentie opslaan in geschiedenis"
+        },
+        "section": {
+          "description": "Bepalen welke meldingen worden opgeslagen in de geschiedenis op basis van hun urgentieniveau.",
+          "label": "Geschiedenis"
+        }
+      },
       "monitors": {
         "section": {
           "description": "Meldingen op specifieke monitoren tonen. Standaard op alle als er geen zijn gekozen.",
@@ -2270,6 +2297,10 @@
         "description": "Toon de titel en sluitknop bovenaan het Sessiemenu.",
         "label": "Koptekst tonen"
       },
+      "show-number-labels": {
+        "description": "Nummerlabels (1-2-3-4...) op knoppen weergeven en nummertoetsen voor snelle selectie inschakelen.",
+        "label": "Nummerlabels tonen"
+      },
       "title": "Sessiemenu"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "Schijfgebruik"
       },
-      "enable-nvidia-gpu": {
-        "description": "Waarschuwing: Dit zal uw NVIDIA GPU activeren, wat een aanzienlijke impact kan hebben op de batterijduur van laptops met hybride grafische kaarten.",
-        "label": "NVIDIA GPU-monitoring inschakelen"
+      "enable-dgpu-monitoring": {
+        "description": "Waarschuwing: Dit zal uw dedicated GPU (NVIDIA/AMD) activeren, wat een aanzienlijke impact kan hebben op de batterijduur van laptops met hybride grafische kaarten.",
+        "label": "Dedicated GPU-monitoring inschakelen"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "Alfabetisch",
+          "description": "Kies hoe achtergronden worden geselecteerd bij automatisch wisselen.",
+          "label": "Wisselmodus",
+          "random": "Willekeurig"
+        },
         "custom-interval": {
           "description": "Voer tijd in als UU:MM (bijv. 01:30).",
           "label": "Aangepast interval"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "Plan willekeurige achtergrondwissels op vaste intervallen.",
           "label": "Willekeurige achtergrond"
+        },
+        "scheduled-change": {
+          "description": "Wissel automatisch achtergronden op vaste intervallen.",
+          "label": "Geplande wissel"
         },
         "section": {
           "label": "Automatisering"
@@ -2905,6 +2946,7 @@
   "wifi": {
     "panel": {
       "available-networks": "Beschikbare netwerken",
+      "action-required": "Actie vereist",
       "connect": "Verbinden",
       "connected": "Verbonden",
       "disabled": "Wi-Fi is uitgeschakeld",
@@ -2916,6 +2958,7 @@
       "forget": "Vergeten",
       "forget-network": "Dit netwerk vergeten?",
       "forgetting": "Vergeten...",
+      "frequency": "Frequentie",
       "gateway": "Poort",
       "info": "Info",
       "internet": "Internet",
@@ -2931,6 +2974,14 @@
       "searching": "Zoeken naar netwerken in de buurt...",
       "security": "Beveiliging",
       "title": "Wi-Fi"
+    },
+    "signal": {
+      "excellent": "Uitstekend",
+      "very-good": "Erg goed",
+      "good": "Goed",
+      "fair": "Redelijk",
+      "weak": "Zwak",
+      "poor": "Slecht"
     }
   }
 }

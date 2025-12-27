@@ -55,6 +55,10 @@
           "description": "Wählen Sie, wie dieser Wert angezeigt werden soll.",
           "label": "Anzeigemodus"
         },
+        "hide-if-not-detected": {
+          "description": "Verberge das Widget, wenn keine Batterie im System erkannt wird.",
+          "label": "Verstecken, wenn nicht entdeckt."
+        },
         "low-battery-threshold": {
           "description": "Warnung anzeigen, wenn Batterie unter diesen Prozentsatz fällt.",
           "label": "Schwellenwert für niedrigen Batteriestand"
@@ -1197,14 +1201,18 @@
             "description": "Schreibe {filepath}"
           },
           "code": {
-            "description": "Schreibe {filepath} — das HyprLuna-Theme muss manuell installiert und aktiviert werden"
+            "description": "Schreibe {filepath}",
+            "description-detected": "Auf Standardprofil angewendet. Erkannt: {clients}",
+            "description-missing": "Kein Code-Editor erkannt (VSCode oder VSCodium)"
           },
           "description": "Anwendungsspezifisches Theming.",
           "discord": {
-            "description": "Schreibe {filepath} für {client} — das HyprLuna-Theme muss manuell installiert und aktiviert werden"
+            "description": "Schreibe {filepath} für {client} — Das Theme muss manuell aktiviert werden",
+            "description-detected": "Erkannt: {clients}",
+            "description-missing": "Kein Discord-Client erkannt"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el<br>Manuell anwenden: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "Schreibe {filepath} und lade neu"
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "Analog",
+          "binary": "Binär",
           "description": "Wähle den Anzeigestil der Uhr.",
           "digital": "Digital",
           "label": "Uhrstil",
@@ -1916,6 +1925,24 @@
           "label": "Benachrichtigungsdauer"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "Kritische Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Kritische Dringlichkeit im Verlauf speichern"
+        },
+        "low-urgency": {
+          "description": "Niedrige Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Niedrige Dringlichkeit im Verlauf speichern"
+        },
+        "normal-urgency": {
+          "description": "Normale Prioritätsbenachrichtigungen im Verlauf speichern.",
+          "label": "Normale Dringlichkeit im Verlauf speichern"
+        },
+        "section": {
+          "description": "Steuern, welche Benachrichtigungen basierend auf ihrer Dringlichkeitsstufe im Verlauf gespeichert werden.",
+          "label": "Verlauf"
+        }
+      },
       "monitors": {
         "section": {
           "description": "Benachrichtigungen auf bestimmten Monitoren anzeigen. Standardmäßig werden sie auf allen Monitoren angezeigt.",
@@ -2270,6 +2297,10 @@
         "description": "Zeige den Titel und die Schließen-Schaltfläche oben im Sitzungsmenü.",
         "label": "Kopfzeile anzeigen"
       },
+      "show-number-labels": {
+        "description": "Nummern-Labels (1-2-3-4...) auf Schaltflächen anzeigen und Nummern-Tastenkürzel für schnelle Auswahl aktivieren.",
+        "label": "Nummern-Labels anzeigen"
+      },
       "title": "Sitzungsmenü"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "Festplattennutzung"
       },
-      "enable-nvidia-gpu": {
-        "description": "Warnung: Dies aktiviert Ihre NVIDIA-GPU, was die Akkulaufzeit von Laptops mit Hybridgrafik erheblich beeinträchtigen kann.",
-        "label": "NVIDIA GPU-Überwachung aktivieren"
+      "enable-dgpu-monitoring": {
+        "description": "Warnung: Dies aktiviert Ihre dedizierte GPU (NVIDIA/AMD), was die Akkulaufzeit von Laptops mit Hybridgrafik erheblich beeinträchtigen kann.",
+        "label": "Dedizierte GPU-Überwachung aktivieren"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "Alphabetisch",
+          "description": "Wählen Sie, wie Hintergrundbilder bei automatischem Wechsel ausgewählt werden.",
+          "label": "Wechselmodus",
+          "random": "Zufällig"
+        },
         "custom-interval": {
           "description": "Zeit als HH:MM eingeben (z.B. 01:30).",
           "label": "Benutzerdefiniertes Intervall"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "Zufällige Hintergrundbild-Wechsel in regelmäßigen Abständen planen.",
           "label": "Zufälliges Hintergrundbild"
+        },
+        "scheduled-change": {
+          "description": "Hintergrundbilder automatisch in regelmäßigen Abständen wechseln.",
+          "label": "Geplanter Wechsel"
         },
         "section": {
           "label": "Automatisierung"
@@ -2905,6 +2946,7 @@
   "wifi": {
     "panel": {
       "available-networks": "Verfügbare Netzwerke",
+      "action-required": "Aktion erforderlich",
       "connect": "Verbinden",
       "connected": "Verbunden",
       "disabled": "WLAN ist deaktiviert",
@@ -2916,6 +2958,7 @@
       "forget": "Vergessen",
       "forget-network": "Dieses Netzwerk vergessen?",
       "forgetting": "Wird vergessen...",
+      "frequency": "Frequenz",
       "gateway": "Gateway: Gateway",
       "info": "Info",
       "internet": "Internet",
@@ -2931,6 +2974,14 @@
       "searching": "Suche nach nahegelegenen Netzwerken...",
       "security": "Sicherheit",
       "title": "WLAN"
+    },
+    "signal": {
+      "excellent": "Ausgezeichnet",
+      "very-good": "Sehr gut",
+      "good": "Gut",
+      "fair": "Mäßig",
+      "weak": "Schwach",
+      "poor": "Schlecht"
     }
   }
 }

@@ -9,3 +9,7 @@
 	email = c0mpile@disroot.org
 [alias]
 	sync-fork = !~/.local/bin/git-sync-fork
+[core]
+	excludesfile = /home/kevin/.gitignore_global
+[init]
+	defaultBranch = main

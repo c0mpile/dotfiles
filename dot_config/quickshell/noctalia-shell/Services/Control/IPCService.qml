@@ -274,6 +274,22 @@ Item {
       }
     }
 
+    function toggleExpand() {
+      if (Settings.data.wallpaper.enabled) {
+        root.screenDetector.withCurrentScreen(screen => {
+          var wallpaperPanel = PanelService.getPanel("wallpaperPanel", screen);
+          if (wallpaperPanel) {
+             if (!wallpaperPanel.isPanelOpen) {
+                 wallpaperPanel.isCollapsed = false;
+                 wallpaperPanel.open();
+             } else {
+                 wallpaperPanel.isCollapsed = !wallpaperPanel.isCollapsed;
+             }
+          }
+        });
+      }
+    }
+
     function random() {
       if (Settings.data.wallpaper.enabled) {
         WallpaperService.setRandomWallpaper();

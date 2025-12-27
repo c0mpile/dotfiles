@@ -323,9 +323,12 @@ Popup {
             sketchyToggle.checked = purityRow.getPurityValue(1);
             nsfwToggle.checked = purityRow.getPurityValue(2);
           }
+          
           function onWallhavenApiKeyChanged() {
-            // If API key is removed, disable NSFW
-            if (!Settings.data.wallpaper.wallhavenApiKey && nsfwToggle.checked) {
+            // If API key is removed and no Env key is set, disable NSFW
+            // Note: We need to access apiKeyInput scope or check env again. For cleanliness, we check Env directly here.
+            var hasEnvKey = !!Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY");
+            if (!Settings.data.wallpaper.wallhavenApiKey && !hasEnvKey && nsfwToggle.checked) {
                nsfwToggle.toggled(false);
             }
           }
@@ -439,7 +442,7 @@ Popup {
         Item {
           Layout.preferredWidth: nsfwCheckboxRow.implicitWidth
           Layout.preferredHeight: nsfwCheckboxRow.implicitHeight
-          visible: Settings.data.wallpaper.wallhavenApiKey !== ""
+          visible: Settings.data.wallpaper.wallhavenApiKey !== "" || !!Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY")
 
           RowLayout {
             id: nsfwCheckboxRow
@@ -984,7 +987,9 @@ Popup {
           WallhavenService.sorting = Settings.data.wallpaper.wallhavenSorting;
           WallhavenService.order = Settings.data.wallpaper.wallhavenOrder;
           WallhavenService.ratios = Settings.data.wallpaper.wallhavenRatios;
-          WallhavenService.apiKey = Settings.data.wallpaper.wallhavenApiKey;
+          WallhavenService.ratios = Settings.data.wallpaper.wallhavenRatios;
+          // WallhavenService.apiKey is bound directly in the service, do not overwrite it here
+
 
           // Update resolution settings (without triggering search)
           updateResolution(false);

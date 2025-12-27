@@ -55,6 +55,10 @@
           "description": "Choisissez comment vous souhaitez que cette valeur apparaisse.",
           "label": "Mode d'affichage"
         },
+        "hide-if-not-detected": {
+          "description": "Masquer le widget lorsqu'aucune batterie n'est détectée sur le système.",
+          "label": "Se cacher si non détecté."
+        },
         "low-battery-threshold": {
           "description": "Afficher un avertissement lorsque la batterie tombe en dessous de ce pourcentage.",
           "label": "Seuil d'avertissement de batterie faible"
@@ -1197,14 +1201,18 @@
             "description": "Écrire {filepath}"
           },
           "code": {
-            "description": "Écrire {filepath} — le thème HyprLuna doit être installé et activé manuellement"
+            "description": "Écrire {filepath}",
+            "description-detected": "Appliqué au profil par défaut. Détecté : {clients}",
+            "description-missing": "Aucun éditeur de code détecté (VSCode ou VSCodium)"
           },
           "description": "Thématisation spécifique aux applications.",
           "discord": {
-            "description": "Écrire {filepath} pour {client} — le thème HyprLuna doit être installé et activé manuellement"
+            "description": "Écrire {filepath} pour {client} — Le thème doit être activé manuellement",
+            "description-detected": "Détecté : {clients}",
+            "description-missing": "Aucun client Discord détecté"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el<br>Appliquer manuellement: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "Écrire {filepath} et recharger"
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "Analogique",
+          "binary": "Binaire",
           "description": "Choisissez le style d'affichage de l'horloge.",
           "digital": "Numérique",
           "label": "Style d'horloge",
@@ -1916,6 +1925,24 @@
           "label": "Durée des notifications"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "Enregistrer les notifications de priorité critique dans l'historique.",
+          "label": "Enregistrer l'urgence critique dans l'historique"
+        },
+        "low-urgency": {
+          "description": "Enregistrer les notifications de priorité faible dans l'historique.",
+          "label": "Enregistrer l'urgence faible dans l'historique"
+        },
+        "normal-urgency": {
+          "description": "Enregistrer les notifications de priorité normale dans l'historique.",
+          "label": "Enregistrer l'urgence normale dans l'historique"
+        },
+        "section": {
+          "description": "Contrôler quelles notifications sont enregistrées dans l'historique en fonction de leur niveau d'urgence.",
+          "label": "Historique"
+        }
+      },
       "monitors": {
         "section": {
           "description": "Afficher les notifications sur des moniteurs spécifiques. Par défaut, sur tous si aucun n'est choisi.",
@@ -2270,6 +2297,10 @@
         "description": "Afficher le titre et le bouton de fermeture en haut du Menu de session.",
         "label": "Afficher l'en-tête"
       },
+      "show-number-labels": {
+        "description": "Afficher les numéros (1-2-3-4...) sur les boutons et activer les raccourcis clavier numériques pour une sélection rapide.",
+        "label": "Afficher les numéros"
+      },
       "title": "Menu de session"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "Utilisation disque"
       },
-      "enable-nvidia-gpu": {
-        "description": "Attention : Ceci va activer votre GPU NVIDIA, ce qui peut avoir un impact significatif sur l'autonomie de la batterie des ordinateurs portables dotés de cartes graphiques hybrides.",
-        "label": "Activer la surveillance du GPU NVIDIA"
+      "enable-dgpu-monitoring": {
+        "description": "Attention : Ceci va activer votre GPU dédié (NVIDIA/AMD), ce qui peut avoir un impact significatif sur l'autonomie de la batterie des ordinateurs portables dotés de cartes graphiques hybrides.",
+        "label": "Activer la surveillance du GPU dédié"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "Alphabétique",
+          "description": "Choisissez comment les fonds d'écran sont sélectionnés lors du changement automatique.",
+          "label": "Mode de changement",
+          "random": "Aléatoire"
+        },
         "custom-interval": {
           "description": "Entrez l'heure au format HH:MM (ex: 01:30).",
           "label": "Intervalle personnalisé"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "Planifiez des changements de fond d'écran aléatoires à intervalles réguliers.",
           "label": "Fond d'écran aléatoire"
+        },
+        "scheduled-change": {
+          "description": "Changer automatiquement les fonds d'écran à intervalles réguliers.",
+          "label": "Changement programmé"
         },
         "section": {
           "label": "Automatisation"
@@ -2905,6 +2946,7 @@
   "wifi": {
     "panel": {
       "available-networks": "Réseaux disponibles",
+      "action-required": "Action requise",
       "connect": "Connecter",
       "connected": "Connecté",
       "disabled": "Le Wi-Fi est désactivé",
@@ -2916,6 +2958,7 @@
       "forget": "Oublier",
       "forget-network": "Oublier ce réseau ?",
       "forgetting": "Oubli en cours...",
+      "frequency": "Fréquence",
       "gateway": "Passerelle",
       "info": "Info",
       "internet": "Internet",
@@ -2931,6 +2974,14 @@
       "searching": "Recherche de réseaux à proximité en cours...",
       "security": "Sécurité",
       "title": "Wi-Fi"
+    },
+    "signal": {
+      "excellent": "Excellent",
+      "very-good": "Very Good",
+      "good": "Good",
+      "fair": "Fair",
+      "weak": "Weak",
+      "poor": "Poor"
     }
   }
 }

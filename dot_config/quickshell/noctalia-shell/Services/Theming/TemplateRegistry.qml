@@ -107,7 +107,7 @@ Singleton {
       "input": "vicinae.toml",
       "outputs": [
         {
-          "path": "~/.local/share/vicinae/themes/matugen.toml"
+          "path": "~/.local/share/vicinae/themes/noctalia.toml"
         }
       ],
       "postProcess": () => `cp --update=none ${Quickshell.shellDir}/Assets/noctalia.svg ~/.local/share/vicinae/themes/noctalia.svg && ${colorsApplyScript} vicinae`
@@ -213,6 +213,17 @@ Singleton {
         }
       ],
       "dualMode": true // Template contains both dark and light theme patterns
+    },
+    {
+      "id": "helix",
+      "name": "Helix",
+      "category": "applications",
+      "input": "helix.toml",
+      "outputs": [
+        {
+          "path": "~/.config/helix/themes/noctalia.toml"
+        }
+      ]
     },
     {
       "id": "spicetify",

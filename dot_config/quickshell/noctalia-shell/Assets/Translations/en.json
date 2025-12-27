@@ -55,6 +55,10 @@
           "description": "Choose how you'd like this value to appear.",
           "label": "Display mode"
         },
+        "hide-if-not-detected": {
+          "description": "Hide the widget when no battery is detected on the system.",
+          "label": "Hide if not detected"
+        },
         "low-battery-threshold": {
           "description": "Show a warning when battery falls below this percentage.",
           "label": "Low battery warning threshold"
@@ -1197,14 +1201,18 @@
             "description": "Write {filepath}"
           },
           "code": {
-            "description": "Write {filepath} — HyprLuna theme needs to be installed and activated manually"
+            "description": "Write {filepath}",
+            "description-detected": "Applied to default profile. Detected: {clients}",
+            "description-missing": "No Code editor detected (VSCode or VSCodium)"
           },
           "description": "Application-specific theming.",
           "discord": {
-            "description": "Write {filepath} for {client} — HyprLuna theme needs to be activated manually"
+            "description": "Write {filepath} for {client} — The theme needs to be activated manually",
+            "description-detected": "Detected: {clients}",
+            "description-missing": "No Discord client detected"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el<br>Apply manually: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>Standard: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "Write {filepath} and reload."
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "Analog",
+          "binary": "Binary",
           "description": "Choose the clock display style.",
           "digital": "Digital",
           "label": "Clock style",
@@ -1916,6 +1925,24 @@
           "label": "Notification duration"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "Save critical priority notifications to history.",
+          "label": "Save critical urgency to history"
+        },
+        "low-urgency": {
+          "description": "Save low priority notifications to history.",
+          "label": "Save low urgency to history"
+        },
+        "normal-urgency": {
+          "description": "Save normal priority notifications to history.",
+          "label": "Save normal urgency to history"
+        },
+        "section": {
+          "description": "Control which notifications are saved to history based on their urgency level.",
+          "label": "History"
+        }
+      },
       "monitors": {
         "section": {
           "description": "Show notification on specific monitors. Defaults to all if none are chosen.",
@@ -2270,6 +2297,10 @@
         "description": "Display the title and close button at the top of the session menu.",
         "label": "Show header"
       },
+      "show-number-labels": {
+        "description": "Display number labels (1-2-3-4...) on buttons and enable number keybinds for quick selection.",
+        "label": "Show number labels"
+      },
       "title": "Session Menu"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "Disk usage"
       },
-      "enable-nvidia-gpu": {
-        "description": "Warning: This will wake up your NVIDIA GPU, which may significantly impact battery life on laptops with hybrid graphics.",
-        "label": "Enable NVIDIA GPU monitoring"
+      "enable-dgpu-monitoring": {
+        "description": "Warning: This will wake up your discrete GPU (NVIDIA/AMD), which may significantly impact battery life on laptops with hybrid graphics.",
+        "label": "Enable discrete GPU monitoring"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "Alphabetical",
+          "description": "Choose how wallpapers are selected when changing automatically.",
+          "label": "Change mode",
+          "random": "Random"
+        },
         "custom-interval": {
           "description": "Enter time as HH:MM (e.g., 01:30).",
           "label": "Custom interval"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "Schedule random wallpaper changes at regular intervals.",
           "label": "Random wallpaper"
+        },
+        "scheduled-change": {
+          "description": "Automatically change wallpapers at regular intervals.",
+          "label": "Scheduled change"
         },
         "section": {
           "label": "Automation"
@@ -2911,6 +2952,7 @@
   "wifi": {
     "panel": {
       "available-networks": "Available networks",
+      "action-required": "Action required",
       "connect": "Connect",
       "connected": "Connected",
       "disabled": "Wi‑Fi is disabled",
@@ -2922,6 +2964,7 @@
       "forget": "Forget",
       "forget-network": "Forget this network",
       "forgetting": "Forgetting…",
+      "frequency": "Frequency",
       "gateway": "Gateway",
       "info": "Info",
       "internet": "Internet",
@@ -2937,6 +2980,14 @@
       "searching": "Searching for networks...",
       "security": "Security",
       "title": "Wi‑Fi"
+    },
+    "signal": {
+      "excellent": "Excellent",
+      "very-good": "Very Good",
+      "good": "Good",
+      "fair": "Fair",
+      "weak": "Weak",
+      "poor": "Poor"
     }
   }
 }

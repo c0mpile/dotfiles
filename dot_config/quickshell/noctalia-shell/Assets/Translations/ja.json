@@ -55,6 +55,10 @@
           "description": "値の表示方法を選択します。",
           "label": "表示モード"
         },
+        "hide-if-not-detected": {
+          "description": "システムでバッテリーが検出されない場合は、ウィジェットを非表示にします。",
+          "label": "検出されなければ隠れる"
+        },
         "low-battery-threshold": {
           "description": "バッテリー残量がこのパーセンテージを下回ると警告を表示します。",
           "label": "低バッテリー警告の閾値"
@@ -1197,14 +1201,18 @@
             "description": "{filepath} を書き込みます。"
           },
           "code": {
-            "description": "{filepath} を書き込みます。HyprLuna テーマを手動でインストールして有効化する必要があります。"
+            "description": "{filepath} を書き込みます。",
+            "description-detected": "デフォルトプロファイルに適用されました。検出: {clients}",
+            "description-missing": "コードエディタが検出されませんでした（VSCode または VSCodium）"
           },
           "description": "アプリケーションごとのテーマ設定",
           "discord": {
-            "description": "{client} 用に {filepath} を書き込みます。HyprLuna テーマを手動でインストールして有効化する必要があります。"
+            "description": "{client} 用に {filepath} を書き込みます。テーマを手動で有効化する必要があります。",
+            "description-detected": "検出: {clients}",
+            "description-missing": "Discord クライアントが検出されませんでした"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>標準: ~/.emacs.d/themes/noctalia.el<br>手動で適用: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>標準: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "{filepath} を書き込み、リロードします。"
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "アナログ",
+          "binary": "バイナリ",
           "description": "時計の表示スタイルを選択します。",
           "digital": "デジタル",
           "label": "時計のスタイル",
@@ -1916,6 +1925,24 @@
           "label": "通知の表示時間"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "緊急優先度の通知を履歴に保存します。",
+          "label": "緊急度: 重大を履歴に保存"
+        },
+        "low-urgency": {
+          "description": "低優先度の通知を履歴に保存します。",
+          "label": "低緊急度を履歴に保存"
+        },
+        "normal-urgency": {
+          "description": "通常優先度の通知を履歴に保存します。",
+          "label": "通常緊急度を履歴に保存"
+        },
+        "section": {
+          "description": "緊急度レベルに基づいて、履歴に保存する通知を制御します。",
+          "label": "履歴"
+        }
+      },
       "monitors": {
         "section": {
           "description": "通知を表示するディスプレイを選択します。未選択の場合は全てに表示されます。",
@@ -2270,6 +2297,10 @@
         "description": "セッションメニューの上部にタイトルと閉じるボタンを表示します。",
         "label": "ヘッダーを表示"
       },
+      "show-number-labels": {
+        "description": "ボタンに数字ラベル（1-2-3-4...）を表示し、クイック選択用の数字キーバインドを有効にします。",
+        "label": "数字ラベルを表示"
+      },
       "title": "セッションメニュー"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "ストレージ使用量"
       },
-      "enable-nvidia-gpu": {
-        "description": "警告: これにより NVIDIA GPU が起動状態になるため、ハイブリッドグラフィックス搭載のノート PC ではバッテリー駆動時間に大きな影響を与える可能性があります。",
-        "label": "NVIDIA GPU モニタリングを有効にする"
+      "enable-dgpu-monitoring": {
+        "description": "警告: これにより外部GPU (NVIDIA/AMD) が起動状態になるため、ハイブリッドグラフィックス搭載のノート PC ではバッテリー駆動時間に大きな影響を与える可能性があります。",
+        "label": "外部GPUモニタリングを有効にする"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "アルファベット順",
+          "description": "自動変更時に壁紙を選択する方法を選択します。",
+          "label": "変更モード",
+          "random": "ランダム"
+        },
         "custom-interval": {
           "description": "時間を HH:MM 形式で入力してください（例: 01:30）。",
           "label": "カスタム間隔"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "一定間隔でランダムに壁紙を変更します。",
           "label": "ランダム変更"
+        },
+        "scheduled-change": {
+          "description": "一定間隔で壁紙を自動的に変更します。",
+          "label": "スケジュール変更"
         },
         "section": {
           "label": "自動化"
@@ -2905,6 +2946,7 @@
   "wifi": {
     "panel": {
       "available-networks": "利用可能なネットワーク",
+      "action-required": "アクションが必要",
       "connect": "接続",
       "connected": "接続済み",
       "disabled": "Wi-Fi は無効です",
@@ -2916,6 +2958,7 @@
       "forget": "削除",
       "forget-network": "このネットワーク設定を削除しますか？",
       "forgetting": "削除中...",
+      "frequency": "周波数",
       "gateway": "ゲートウェイ",
       "info": "情報 (Jōhō)",
       "internet": "インターネット",
@@ -2931,6 +2974,14 @@
       "searching": "近くのネットワークを検索中...",
       "security": "セキュリティ",
       "title": "Wi-Fi"
+    },
+    "signal": {
+      "excellent": "優秀",
+      "very-good": "とても良い",
+      "good": "良い",
+      "fair": "普通",
+      "weak": "弱い",
+      "poor": "悪い"
     }
   }
 }

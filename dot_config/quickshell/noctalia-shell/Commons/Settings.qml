@@ -24,7 +24,7 @@ Singleton {
   - Default cache directory: ~/.cache/noctalia
   */
   readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
-  readonly property int settingsVersion: 31
+  readonly property int settingsVersion: 33
   readonly property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
   readonly property string shellName: "noctalia"
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
@@ -366,13 +366,16 @@ Singleton {
       property bool setWallpaperOnAllMonitors: true
       property string fillMode: "crop"
       property color fillColor: "#000000"
-      property bool randomEnabled: false
+      property bool randomEnabled: false // Deprecated: use wallpaperChangeMode instead
+      property string wallpaperChangeMode: "random" // "random" or "alphabetical"
       property int randomIntervalSec: 300 // 5 min
       property int transitionDuration: 1500 // 1500 ms
       property string transitionType: "random"
       property real transitionEdgeSmoothness: 0.05
       property string panelPosition: "follow_bar"
       property bool hideWallpaperFilenames: false
+      property int panelHeightPercentage: 45
+      property int panelVisibleRows: 3
       // Wallhaven settings
       property bool useWallhaven: false
       property string wallhavenQuery: ""
@@ -484,7 +487,7 @@ Singleton {
       property int cpuPollingInterval: 3000
       property int tempPollingInterval: 3000
       property int gpuPollingInterval: 3000
-      property bool enableNvidiaGpu: false // Opt-in: nvidia-smi wakes dGPU on laptops, draining battery
+      property bool enableDgpuMonitoring: false // Opt-in: reading dGPU sysfs/nvidia-smi wakes it from D3cold, draining battery
       property int memPollingInterval: 3000
       property int diskPollingInterval: 3000
       property int networkPollingInterval: 3000
@@ -524,6 +527,7 @@ Singleton {
       property string position: "center"
       property bool showHeader: true
       property bool largeButtonsStyle: false
+      property bool showNumberLabels: true
       property list<var> powerOptions: [
         {
           "action": "lock",
@@ -564,6 +568,11 @@ Singleton {
       property int normalUrgencyDuration: 8
       property int criticalUrgencyDuration: 15
       property bool enableKeyboardLayoutToast: true
+      property JsonObject saveToHistory: JsonObject {
+        property bool low: true
+        property bool normal: true
+        property bool critical: true
+      }
       property JsonObject sounds: JsonObject {
         property bool enabled: false
         property real volume: 0.5
@@ -640,6 +649,7 @@ Singleton {
       property bool hyprland: false
       property bool mango: false
       property bool zed: false
+      property bool helix: false
       property bool enableUserTemplates: false
     }
 

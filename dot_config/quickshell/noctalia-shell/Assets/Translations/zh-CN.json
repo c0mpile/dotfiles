@@ -55,6 +55,10 @@
           "description": "选择您希望此值显示的方式。",
           "label": "显示模式"
         },
+        "hide-if-not-detected": {
+          "description": "当系统未检测到电池时，隐藏该小部件。",
+          "label": "如果未被发现，则隐藏。"
+        },
         "low-battery-threshold": {
           "description": "当电量低于此百分比时显示警告。",
           "label": "低电量警告阈值"
@@ -1197,14 +1201,18 @@
             "description": "写入 {filepath}"
           },
           "code": {
-            "description": "写入 {filepath}，Hyprluna 主题需要手动安装和激活"
+            "description": "写入 {filepath}",
+            "description-detected": "已应用到默认配置文件。检测到: {clients}",
+            "description-missing": "未检测到代码编辑器（VSCode 或 VSCodium）"
           },
           "description": "应用程序特定主题",
           "discord": {
-            "description": "为 {client} 写入 {filepath}，Hyprluna 主题需要手动安装和激活"
+            "description": "为 {client} 写入 {filepath}，主题需要手动激活",
+            "description-detected": "检测到: {clients}",
+            "description-missing": "未检测到 Discord 客户端"
           },
           "emacs": {
-            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>标准: ~/.emacs.d/themes/noctalia.el<br>手动应用: (load-theme 'noctalia t)"
+            "description": "Doom: ~/.config/doom/themes/noctalia.el<br>标准: ~/.emacs.d/themes/noctalia.el"
           },
           "fuzzel": {
             "description": "写入 {filepath} 并重新加载"
@@ -1393,6 +1401,7 @@
         },
         "style": {
           "analog": "模拟",
+          "binary": "二进制",
           "description": "选择时钟显示样式。",
           "digital": "数字",
           "label": "时钟样式",
@@ -1916,6 +1925,24 @@
           "label": "通知持续时间"
         }
       },
+      "history": {
+        "critical-urgency": {
+          "description": "将关键优先级通知保存到历史记录。",
+          "label": "将高紧急度保存到历史记录"
+        },
+        "low-urgency": {
+          "description": "将低优先级通知保存到历史记录。",
+          "label": "将低紧急度保存到历史记录"
+        },
+        "normal-urgency": {
+          "description": "将正常优先级通知保存到历史记录。",
+          "label": "将正常紧急度保存到历史记录"
+        },
+        "section": {
+          "description": "根据紧急级别控制哪些通知保存到历史记录。",
+          "label": "历史记录"
+        }
+      },
       "monitors": {
         "section": {
           "description": "在特定显示器上显示通知。如果未选择，则默认为全部。",
@@ -2270,6 +2297,10 @@
         "description": "在会话菜单顶部显示标题和关闭按钮。",
         "label": "显示标题"
       },
+      "show-number-labels": {
+        "description": "在按钮上显示数字标签（1-2-3-4...）并启用数字快捷键以快速选择。",
+        "label": "显示数字标签"
+      },
       "title": "会话菜单"
     },
     "system-monitor": {
@@ -2285,9 +2316,9 @@
       "disk-section": {
         "label": "磁盘使用率"
       },
-      "enable-nvidia-gpu": {
-        "description": "警告：这将唤醒您的 NVIDIA GPU，这可能会显著影响配备混合显卡的笔记本电脑的电池续航时间。",
-        "label": "启用 NVIDIA GPU 监控"
+      "enable-dgpu-monitoring": {
+        "description": "警告：这将唤醒您的独立显卡 (NVIDIA/AMD)，这可能会显著影响配备混合显卡的笔记本电脑的电池续航时间。",
+        "label": "启用独立显卡监控"
       },
       "general": {
         "section": {
@@ -2404,6 +2435,12 @@
     },
     "wallpaper": {
       "automation": {
+        "change-mode": {
+          "alphabetical": "按字母顺序",
+          "description": "选择自动更改时如何选择壁纸。",
+          "label": "更改模式",
+          "random": "随机"
+        },
         "custom-interval": {
           "description": "以 HH:MM 格式输入时间（例如：01:30）。",
           "label": "自定义间隔"
@@ -2415,6 +2452,10 @@
         "random-wallpaper": {
           "description": "按固定间隔调度随机壁纸更改。",
           "label": "随机壁纸"
+        },
+        "scheduled-change": {
+          "description": "按固定间隔自动更改壁纸。",
+          "label": "计划更改"
         },
         "section": {
           "label": "自动化"
@@ -2905,6 +2946,7 @@
   "wifi": {
     "panel": {
       "available-networks": "可用网络",
+      "action-required": "需要动作",
       "connect": "连接",
       "connected": "已连接",
       "disabled": "Wi-Fi 已禁用",
@@ -2916,6 +2958,7 @@
       "forget": "忘记",
       "forget-network": "忘记此网络？",
       "forgetting": "正在忘记...",
+      "frequency": "频率",
       "gateway": "网关",
       "info": "信息",
       "internet": "互联网",
@@ -2931,6 +2974,14 @@
       "searching": "正在搜索附近网络...",
       "security": "安全",
       "title": "Wi-Fi"
+    },
+    "signal": {
+      "excellent": "优秀",
+      "very-good": "非常好",
+      "good": "好",
+      "fair": "一般",
+      "weak": "弱",
+      "poor": "差"
     }
   }
 }

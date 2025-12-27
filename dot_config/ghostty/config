@@ -3,6 +3,7 @@ font-family = "MesloLGS Nerd Font Mono"
 font-size = 12
 window-padding-x = 15
 window-padding-y = 15 
+working-directory = home
 cursor-click-to-move
 image-storage-limit = 4294967295
 confirm-close-surface = false

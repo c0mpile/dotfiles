@@ -30,7 +30,7 @@ while getopts "r:h" opt; do
 done
 
 if [ "$MODE" == "deploy" ]; then
-    TIMESTAMP=$(date +"%m%d%Y%H%M")
+    TIMESTAMP=$(date +"%Y%m%d%H%M")
     BACKUP_DIR="$BACKUP_ROOT/$TIMESTAMP"
     
     echo "Starting deployment..."
@@ -65,8 +65,8 @@ if [ "$MODE" == "deploy" ]; then
         "$SOURCE_DIR" "$DEST_DIR"
 
     # 3. Add to chezmoi
-    echo "Adding to chezmoi..."
-    chezmoi add "$DEST_DIR"
+    #echo "Adding to chezmoi..."
+    #chezmoi add "$DEST_DIR"
     
     echo "Deployment complete!"
 

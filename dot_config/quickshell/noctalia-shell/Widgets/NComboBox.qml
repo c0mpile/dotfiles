@@ -18,6 +18,7 @@ RowLayout {
   property bool isSettings: false
   property var defaultValue: ""
   property string settingsPath: ""
+  property color highlightColor: Color.mHover
 
   readonly property real preferredHeight: Style.baseWidgetSize * 1.1 * Style.uiScaleRatio
   readonly property var comboBox: combo
@@ -242,7 +243,7 @@ RowLayout {
           width: listView.width
           height: delegateText.implicitHeight + Style.marginS * 2
           radius: Style.iRadiusS
-          color: isHighlighted ? Color.mHover : Color.transparent
+          color: isHighlighted ? root.highlightColor : Color.transparent
 
           Behavior on color {
             ColorAnimation {
