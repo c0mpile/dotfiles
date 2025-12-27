@@ -1,0 +1,6 @@
+# Local AI Agent configs
+.agent/
+
+# Common OS trash
+.DS_Store
+Thumbs.db
