@@ -61,7 +61,7 @@ Singleton {
     var schemeName = filename.replace(".json", "");
     // Convert back to display names for special cases
     if (schemeName === "Noctalia-default") {
-      return "Verve (default)";
+      return "Noctalia (default)";
     } else if (schemeName === "Noctalia-legacy") {
       return "Noctalia (legacy)";
     } else if (schemeName === "Tokyo-Night") {
@@ -80,7 +80,7 @@ Singleton {
     }
     // Handle special cases for Noctalia schemes
     var schemeName = nameOrPath.replace(".json", "");
-    if (schemeName === "Verve (default)" || schemeName === "Noctalia (default)") {
+    if (schemeName === "Noctalia (default)") {
       schemeName = "Noctalia-default";
     } else if (schemeName === "Noctalia (legacy)") {
       schemeName = "Noctalia-legacy";

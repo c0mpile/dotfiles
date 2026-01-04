@@ -17,6 +17,7 @@ Singleton {
   property bool reloadSettings: false
   property bool directoriesCreated: false
   property bool shouldOpenSetupWizard: false
+  property bool isFreshInstall: false
 
   /*
   Shell directories.
@@ -24,14 +25,11 @@ Singleton {
   - Default cache directory: ~/.cache/noctalia
   */
   readonly property alias data: adapter  // Used to access via Settings.data.xxx.yyy
-  readonly property int settingsVersion: 33
+  readonly property int settingsVersion: 37
   readonly property bool isDebug: Quickshell.env("NOCTALIA_DEBUG") === "1"
   readonly property string shellName: "noctalia"
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
   readonly property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
-  readonly property string cacheDirImages: cacheDir + "images/"
-  readonly property string cacheDirImagesWallpapers: cacheDir + "images/wallpapers/"
-  readonly property string cacheDirImagesNotifications: cacheDir + "images/notifications/"
   readonly property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
   readonly property string defaultLocation: "Tokyo"
   readonly property string defaultAvatar: Quickshell.env("HOME") + "/.face"
@@ -50,9 +48,6 @@ Singleton {
     Quickshell.execDetached(["mkdir", "-p", configDir]);
     Quickshell.execDetached(["mkdir", "-p", cacheDir]);
 
-    Quickshell.execDetached(["mkdir", "-p", cacheDirImagesWallpapers]);
-    Quickshell.execDetached(["mkdir", "-p", cacheDirImagesNotifications]);
-
     // Ensure PAM config file exists in configDir (create once, never override)
     ensurePamConfig();
 
@@ -64,6 +59,7 @@ Singleton {
     // default settings on every start
     if (isDebug) {
       generateDefaultSettings();
+      generateWidgetDefaultSettings();
     }
 
     // Patch-in the local default, resolved to user's home
@@ -138,6 +134,7 @@ Singleton {
       }
       if (error.toString().includes("No such file") || error === 2) {
         // File doesn't exist, create it with default values
+        root.isFreshInstall = true;
         writeAdapter();
 
         // Also write to fallback if set
@@ -194,10 +191,13 @@ Singleton {
       property string position: "top" // "top", "bottom", "left", or "right"
       property list<string> monitors: [] // holds bar visibility per monitor
       property string density: "default" // "compact", "default", "comfortable"
-      property bool transparent: false
       property bool showOutline: false
       property bool showCapsule: true
       property real capsuleOpacity: 1.0
+
+      // Bar background opacity settings
+      property real backgroundOpacity: 0.93
+      property bool useSeparateOpacity: false
 
       // Floating bar settings
       property bool floating: false
@@ -215,13 +215,10 @@ Singleton {
       widgets: JsonObject {
         property list<var> left: [
           {
-            "icon": "rocket",
-            "id": "CustomButton",
-            "leftClickExec": "qs -c noctalia-shell ipc call launcher toggle"
+            "id": "Launcher"
           },
           {
-            "id": "Clock",
-            "usePrimaryColor": false
+            "id": "Clock"
           },
           {
             "id": "SystemMonitor"
@@ -296,14 +293,10 @@ Singleton {
       property real fontDefaultScale: 1.0
       property real fontFixedScale: 1.0
       property bool tooltipsEnabled: true
-      property real panelBackgroundOpacity: 0.85
+      property real panelBackgroundOpacity: 0.93
       property bool panelsAttachedToBar: true
       property string settingsPanelMode: "attached" // "centered", "attached", "window"
-      // Details view mode persistence for panels
-      property string wifiDetailsViewMode: "grid"   // "grid" or "list"
-      property string bluetoothDetailsViewMode: "grid" // "grid" or "list"
-      // Bluetooth available devices list: hide items without a name
-      property bool bluetoothHideUnnamedDevices: false
+      property bool boxBorderEnabled: false
     }
 
     // location
@@ -351,6 +344,7 @@ Singleton {
       property string quality: "very_high"
       property string colorRange: "limited"
       property bool showCursor: true
+      property bool copyToClipboard: false
       property string audioSource: "default_output"
       property string videoSource: "portal"
     }
@@ -366,6 +360,8 @@ Singleton {
       property bool setWallpaperOnAllMonitors: true
       property string fillMode: "crop"
       property color fillColor: "#000000"
+      property bool useSolidColor: false
+      property color solidColor: "#1a1a2e"
       property bool randomEnabled: false // Deprecated: use wallpaperChangeMode instead
       property string wallpaperChangeMode: "random" // "random" or "alphabetical"
       property int randomIntervalSec: 300 // 5 min
@@ -374,8 +370,6 @@ Singleton {
       property real transitionEdgeSmoothness: 0.05
       property string panelPosition: "follow_bar"
       property bool hideWallpaperFilenames: false
-      property int panelHeightPercentage: 45
-      property int panelVisibleRows: 3
       // Wallhaven settings
       property bool useWallhaven: false
       property string wallhavenQuery: ""
@@ -407,12 +401,16 @@ Singleton {
       property bool showCategories: true
       // Icon mode: "tabler" or "native"
       property string iconMode: "tabler"
+      property bool showIconBackground: true
+      property bool ignoreMouseInput: false
+      property string screenshotAnnotationTool: ""
     }
 
     // control center
     property JsonObject controlCenter: JsonObject {
       // Position: close_to_bar_button, center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
       property string position: "close_to_bar_button"
+      property string diskPath: "/"
       property JsonObject shortcuts
       shortcuts: JsonObject {
         property list<var> left: [
@@ -491,9 +489,11 @@ Singleton {
       property int memPollingInterval: 3000
       property int diskPollingInterval: 3000
       property int networkPollingInterval: 3000
+      property int loadAvgPollingInterval: 3000
       property bool useCustomColors: false
       property string warningColor: ""
       property string criticalColor: ""
+      property string externalMonitor: "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"
     }
 
     // dock
@@ -505,8 +505,7 @@ Singleton {
       property real size: 1
       property bool onlySameOutput: true
       property list<string> monitors: [] // holds dock visibility per monitor
-      // Desktop entry IDs pinned to the dock (e.g., "org.kde.konsole", "firefox.desktop")
-      property list<string> pinnedApps: []
+      property list<string> pinnedApps: [] // Desktop entry IDs pinned to the dock (e.g., "org.kde.konsole", "firefox.desktop")
       property bool colorizeIcons: false
 
       property bool pinnedStatic: false
@@ -518,6 +517,11 @@ Singleton {
     // network
     property JsonObject network: JsonObject {
       property bool wifiEnabled: true
+      property bool bluetoothRssiPollingEnabled: false  // Opt-in Bluetooth RSSI polling (uses bluetoothctl)
+      property int bluetoothRssiPollIntervalMs: 10000 // Polling interval in milliseconds for RSSI queries
+      property string wifiDetailsViewMode: "grid"   // "grid" or "list"
+      property string bluetoothDetailsViewMode: "grid" // "grid" or "list"
+      property bool bluetoothHideUnnamedDevices: false
     }
 
     // session menu
@@ -527,6 +531,7 @@ Singleton {
       property string position: "center"
       property bool showHeader: true
       property bool largeButtonsStyle: false
+      property string largeButtonsLayout: "grid"
       property bool showNumberLabels: true
       property list<var> powerOptions: [
         {
@@ -615,7 +620,7 @@ Singleton {
 
     property JsonObject colorSchemes: JsonObject {
       property bool useWallpaperColors: false
-      property string predefinedScheme: "Verve (default)"
+      property string predefinedScheme: "Noctalia (default)"
       property bool darkMode: true
       property string schedulingMode: "off"
       property string manualSunrise: "06:30"
@@ -777,7 +782,7 @@ Singleton {
   }
 
   // -----------------------------------------------------
-  // Generate default settings at the root of the repo
+  // Generate default settings: for reference only, not used by the shell
   function generateDefaultSettings() {
     try {
       Logger.d("Settings", "Generating settings-default.json");
@@ -797,9 +802,37 @@ Singleton {
   }
 
   // -----------------------------------------------------
+  // Generate default widget settings: for reference only, not used by the shell
+  function generateWidgetDefaultSettings() {
+    try {
+      Logger.d("Settings", "Generating settings-widgets-default.json");
+
+      var output = {
+        "bar": QtObj2JS.qtObjectToPlainObject(BarWidgetRegistry.widgetMetadata),
+        "controlCenter": QtObj2JS.qtObjectToPlainObject(ControlCenterWidgetRegistry.widgetMetadata),
+        "desktop": QtObj2JS.qtObjectToPlainObject(DesktopWidgetRegistry.widgetMetadata)
+      };
+      var jsonData = JSON.stringify(output, null, 2);
+
+      var defaultPath = Quickshell.shellDir + "/Assets/settings-widgets-default.json";
+
+      var base64Data = Qt.btoa(jsonData);
+      Quickshell.execDetached(["sh", "-c", `echo "${base64Data}" | base64 -d > "${defaultPath}"`]);
+    } catch (error) {
+      Logger.e("Settings", "Failed to generate widget default settings file: " + error);
+    }
+  }
+
+  // -----------------------------------------------------
   // Run versioned migrations using MigrationRegistry
   // rawJson is the parsed JSON file content (before adapter filtering)
   function runVersionedMigrations(rawJson) {
+    // Skip migrations on fresh installs (no prior settings file)
+    if (!rawJson || root.isFreshInstall) {
+      Logger.i("Settings", "Fresh install detected, skipping migrations");
+      return;
+    }
+
     const currentVersion = adapter.settingsVersion;
     const migrations = MigrationRegistry.migrations;
 
@@ -880,8 +913,7 @@ Singleton {
         var widget = adapter.bar.widgets[sectionName][i];
 
         // Check if widget registry supports user settings, if it does not, then there is nothing to do
-        const reg = BarWidgetRegistry.widgetMetadata[widget.id];
-        if ((reg === undefined) || (reg.allowUserSettings === undefined) || !reg.allowUserSettings) {
+        if (BarWidgetRegistry.widgetMetadata[widget.id] === undefined) {
           continue;
         }
 

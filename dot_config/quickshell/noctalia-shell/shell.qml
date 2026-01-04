@@ -43,7 +43,7 @@ ShellRoot {
 
   Component.onCompleted: {
     Logger.i("Shell", "---------------------------");
-    Logger.i("Shell", "Verve Shell Hello!");
+    Logger.i("Shell", "Noctalia Hello!");
 
     // Initialize plugin system early so Settings can validate plugin widgets
     PluginRegistry.init();
@@ -91,7 +91,7 @@ ShellRoot {
       Component.onCompleted: {
         Logger.i("Shell", "---------------------------");
         WallpaperService.init();
-        WallpaperCacheService.init();
+        ImageCacheService.init();
         AppThemeService.init();
         ColorSchemeService.init();
         LocationService.init();

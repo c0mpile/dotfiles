@@ -1,0 +1,58 @@
+# Directories
+ncmpcpp_directory = ~/.local/share/ncmpcpp
+lyrics_directory = ~/.local/share/ncmpcpp/lyrics
+
+# Connection
+mpd_host = "127.0.0.1"
+mpd_port = "6600"
+mpd_music_dir = "~/Music"
+
+# Display Modes
+playlist_display_mode = "columns"
+browser_display_mode = "columns"
+search_engine_display_mode = "columns"
+playlist_editor_display_mode = "columns"
+
+# User Interface
+user_interface = "alternative"
+autocenter_mode = "yes"
+centered_cursor = "yes"
+message_delay_time = "1"
+# show_cursor = "no"
+
+# Status Bar
+statusbar_visibility = "yes"
+display_volume_level = "no"
+
+# Formatting
+song_list_format = "{$4%a - }{$8%t}|{$8%f$9}$R{$3(%l)$9}"
+song_status_format = "{{%a{ - %t}}}|{%f}"
+song_library_format = "{%n - }{%t}|{%f}"
+
+# Colors - Cyan/Blue Aesthetic
+colors_enabled = "yes"
+empty_tag_color = "cyan"
+header_window_color = "cyan"
+volume_color = "cyan"
+state_line_color = "cyan"
+state_flags_color = "cyan"
+main_window_color = "default"
+color1 = "white"
+color2 = "cyan"
+progressbar_color = "black"
+progressbar_elapsed_color = "cyan"
+statusbar_color = "default"
+current_item_prefix = "$(cyan)$r"
+current_item_suffix = "$/r$(end)"
+
+# Visualizer
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "my_fifo"
+visualizer_in_stereo = "yes"
+# Options: spectrum, wave, wave_filled, ellipse
+visualizer_type = "spectrum"
+visualizer_look = "●▮"
+
+
+# ProgressBar
+progressbar_look = "─╼ "

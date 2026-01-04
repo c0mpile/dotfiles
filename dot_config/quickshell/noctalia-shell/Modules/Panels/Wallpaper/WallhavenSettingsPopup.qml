@@ -10,47 +10,33 @@ Popup {
   id: root
 
   property ShellScreen screen
-  property Item anchorItem: null
 
-  width: Math.max(440, contentColumn.implicitWidth + (Style.marginL * 2))
-  height: contentColumn.implicitHeight + (Style.marginL * 2)
+  // Measure the ENV placeholder text at current font settings
+  TextMetrics {
+    id: envPlaceholderMetrics
+    text: I18n.tr("wallpaper.panel.apikey.managed-by-env")
+    font.pointSize: Style.fontSizeM
+  }
+
+  // Dynamic width: use measured ENV placeholder width + input padding, or fallback to 440
+  width: Math.max(440, Math.round(envPlaceholderMetrics.width + (Style.marginL * 4)), Math.round(contentColumn.implicitWidth + (Style.marginL * 2)))
+  height: Math.round(contentColumn.implicitHeight + (Style.marginL * 2))
   padding: Style.marginL
   modal: true
   dim: false
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-  parent: anchorItem ? anchorItem.parent : Overlay.overlay
-
-  x: {
-    if (anchorItem) {
-      var itemPos = anchorItem.mapToItem(parent, 0, 0);
-      return itemPos.x - width + anchorItem.width;
-    }
-    return 0;
-  }
-
-  y: {
-    if (anchorItem) {
-      var itemPos = anchorItem.mapToItem(parent, 0, 0);
-      return itemPos.y + anchorItem.height + Style.marginS;
-    }
-    return 0;
-  }
 
   function showAt(item) {
-    if (!item) {
-      return;
-    }
-    anchorItem = item;
     open();
-    Qt.callLater(() => {
-                   // Try to focus the first input if available
-                   if (resolutionWidthInput.inputItem) {
-                     resolutionWidthInput.inputItem.forceActiveFocus();
-                   }
-                 });
   }
 
   onOpened: {
+    // Center on screen after popup is opened and parent position is known
+    if (screen && parent) {
+      var parentPos = parent.mapToItem(null, 0, 0);
+      x = Math.round((screen.width - width) / 2 - parentPos.x);
+      y = Math.round((screen.height - height) / 2 - parentPos.y);
+    }
     Qt.callLater(() => {
                    if (resolutionWidthInput.inputItem) {
                      resolutionWidthInput.inputItem.forceActiveFocus();
@@ -152,27 +138,24 @@ Popup {
       NTextInput {
         id: apiKeyInput
         Layout.fillWidth: true
-        
-        readonly property bool isEnvKeySet: !!Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY")
-        
-        enabled: !isEnvKeySet
-        placeholderText: isEnvKeySet ? "Managed by Environment Variable" : I18n.tr("wallpaper.panel.apikey.placeholder")
-        text: isEnvKeySet ? "Managed by Environment Variable" : (Settings.data.wallpaper.wallhavenApiKey || "")
-        
+        enabled: !WallhavenService.apiKeyManagedByEnv
+        placeholderText: WallhavenService.apiKeyManagedByEnv ? I18n.tr("wallpaper.panel.apikey.managed-by-env") : I18n.tr("wallpaper.panel.apikey.placeholder")
+        text: WallhavenService.apiKeyManagedByEnv ? "" : (Settings.data.wallpaper.wallhavenApiKey || "")
+
         // Fix for password echo mode
         Component.onCompleted: {
           if (apiKeyInput.inputItem) {
-             apiKeyInput.inputItem.echoMode = isEnvKeySet ? TextInput.Normal : TextInput.Password;
+            apiKeyInput.inputItem.echoMode = TextInput.Password;
           }
         }
 
         onEditingFinished: {
-          if (!isEnvKeySet) {
+          if (!WallhavenService.apiKeyManagedByEnv) {
             Settings.data.wallpaper.wallhavenApiKey = text;
           }
         }
       }
-      
+
       NText {
         text: I18n.tr("wallpaper.panel.apikey.help")
         color: Color.mOnSurfaceVariant
@@ -185,7 +168,6 @@ Popup {
     NDivider {
       Layout.fillWidth: true
     }
-
 
     // Sorting
     RowLayout {
@@ -290,14 +272,6 @@ Popup {
         Layout.preferredWidth: implicitWidth
       }
 
-      NText {
-        readonly property bool isSafe: typeof WallhavenService !== "undefined" ? WallhavenService.isSafeSearchEnforced : true
-        text: isSafe ? "\u{f033e}" : "\u{f0341}"
-        color: isSafe ? Color.mPrimary : Color.mError
-        pointSize: Style.fontSizeL
-        Layout.alignment: Qt.AlignVCenter
-      }
-
       Item {
         Layout.fillWidth: true
       }
@@ -331,13 +305,10 @@ Popup {
             sketchyToggle.checked = purityRow.getPurityValue(1);
             nsfwToggle.checked = purityRow.getPurityValue(2);
           }
-          
           function onWallhavenApiKeyChanged() {
-            // If API key is removed and no Env key is set, disable NSFW
-            // Note: We need to access apiKeyInput scope or check env again. For cleanliness, we check Env directly here.
-            var hasEnvKey = !!Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY");
-            if (!Settings.data.wallpaper.wallhavenApiKey && !hasEnvKey && nsfwToggle.checked) {
-               nsfwToggle.toggled(false);
+            // If API key is removed (and no ENV key), disable NSFW
+            if (!WallhavenService.apiKey && nsfwToggle.checked) {
+              nsfwToggle.toggled(false);
             }
           }
         }
@@ -450,7 +421,7 @@ Popup {
         Item {
           Layout.preferredWidth: nsfwCheckboxRow.implicitWidth
           Layout.preferredHeight: nsfwCheckboxRow.implicitHeight
-          visible: Settings.data.wallpaper.wallhavenApiKey !== "" || !!Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY")
+          visible: WallhavenService.apiKey !== ""
 
           RowLayout {
             id: nsfwCheckboxRow
@@ -995,9 +966,7 @@ Popup {
           WallhavenService.sorting = Settings.data.wallpaper.wallhavenSorting;
           WallhavenService.order = Settings.data.wallpaper.wallhavenOrder;
           WallhavenService.ratios = Settings.data.wallpaper.wallhavenRatios;
-          WallhavenService.ratios = Settings.data.wallpaper.wallhavenRatios;
-          // WallhavenService.apiKey is bound directly in the service, do not overwrite it here
-
+          WallhavenService.apiKey = Settings.data.wallpaper.wallhavenApiKey;
 
           // Update resolution settings (without triggering search)
           updateResolution(false);

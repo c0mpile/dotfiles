@@ -11,16 +11,11 @@ import qs.Widgets
 
 SmartPanel {
   id: root
-  
 
-
-  preferredWidth: isCollapsed ? (120 * Style.uiScaleRatio) : (800 * Style.uiScaleRatio)
-  preferredHeight: isCollapsed ? (40 * Style.uiScaleRatio) : (screen ? (screen.height * (Settings.data.wallpaper.panelHeightPercentage / 100)) : (600 * Style.uiScaleRatio))
-  preferredWidthRatio: isCollapsed ? 0 : 0.5
-  preferredHeightRatio: isCollapsed ? 0 : 0.45
-
-  panelBackgroundColor: isCollapsed ? Color.transparent : Color.mSurface
-  panelBorderColor: isCollapsed ? Color.transparent : Color.mOutline
+  preferredWidth: 800 * Style.uiScaleRatio
+  preferredHeight: 600 * Style.uiScaleRatio
+  preferredWidthRatio: 0.5
+  preferredHeightRatio: 0.45
 
   // Positioning
   readonly property string panelPosition: {
@@ -34,25 +29,12 @@ SmartPanel {
       return Settings.data.wallpaper.panelPosition;
     }
   }
-  
-  // When collapsed, anchor to top (or bottom if bar is there)
-  // When expanded, use default anchoring
   panelAnchorHorizontalCenter: panelPosition === "center" || panelPosition.endsWith("_center")
-  panelAnchorVerticalCenter: !isCollapsed && (panelPosition === "center")
+  panelAnchorVerticalCenter: panelPosition === "center"
   panelAnchorLeft: panelPosition !== "center" && panelPosition.endsWith("_left")
   panelAnchorRight: panelPosition !== "center" && panelPosition.endsWith("_right")
-  panelAnchorBottom: (isCollapsed && Settings.data.bar.position === "bottom") || panelPosition.startsWith("bottom_")
-  panelAnchorTop: (isCollapsed && Settings.data.bar.position !== "bottom") || panelPosition.startsWith("top_")
-
-  // Force attachment to bar when collapsed for clean look
-  forceAttachToBar: isCollapsed
-
-  // Explicitly trigger layout recalc when collapsed state changes
-  onIsCollapsedChanged: {
-    // This forces SmartPanel to re-evaluate size and position
-    // Use Qt.callLater to ensure property bindings (height, anchors) have updated first
-    Qt.callLater(() => root.setPosition());
-  }
+  panelAnchorBottom: panelPosition.startsWith("bottom_")
+  panelAnchorTop: panelPosition.startsWith("top_")
 
   // Store direct reference to content for instant access
   property var contentItem: null
@@ -135,7 +117,7 @@ SmartPanel {
   }
 
   panelContent: Rectangle {
-    id: wallpaperPanel
+    id: panelContent
 
     property int currentScreenIndex: {
       if (screen !== null) {
@@ -150,48 +132,11 @@ SmartPanel {
     property var currentScreen: Quickshell.screens[currentScreenIndex]
     property string filterText: ""
     property alias screenRepeater: screenRepeater
-    
-    // Multi-select state
-    property bool selectionModeActive: false
-    property var selectedFiles: []
-    property int selectionRevision: 0
-
-    function toggleSelection(path) {
-      var strPath = String(path);
-      var list = selectedFiles;
-      var idx = -1;
-      for (var i = 0; i < list.length; i++) {
-        if (String(list[i]) === strPath) { idx = i; break; }
-      }
-      if (idx !== -1) {
-        var newList = [];
-        for (var j = 0; j < list.length; j++) { if (j !== idx) newList.push(list[j]); }
-        list = newList;
-      } else {
-        list = list.concat([strPath]);
-      }
-      selectedFiles = list;
-      selectionRevision++;
-    }
-
-    function clearSelection() {
-      selectedFiles = [];
-      selectionRevision++;
-    }
-    
-    function requestBatchDelete() {
-      if (selectedFiles.length === 0) return;
-      deleteDialogOverlay.openBatch(selectedFiles);
-    }
 
     Component.onCompleted: {
-      root.contentItem = wallpaperPanel;
+      root.contentItem = panelContent;
     }
 
-    function requestDelete(path) {
-      deleteDialogOverlay.open(path);
-    }
-    
     // Function to update Wallhaven resolution filter
     function updateWallhavenResolution() {
       if (typeof WallhavenService === "undefined") {
@@ -238,13 +183,21 @@ SmartPanel {
       }
     }
 
+    // Solid color picker dialog
+    NColorPickerDialog {
+      id: solidColorPicker
+      screen: root.screen
+      selectedColor: Settings.data.wallpaper.solidColor
+      onColorSelected: color => WallpaperService.setSolidColor(color.toString())
+    }
+
     // Focus management
     Connections {
       target: root
       function onOpened() {
         // Ensure contentItem is set
         if (!root.contentItem) {
-          root.contentItem = wallpaperPanel;
+          root.contentItem = panelContent;
         }
         // Reset grid view selections
         for (var i = 0; i < screenRepeater.count; i++) {
@@ -270,7 +223,7 @@ SmartPanel {
       id: searchDebounceTimer
       interval: 150
       onTriggered: {
-        wallpaperPanel.filterText = searchInput.text;
+        panelContent.filterText = searchInput.text;
         // Trigger update on all screen views
         for (var i = 0; i < screenRepeater.count; i++) {
           let item = screenRepeater.itemAt(i);
@@ -283,7 +236,7 @@ SmartPanel {
 
     ColumnLayout {
       anchors.fill: parent
-      anchors.margins: root.isCollapsed ? 0 : Style.marginL
+      anchors.margins: Style.marginL
       spacing: Style.marginM
 
       // Debounce timer for Wallhaven search
@@ -302,21 +255,17 @@ SmartPanel {
       // Header
       NBox {
         Layout.fillWidth: true
-        Layout.preferredHeight: root.isCollapsed ? (40 * Style.uiScaleRatio) : (headerColumn.implicitHeight + Style.marginL * 2)
-        color: root.isCollapsed ? Color.transparent : Color.mSurfaceVariant
-        border.color: root.isCollapsed ? Color.transparent : Color.mOutline
+        Layout.preferredHeight: headerColumn.implicitHeight + Style.marginL * 2
+        color: Color.mSurfaceVariant
 
-        // Normal Header Content
         ColumnLayout {
           id: headerColumn
           anchors.fill: parent
           anchors.margins: Style.marginL
           spacing: Style.marginM
-          visible: !root.isCollapsed
 
           RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: 40 * Style.uiScaleRatio
             spacing: Style.marginM
 
             NIcon {
@@ -331,6 +280,15 @@ SmartPanel {
               font.weight: Style.fontWeightBold
               color: Color.mOnSurface
               Layout.fillWidth: true
+            }
+
+            NIconButton {
+              icon: "palette"
+              tooltipText: I18n.tr("wallpaper.panel.solid-color.tooltip")
+              baseSize: Style.baseWidgetSize * 0.8
+              colorBg: Settings.data.wallpaper.useSolidColor ? Color.mPrimary : Color.mSurfaceVariant
+              colorFg: Settings.data.wallpaper.useSolidColor ? Color.mOnPrimary : Color.mPrimary
+              onClicked: solidColorPicker.open()
             }
 
             NIconButton {
@@ -351,59 +309,26 @@ SmartPanel {
               onClicked: {
                 if (Settings.data.wallpaper.useWallhaven) {
                   if (typeof WallhavenService !== "undefined") {
-                     WallhavenService.search(Settings.data.wallpaper.wallhavenQuery, 1);
+                    WallhavenService.search(Settings.data.wallpaper.wallhavenQuery, 1);
                   }
                 } else {
                   WallpaperService.refreshWallpapersList();
                 }
               }
             }
-
-
+            //Hide Wallpaper Filenames
+            NIconButton {
+              icon: Settings.data.wallpaper.hideWallpaperFilenames ? "eye-closed" : "eye"
+              tooltipText: Settings.data.wallpaper.hideWallpaperFilenames ? I18n.tr("settings.wallpaper.settings.hide-wallpaper-filenames.tooltip-show") : I18n.tr("settings.wallpaper.settings.hide-wallpaper-filenames.tooltip-hide")
+              baseSize: Style.baseWidgetSize * 0.8
+              onClicked: Settings.data.wallpaper.hideWallpaperFilenames = !Settings.data.wallpaper.hideWallpaperFilenames
+            }
 
             NIconButton {
               icon: "close"
               tooltipText: I18n.tr("tooltips.close")
               baseSize: Style.baseWidgetSize * 0.8
               onClicked: root.close()
-            }
-            
-            // Selection Mode Toggle / Actions
-            NText {
-               text: qsTr("Select")
-               font.weight: Style.fontWeightBold
-               color: wallpaperPanel.selectionModeActive ? Color.mPrimary : Color.mOnSurfaceVariant
-               visible: !Settings.data.wallpaper.useWallhaven && !wallpaperPanel.selectionModeActive
-               
-               MouseArea {
-                   anchors.fill: parent
-                   cursorShape: Qt.PointingHandCursor
-                   onClicked: wallpaperPanel.selectionModeActive = true
-               }
-            }
-            
-            // Action Buttons for Selection Mode
-            RowLayout {
-                visible: wallpaperPanel.selectionModeActive
-                spacing: Style.marginM
-                
-                NButton {
-                    text: qsTr("Cancel")
-                    onClicked: {
-                        wallpaperPanel.selectionModeActive = false
-                        wallpaperPanel.clearSelection()
-                    }
-                }
-                
-                NButton {
-                    text: qsTr("Delete (%1)").arg(wallpaperPanel.selectedFiles ? wallpaperPanel.selectedFiles.length : 0)
-                    backgroundColor: Color.mError
-                    textColor: Color.mOnError
-                    hoverColor: Qt.lighter(Color.mError, 1.1)
-                    enabled: wallpaperPanel.selectedFiles && wallpaperPanel.selectedFiles.length > 0
-                    opacity: enabled ? 1 : 0.5
-                    onClicked: wallpaperPanel.requestBatchDelete()
-                }
             }
           }
 
@@ -451,6 +376,7 @@ SmartPanel {
             NTextInput {
               id: searchInput
               placeholderText: Settings.data.wallpaper.useWallhaven ? I18n.tr("placeholders.search-wallhaven") : I18n.tr("placeholders.search-wallpapers")
+              fontSize: Style.fontSizeM
               Layout.fillWidth: true
 
               property bool initializing: true
@@ -459,7 +385,7 @@ SmartPanel {
                 if (Settings.data.wallpaper.useWallhaven) {
                   searchInput.text = Settings.data.wallpaper.wallhavenQuery || "";
                 } else {
-                  searchInput.text = wallpaperPanel.filterText || "";
+                  searchInput.text = panelContent.filterText || "";
                 }
                 // Give focus to search input
                 if (searchInput.inputItem && searchInput.inputItem.visible) {
@@ -478,7 +404,7 @@ SmartPanel {
                   if (Settings.data.wallpaper.useWallhaven) {
                     searchInput.text = Settings.data.wallpaper.wallhavenQuery || "";
                   } else {
-                    searchInput.text = wallpaperPanel.filterText || "";
+                    searchInput.text = panelContent.filterText || "";
                   }
                 }
               }
@@ -497,12 +423,12 @@ SmartPanel {
 
               onEditingFinished: {
                 if (Settings.data.wallpaper.useWallhaven) {
-                   wallhavenSearchDebounceTimer.stop();
-                   Settings.data.wallpaper.wallhavenQuery = text;
-                   if (typeof WallhavenService !== "undefined") {
-                     wallhavenView.loading = true;
-                     WallhavenService.search(text, 1);
-                   }
+                  wallhavenSearchDebounceTimer.stop();
+                  Settings.data.wallpaper.wallhavenQuery = text;
+                  if (typeof WallhavenService !== "undefined") {
+                    wallhavenView.loading = true;
+                    WallhavenService.search(text, 1);
+                  }
                 }
               }
 
@@ -523,9 +449,6 @@ SmartPanel {
             NComboBox {
               id: sourceComboBox
               Layout.fillWidth: false
-              
-              // Match inactive workspace highlight (occupied inactive)
-              highlightColor: Color.mSecondary
 
               model: [
                 {
@@ -556,25 +479,26 @@ SmartPanel {
                             if (useWallhaven) {
                               searchInput.text = Settings.data.wallpaper.wallhavenQuery || "";
                             } else {
-                              searchInput.text = wallpaperPanel.filterText || "";
+                              searchInput.text = panelContent.filterText || "";
                             }
                             if (useWallhaven && typeof WallhavenService !== "undefined") {
-                               // Update service properties when switching to Wallhaven
-                               // Don't search here - Component.onCompleted will handle it when the component is created
-                               // This prevents duplicate searches
-                               WallhavenService.categories = Settings.data.wallpaper.wallhavenCategories;
-                               WallhavenService.purity = Settings.data.wallpaper.wallhavenPurity;
-                               WallhavenService.sorting = Settings.data.wallpaper.wallhavenSorting;
-                               WallhavenService.order = Settings.data.wallpaper.wallhavenOrder;
+                              // Update service properties when switching to Wallhaven
+                              // Don't search here - Component.onCompleted will handle it when the component is created
+                              // This prevents duplicate searches
+                              WallhavenService.categories = Settings.data.wallpaper.wallhavenCategories;
+                              WallhavenService.purity = Settings.data.wallpaper.wallhavenPurity;
+                              WallhavenService.sorting = Settings.data.wallpaper.wallhavenSorting;
+                              WallhavenService.order = Settings.data.wallpaper.wallhavenOrder;
 
-                               // Update resolution settings
-                               wallpaperPanel.updateWallhavenResolution();
+                              // Update resolution settings
+                              panelContent.updateWallhavenResolution();
 
-                               // If the view is already initialized, trigger a new search when switching to it
-                               if (wallhavenView && wallhavenView.initialized && !WallhavenService.fetching) {
-                                 wallhavenView.loading = true;
-                                 WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", 1);
-                               }
+                              // If the view is already initialized, trigger a new search when switching to it
+                              // Preserve current page when switching back to Wallhaven source
+                              if (wallhavenView && wallhavenView.initialized && !WallhavenService.fetching) {
+                                wallhavenView.loading = true;
+                                WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", WallhavenService.currentPage);
+                              }
                             }
                           }
             }
@@ -597,28 +521,12 @@ SmartPanel {
             }
           }
         }
-        
-        // Collapsed Header (Minimal)
-        Item {
-          anchors.fill: parent
-          visible: root.isCollapsed
-          
-          NIconButton {
-            id: expandBtn
-            anchors.centerIn: parent
-            icon: "chevron-down"
-            tooltipText: I18n.tr("tooltips.expand")
-            baseSize: Style.baseWidgetSize * 0.8
-            onClicked: root.isCollapsed = false
-          }
-        }
       }
 
       // Content stack: Wallhaven or Local
       NBox {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        visible: !root.isCollapsed
         color: Color.mSurfaceVariant
 
         StackLayout {
@@ -648,134 +556,52 @@ SmartPanel {
           }
         }
 
-
-      }
-    }
-    
-    // -------------------------------------------------------------------------
-    // Delete Confirmation Dialog
-    // -------------------------------------------------------------------------
-    Item {
-      id: deleteDialogOverlay
-      anchors.fill: parent
-      z: 999
-      visible: false
-
-      property string pendingPath: ""
-      property var pendingPaths: []
-
-      // Dimmer Background
-      Rectangle {
-        anchors.fill: parent
-        color: Color.black
-        opacity: deleteDialogOverlay.visible ? 0.6 : 0
-        Behavior on opacity {
-            NumberAnimation { duration: Style.animationFast }
-        }
-        
-        MouseArea {
-            anchors.fill: parent
-            onClicked: deleteDialogOverlay.close()
-        }
-      }
-
-      // Dialog Box
-      Rectangle {
-        anchors.centerIn: parent
-        width: Math.min(parent.width - Style.marginL * 2, 400 * Style.uiScaleRatio)
-        height: dialogColumn.implicitHeight + Style.marginL * 2
-        
-        color: Color.mSurface 
-        radius: Style.radiusL
-        border.color: Color.mOutline
-        border.width: Style.borderS
-        
-        // Pop-in animation
-        scale: deleteDialogOverlay.visible ? 1 : 0.95
-        opacity: deleteDialogOverlay.visible ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: Style.animationFast } }
-        Behavior on scale { NumberAnimation { duration: Style.animationFast; easing.type: Easing.OutQuad } }
-
-        // Prevent clicking through the dialog
-        MouseArea { anchors.fill: parent }
-
-        ColumnLayout {
-          id: dialogColumn
+        // Overlay gradient to smooth the hard cut due to scrolling
+        Rectangle {
           anchors.fill: parent
-          anchors.margins: Style.marginL
-          spacing: Style.marginL
+          anchors.margins: Style.borderS
+          radius: Style.radiusM
 
-          NText {
-            Layout.fillWidth: true
-            text: deleteDialogOverlay.pendingPaths.length > 0 
-                  ? qsTr("Delete %1 Wallpapers?").arg(deleteDialogOverlay.pendingPaths.length)
-                  : qsTr("Delete Wallpaper?")
-            horizontalAlignment: Text.AlignHCenter
-            pointSize: Style.fontSizeL
-            font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
-          }
-
-          NText {
-            Layout.fillWidth: true
-            text: deleteDialogOverlay.pendingPaths.length > 0 
-                  ? qsTr("Are you sure you want to delete these %1 files?\nThis action cannot be undone.").arg(deleteDialogOverlay.pendingPaths.length)
-                  : qsTr("Are you sure you want to delete this specific wallpaper file?\nThis action cannot be undone.")
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.Wrap
-            pointSize: Style.fontSizeM
-            color: Color.mOnSurfaceVariant
-          }
-
-          RowLayout {
-            Layout.alignment: Qt.AlignHCenter
-            spacing: Style.marginM
-
-            NButton {
-              text: "Cancel"
-              onClicked: deleteDialogOverlay.close()
+          // Get active grid view for scroll position
+          readonly property var activeGridView: {
+            if (Settings.data.wallpaper.useWallhaven) {
+              return wallhavenView.gridView;
+            } else {
+              const view = screenRepeater.itemAt(currentScreenIndex);
+              return view?.gridView ?? null;
             }
+          }
 
-            NButton {
-              text: "Delete"
-              backgroundColor: Color.mError
-              textColor: Color.mOnError
-              hoverColor: Qt.lighter(Color.mError, 1.1)
-              onClicked: {
-                if (deleteDialogOverlay.pendingPaths.length > 0) {
-                    WallpaperService.deleteLocalWallpapers(deleteDialogOverlay.pendingPaths);
-                    wallpaperPanel.selectionModeActive = false;
-                    wallpaperPanel.clearSelection();
-                } else if (deleteDialogOverlay.pendingPath !== "") {
-                   WallpaperService.deleteLocalWallpaper(deleteDialogOverlay.pendingPath);
-                }
-                deleteDialogOverlay.close();
-              }
+          opacity: {
+            if (!activeGridView)
+              return 1;
+            return (activeGridView.contentY + activeGridView.height >= activeGridView.contentHeight - 10) ? 0 : 1;
+          }
+
+          Behavior on opacity {
+            NumberAnimation {
+              duration: Style.animationFast
+              easing.type: Easing.InOutQuad
+            }
+          }
+
+          gradient: Gradient {
+            GradientStop {
+              position: 0.0
+              color: Color.transparent
+            }
+            GradientStop {
+              position: 0.9
+              color: Color.transparent
+            }
+            GradientStop {
+              position: 1.0
+              color: Color.mSurfaceVariant
             }
           }
         }
       }
-
-      function open(path) {
-        pendingPath = path;
-        pendingPaths = [];
-        visible = true;
-      }
-      
-      function openBatch(paths) {
-        pendingPath = "";
-        pendingPaths = paths;
-        visible = true;
-      }
-      
-      function close() {
-        visible = false;
-        pendingPath = "";
-        pendingPaths = [];
-      }
     }
-
-
   }
 
   // Component for each screen's wallpaper view
@@ -791,12 +617,12 @@ SmartPanel {
 
     // Expose updateFiltered as a proper function property
     function updateFiltered() {
-      if (!wallpaperPanel.filterText || wallpaperPanel.filterText.trim().length === 0) {
+      if (!panelContent.filterText || panelContent.filterText.trim().length === 0) {
         filteredWallpapers = wallpapersList;
         return;
       }
 
-      const results = FuzzySort.go(wallpaperPanel.filterText.trim(), wallpapersWithNames, {
+      const results = FuzzySort.go(panelContent.filterText.trim(), wallpapersWithNames, {
                                      "key": 'name',
                                      "limit": 200
                                    });
@@ -844,13 +670,7 @@ SmartPanel {
         };
       });
 
-      // Verify that current wallpaper still exists in the new list
-      // If the file was deleted, this check prevents the UI from showing a ghost selection or crashing
-      var cw = WallpaperService.getWallpaper(targetScreen.name);
-      var exists = wallpapersList.indexOf(cw) !== -1;
-      
-      currentWallpaper = exists ? cw : "";
-      
+      currentWallpaper = WallpaperService.getWallpaper(targetScreen.name);
       updateFiltered();
     }
 
@@ -860,8 +680,6 @@ SmartPanel {
 
       GridView {
         id: wallpaperGridView
-        
-        property var selectionContext: wallpaperPanel
 
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -890,44 +708,14 @@ SmartPanel {
           }
         }
 
-        property int visibleRows: Settings.data.wallpaper.panelVisibleRows
-        
-        // Calculate cell height based on available grid height and desired rows
-        cellHeight: Math.floor((height - topMargin - bottomMargin) / visibleRows)
-
-        // Derive cell width to maintain aspect ratio (based on original 0.7 ratio)
-        // Original: cellHeight = (itemSize * 0.7) + overhead
-        // New: itemSize = (cellHeight - overhead) / 0.7
-        property int overhead: Style.marginXS + Style.fontSizeXS + Style.marginM
-        property int calculatedItemSize: Math.max(50, Math.floor((cellHeight - overhead) / 0.7))
-        
-        cellWidth: calculatedItemSize
+        property int columns: (screen.width > 1920) ? 5 : 4
         property int itemSize: cellWidth
 
-        property int columns: {
-             let avail = width - (leftMargin + rightMargin);
-             let cols = Math.floor(avail / cellWidth);
-             return Math.max(1, cols);
-        }
+        cellWidth: Math.floor((width - leftMargin - rightMargin) / columns)
+        cellHeight: Math.floor(itemSize * 0.7) + Style.marginXS + Style.fontSizeXS + Style.marginM
 
-        leftMargin: {
-          if (!cellWidth || width <= 0) return Style.marginS;
-          
-          // Layout Logic with Centering
-          // 1. Calculate safe available width (subtract margins + safety buffer for scrollbar)
-          let availableWidth = width - (Style.marginS * 2) - Style.marginXL;
-          
-          // 2. Determine how many columns fit
-          let cols = Math.floor(availableWidth / cellWidth);
-          if (cols <= 0) cols = 1;
-          
-          // 3. Calculate remaining space to center the grid
-          let contentWidth = cols * cellWidth;
-          let remaining = width - contentWidth;
-          
-          return Math.max(Style.marginS, Math.floor(remaining / 2));
-        }
-        rightMargin: leftMargin
+        leftMargin: Style.marginS
+        rightMargin: Style.marginS
         topMargin: Style.marginS
         bottomMargin: Style.marginS
 
@@ -1010,206 +798,140 @@ SmartPanel {
           }
         }
 
-        delegate: ColumnLayout {
-          id: wallpaperItem
+        delegate: Item {
+          id: wallpaperItemWrapper
+          width: wallpaperGridView.cellWidth
+          height: wallpaperGridView.cellHeight
 
-          property string wallpaperPath: modelData
-          property bool isSelected: (wallpaperPath === currentWallpaper)
-          property bool isSelectedInMode: {
-              if (!wallpaperGridView || !wallpaperGridView.selectionContext) return false;
-              var ctx = wallpaperGridView.selectionContext;
-              if (!ctx.selectionModeActive) return false;
-              var rev = ctx.selectionRevision;
-              var strPath = String(wallpaperPath);
-              var list = ctx.selectedFiles;
-              if (!list) return false;
-              for (var i = 0; i < list.length; i++) {
-                 if (String(list[i]) === strPath) return true;
+          ColumnLayout {
+            id: wallpaperItem
+            anchors.fill: parent
+            anchors.margins: Style.marginXS
+
+            property string wallpaperPath: modelData
+            property bool isSelected: (wallpaperPath === currentWallpaper)
+            property string filename: wallpaperPath.split('/').pop()
+            property string cachedPath: ""
+
+            spacing: Style.marginXS
+
+            Component.onCompleted: {
+              if (ImageCacheService.initialized) {
+                ImageCacheService.getThumbnail(wallpaperPath, function (path, success) {
+                  if (wallpaperItem)
+                    wallpaperItem.cachedPath = success ? path : wallpaperPath;
+                });
+              } else {
+                cachedPath = wallpaperPath;
               }
-              return false;
-          }
-          property string filename: wallpaperPath.split('/').pop()
-
-          width: wallpaperGridView.itemSize
-          spacing: Style.marginXS
-
-          Rectangle {
-            id: imageContainer
-            Layout.fillWidth: true
-            Layout.preferredHeight: Math.round(wallpaperGridView.itemSize * 0.67)
-            color: Color.transparent
-            
-            MouseArea {
-                id: cellMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                
-                onClicked: {
-                  var ctx = wallpaperGridView.selectionContext;
-                   if (ctx && ctx.selectionModeActive) {
-                       if (wallpaperPath === currentWallpaper) return;
-                       ctx.toggleSelection(wallpaperPath);
-                   } else {
-                       wallpaperGridView.currentIndex = index
-                       wallpaperGridView.forceActiveFocus()
-                       
-                       var path = wallpaperPath
-                       if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
-                           WallpaperService.changeWallpaper(path, undefined)
-                       } else {
-                           WallpaperService.changeWallpaper(path, targetScreen.name)
-                       }
-                   }
-                }
             }
 
-            NImageCached {
-              id: img
-              imagePath: wallpaperPath
-              cacheFolder: Settings.cacheDirImagesWallpapers
-              anchors.fill: parent
-            }
-
-            Rectangle {
-              anchors.fill: parent
-              color: Color.transparent
-              border.color: {
-                if (isSelectedInMode && wallpaperGridView.selectionContext.selectionModeActive) return Color.mPrimary;
-                if (isSelected) return Color.mSecondary;
-                if (wallpaperGridView.currentIndex === index) return Color.mHover;
-                return Color.mSurface;
-              }
-              border.width: Math.max(1, Style.borderL * 1.5)
-            }
-            
-            // Delete button overlay
             Item {
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.margins: Style.marginXS
-                width: 28 * Style.uiScaleRatio
-                height: 28 * Style.uiScaleRatio
-                z: 10
-                visible: (cellMouseArea.containsMouse || deleteBtnMouse.containsMouse) && !isSelected && !wallpaperGridView.selectionContext.selectionModeActive
-                
-                Rectangle {
-                    anchors.fill: parent
-                    radius: width / 2
-                    color: Color.mSurface
-                    opacity: 0.9
-                    border.color: Color.mOutline
-                    border.width: 1
-                }
-                
-                NIcon {
-                    anchors.centerIn: parent
-                    icon: "trash"
-                    pointSize: Style.fontSizeS
-                    color: Color.mError
-                }
-                
-                MouseArea {
-                    id: deleteBtnMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        wallpaperPanel.requestDelete(wallpaperPath);
-                    }
-                }
-            }
+              id: imageContainer
+              Layout.fillWidth: true
+              Layout.preferredHeight: Math.round(wallpaperGridView.itemSize * 0.67)
 
-            // Multi-Select Indicator (Checkmark)
-            Rectangle {
+              NImageRounded {
+                id: img
+                anchors.fill: parent
+                imagePath: wallpaperItem.cachedPath
+                radius: Style.radiusM
+                borderColor: {
+                  if (wallpaperItem.isSelected) {
+                    return Color.mSecondary;
+                  }
+                  if (wallpaperGridView.currentIndex === index) {
+                    return Color.mHover;
+                  }
+                  return Color.mSurface;
+                }
+                borderWidth: Math.max(1, Style.borderL * 1.5)
+                imageFillMode: Image.PreserveAspectCrop
+              }
+
+              // Loading/error state background
+              Rectangle {
+                anchors.fill: parent
+                color: Color.mSurfaceVariant
+                radius: Style.radiusM
+                visible: img.status === Image.Loading || img.status === Image.Error || wallpaperItem.cachedPath === ""
+
+                NIcon {
+                  icon: "image"
+                  pointSize: Style.fontSizeL
+                  color: Color.mOnSurfaceVariant
+                  anchors.centerIn: parent
+                }
+              }
+
+              NBusyIndicator {
+                anchors.centerIn: parent
+                visible: img.status === Image.Loading || wallpaperItem.cachedPath === ""
+                running: visible
+                size: 18
+              }
+
+              Rectangle {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.margins: Style.marginS
-                width: 28 * Style.uiScaleRatio
-                height: 28 * Style.uiScaleRatio
+                width: 28
+                height: 28
                 radius: width / 2
-                
-                visible: wallpaperGridView.selectionContext.selectionModeActive && !isSelected
-                color: isSelectedInMode ? Color.mPrimary : Qt.rgba(0,0,0,0.5)
+                color: Color.mSecondary
                 border.color: Color.mOutline
-                border.width: 1
-                
+                border.width: Style.borderS
+                visible: wallpaperItem.isSelected
+
                 NIcon {
-                   anchors.centerIn: parent
-                   icon: "check"
-                   pointSize: Style.fontSizeS
-                   color: Color.mOnPrimary
-                   visible: isSelectedInMode
+                  icon: "check"
+                  pointSize: Style.fontSizeM
+                  color: Color.mOnSecondary
+                  anchors.centerIn: parent
                 }
-            }
-
-            Rectangle {
-              anchors.top: parent.top
-              anchors.right: parent.right
-              anchors.margins: Style.marginS
-              width: 28
-              height: 28
-              radius: width / 2
-              color: Color.mSecondary
-              border.color: Color.mOutline
-              border.width: Style.borderS
-              visible: isSelected && !wallpaperGridView.selectionContext.selectionModeActive
-
-              NIcon {
-                icon: "check"
-                pointSize: Style.fontSizeM
-                color: Color.mOnSecondary
-                anchors.centerIn: parent
               }
-            }
 
-            Rectangle {
-              anchors.fill: parent
-              color: Color.mSurface
-              opacity: (hoverHandler.hovered || isSelected || isSelectedInMode || wallpaperGridView.currentIndex === index) ? 0 : 0.3
-              radius: parent.radius
-              Behavior on opacity {
-                NumberAnimation {
-                  duration: Style.animationFast
+              Rectangle {
+                anchors.fill: parent
+                color: Color.mSurface
+                radius: Style.radiusM
+                opacity: (hoverHandler.hovered || wallpaperItem.isSelected || wallpaperGridView.currentIndex === index) ? 0 : 0.3
+                Behavior on opacity {
+                  NumberAnimation {
+                    duration: Style.animationFast
+                  }
+                }
+              }
+
+              HoverHandler {
+                id: hoverHandler
+              }
+
+              TapHandler {
+                onTapped: {
+                  wallpaperGridView.forceActiveFocus();
+                  wallpaperGridView.currentIndex = index;
+                  if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
+                    WallpaperService.changeWallpaper(wallpaperItem.wallpaperPath, undefined);
+                  } else {
+                    WallpaperService.changeWallpaper(wallpaperItem.wallpaperPath, targetScreen.name);
+                  }
                 }
               }
             }
 
-            // More efficient hover handling
-            HoverHandler {
-              id: hoverHandler
+            NText {
+              text: wallpaperItem.filename
+              visible: !Settings.data.wallpaper.hideWallpaperFilenames
+              color: (hoverHandler.hovered || wallpaperItem.isSelected || wallpaperGridView.currentIndex === index) ? Color.mOnSurface : Color.mOnSurfaceVariant
+              pointSize: Style.fontSizeXS
+              Layout.fillWidth: true
+              Layout.leftMargin: Style.marginS
+              Layout.rightMargin: Style.marginS
+              Layout.alignment: Qt.AlignHCenter
+              horizontalAlignment: Text.AlignHCenter
+              elide: Text.ElideRight
             }
-
-            TapHandler {
-              onTapped: {
-                  var ctx = wallpaperGridView.selectionContext;
-                   if (ctx && ctx.selectionModeActive) {
-                       if (wallpaperPath === currentWallpaper) return;
-                       ctx.toggleSelection(wallpaperPath);
-                   } else {
-                       wallpaperGridView.forceActiveFocus();
-                       wallpaperGridView.currentIndex = index;
-                       if (Settings.data.wallpaper.setWallpaperOnAllMonitors) {
-                         WallpaperService.changeWallpaper(wallpaperPath, undefined);
-                       } else {
-                         WallpaperService.changeWallpaper(wallpaperPath, targetScreen.name);
-                       }
-                   }
-              }
-            }
-          }
-
-          NText {
-            text: filename
-            visible: !Settings.data.wallpaper.hideWallpaperFilenames
-            color: (hoverHandler.hovered || isSelected || wallpaperGridView.currentIndex === index) ? Color.mOnSurface : Color.mOnSurfaceVariant
-            pointSize: Style.fontSizeXS
-            Layout.fillWidth: true
-            Layout.leftMargin: Style.marginS
-            Layout.rightMargin: Style.marginS
-            Layout.alignment: Qt.AlignHCenter
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight
           }
         }
       }
@@ -1245,13 +967,13 @@ SmartPanel {
             Layout.alignment: Qt.AlignHCenter
           }
           NText {
-            text: (wallpaperPanel.filterText && wallpaperPanel.filterText.length > 0) ? I18n.tr("wallpaper.no-match") : I18n.tr("wallpaper.no-wallpaper")
+            text: (panelContent.filterText && panelContent.filterText.length > 0) ? I18n.tr("wallpaper.no-match") : I18n.tr("wallpaper.no-wallpaper")
             color: Color.mOnSurface
             font.weight: Style.fontWeightBold
             Layout.alignment: Qt.AlignHCenter
           }
           NText {
-            text: (wallpaperPanel.filterText && wallpaperPanel.filterText.length > 0) ? I18n.tr("wallpaper.try-different-search") : I18n.tr("wallpaper.configure-directory")
+            text: (panelContent.filterText && panelContent.filterText.length > 0) ? I18n.tr("wallpaper.try-different-search") : I18n.tr("wallpaper.configure-directory")
             color: Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
@@ -1269,7 +991,7 @@ SmartPanel {
     id: wallhavenViewRoot
     property alias gridView: wallhavenGridView
 
-    property var wallpapers: (typeof WallhavenService !== "undefined" && WallhavenService.currentResults) ? WallhavenService.currentResults : []
+    property var wallpapers: []
     property bool loading: false
     property string errorMessage: ""
     property bool initialized: false
@@ -1282,10 +1004,6 @@ SmartPanel {
         wallhavenViewRoot.loading = false;
         wallhavenViewRoot.errorMessage = "";
         wallhavenViewRoot.searchScheduled = false;
-        // Imperatively update page input (Standard TextField)
-        if (typeof pageInput !== "undefined") {
-           pageInput.text = "" + WallhavenService.currentPage;
-        }
       }
       function onSearchFailed(error) {
         wallhavenViewRoot.loading = false;
@@ -1330,23 +1048,10 @@ SmartPanel {
           WallhavenService.resolutions = "";
         }
 
-        // Check if we should retain previous results
-        // If we have results and the query hasn't changed, reuse them to prevent resetting the user
-        var queryMatch = (Settings.data.wallpaper.wallhavenQuery || "") === WallhavenService.currentQuery;
-        
-        // If we have results and a match, the declarative binding already handles the data.
-        // We just need to handle the case where we NEED a search.
-        if (WallhavenService.currentResults.length === 0 || !queryMatch) {
-            // New search needed
-            loading = true;
-            WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", 1);
-        } else {
-             // Data preserved via binding. Restore error state if any.
-             if (WallhavenService.lastError) {
-                  errorMessage = WallhavenService.lastError;
-             }
-             Logger.d("WallhavenView", "Restoring previous results for query:", WallhavenService.currentQuery);
-        }
+        // Now check if we can actually search (fetching check is in WallhavenService.search)
+        // Use persisted currentPage to maintain state across window reopening
+        loading = true;
+        WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", WallhavenService.currentPage);
       }
     }
 
@@ -1378,37 +1083,14 @@ SmartPanel {
             currentIndex = -1;
           }
 
-          property int visibleRows: Settings.data.wallpaper.panelVisibleRows
-          
-          cellHeight: Math.floor((height - topMargin - bottomMargin) / visibleRows)
-          
-          property int overhead: Style.marginXS + (Settings.data.wallpaper.hideWallpaperFilenames ? 0 : Style.fontSizeXS + Style.marginM)
-          property int calculatedItemSize: Math.max(50, Math.floor((cellHeight - overhead) / 0.7))
-          
-          cellWidth: calculatedItemSize
-
-          property int columns: {
-             let avail = width - (leftMargin + rightMargin);
-             let cols = Math.floor(avail / cellWidth);
-             return Math.max(1, cols);
-          }
+          property int columns: (screen.width > 1920) ? 5 : 4
           property int itemSize: cellWidth
 
-          leftMargin: {
-            if (!cellWidth || width <= 0) return Style.marginS;
-            
-            // Layout Logic with Centering
-            let availableWidth = width - (Style.marginS * 2) - Style.marginXL;
-            
-            let cols = Math.floor(availableWidth / cellWidth);
-            if (cols <= 0) cols = 1;
-            
-            let contentWidth = cols * cellWidth;
-            let remaining = width - contentWidth;
-            
-            return Math.max(Style.marginS, Math.floor(remaining / 2));
-          }
-          rightMargin: leftMargin
+          cellWidth: Math.floor((width - leftMargin - rightMargin) / columns)
+          cellHeight: Math.floor(itemSize * 0.7) + Style.marginXS + (Settings.data.wallpaper.hideWallpaperFilenames ? 0 : Style.fontSizeXS + Style.marginM)
+
+          leftMargin: Style.marginS
+          rightMargin: Style.marginS
           topMargin: Style.marginS
           bottomMargin: Style.marginS
 
@@ -1510,6 +1192,8 @@ SmartPanel {
                 asynchronous: true
                 cache: true
                 smooth: true
+                sourceSize.width: Math.round(wallhavenGridView.itemSize * 0.67)
+                sourceSize.height: Math.round(wallhavenGridView.itemSize * 0.67)
               }
 
               Rectangle {
@@ -1694,108 +1378,16 @@ SmartPanel {
           onClicked: WallhavenService.previousPage()
         }
 
-        RowLayout {
-          spacing: Style.marginXS
-
-          TextField {
-            id: pageInput
-            // Standard TextField styling to match theme
-            Layout.preferredWidth: 40 * Style.uiScaleRatio
-            Layout.minimumWidth: 40 * Style.uiScaleRatio
-            
-            // Zero padding to align perfectly with NText
-            padding: 0
-            topPadding: 0
-            bottomPadding: 0
-            leftPadding: 0
-            rightPadding: 0
-            
-            // Minimal styling - Transparent background
-            background: null
-            color: Color.mOnSurface
-            
-            // Replicate NText.qml font logic exactly
-            font.family: Settings.data.ui.fontDefault
-            font.weight: Style.fontWeightMedium
-            // pointSize * (defaultScale * uiScaleRatio)
-            font.pointSize: Style.fontSizeM * Settings.data.ui.fontDefaultScale * Style.uiScaleRatio
-            
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            
-            // Selection color
-            selectedTextColor: Color.mOnPrimary
-            selectionColor: Color.mPrimary
-            
-            // Decoupled: Initialize safely
-            text: "1"
-            
-            // Robust key handling
-            Keys.onReturnPressed: event => {
-               event.accepted = true;
-               focus = false;
-               submitPage();
-            }
-            Keys.onEnterPressed: event => {
-               event.accepted = true;
-               focus = false;
-               submitPage();
-            }
-            
-            // Keep onEditingFinished as fallback or for focus loss
-            onEditingFinished: {
-               focus = false;
-               submitPage();
-            }
-            
-            function submitPage() {
-               if (typeof WallhavenService === "undefined") return;
-
-               var page = parseInt(text.trim())
-               if (!isNaN(page) && page > 0 && page <= WallhavenService.lastPage) {
-                 if (page !== WallhavenService.currentPage) {
-                   wallhavenViewRoot.loading = true
-                   // Revert to using the Settings value which is reliable
-                   WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", page)
-                 }
-               } else {
-                 text = "" + WallhavenService.currentPage
-               }
-            }
-            
-            Component.onCompleted: {
-               if (typeof WallhavenService !== "undefined") {
-                  text = "" + WallhavenService.currentPage;
-               }
-            }
-          }
-
-          NText {
-             text: "of " + ((typeof WallhavenService !== "undefined") ? WallhavenService.lastPage : "1")
-             color: Color.mOnSurface
-          }
+        NText {
+          text: I18n.tr("wallpaper.wallhaven.page").replace("{current}", WallhavenService.currentPage).replace("{total}", WallhavenService.lastPage)
+          color: Color.mOnSurface
+          horizontalAlignment: Text.AlignHCenter
         }
 
         NIconButton {
           icon: "chevron-right"
           enabled: WallhavenService.currentPage < WallhavenService.lastPage && !WallhavenService.fetching
-          onClicked: {
-              // Custom Logic: Check if user entered a specific page manually
-              if (typeof WallhavenService === "undefined" || typeof pageInput === "undefined") {
-                  WallhavenService.nextPage()
-                  return
-              }
-
-              var inputPage = parseInt(pageInput.text.trim())
-              // If valid and explicitly different from current page, treat as manual jump
-              if (!isNaN(inputPage) && inputPage > 0 && inputPage <= WallhavenService.lastPage && inputPage !== WallhavenService.currentPage) {
-                  wallhavenViewRoot.loading = true
-                  WallhavenService.search(Settings.data.wallpaper.wallhavenQuery || "", inputPage)
-              } else {
-                  // Standard behavior
-                  WallhavenService.nextPage()
-              }
-          }
+          onClicked: WallhavenService.nextPage()
         }
 
         Item {

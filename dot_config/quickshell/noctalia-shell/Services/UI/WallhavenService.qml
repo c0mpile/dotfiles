@@ -28,15 +28,15 @@ Singleton {
   property string resolutions: "" // e.g., "1920x1080,1920x1200"
   property string ratios: "" // e.g., "16x9,16x10"
   property string colors: "" // Color hex codes
-  property string apiKey: Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY") || Settings.data.wallpaper.wallhavenApiKey || "" // User API key for NSFW access
+  // API Key Priority: Environment Variable > Local Settings
+  readonly property string envApiKey: Quickshell.env("NOCTALIA_WALLHAVEN_API_KEY") || ""
+  readonly property string apiKey: envApiKey !== "" ? envApiKey : (Settings.data.wallpaper.wallhavenApiKey || "")
+  readonly property bool apiKeyManagedByEnv: envApiKey !== ""
 
   // Signals
   signal searchCompleted(var results, var meta)
   signal searchFailed(string error)
   signal wallpaperDownloaded(string wallpaperId, string localPath)
-
-  // Helpers
-  readonly property bool isSafeSearchEnforced: purity === "100" || purity === "" || purity === "000"
 
   // Base API URL
   readonly property string apiBaseUrl: "https://wallhaven.cc/api/v1"
@@ -65,14 +65,9 @@ Singleton {
     }
 
     params.push("categories=" + categories);
-    
-    // Safety Logic
-    var finalPurity = purity;
-    if (purity === "" || purity === "000") {
-        finalPurity = "100";
-    }
-    params.push("purity=" + finalPurity);
-    
+    // Safety: Force SFW if no purity selected to prevent API error
+    var safePurity = (purity === "000") ? "100" : purity;
+    params.push("purity=" + safePurity);
     params.push("sorting=" + sorting);
     params.push("order=" + order);
 
@@ -99,7 +94,7 @@ Singleton {
     if (colors) {
       params.push("colors=" + colors);
     }
-    
+
     if (apiKey) {
       params.push("apikey=" + apiKey);
     }
@@ -108,10 +103,7 @@ Singleton {
 
     url += "?" + params.join("&");
 
-    // UX Logging
-    var activeHex = isSafeSearchEnforced ? "\u{f033e}" : "\u{f0341}";
     Logger.d("Wallhaven", "Searching:", url);
-    Logger.d("Wallhaven", "Active Safety Hex:", activeHex);
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {

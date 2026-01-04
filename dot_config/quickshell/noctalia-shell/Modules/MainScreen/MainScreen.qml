@@ -23,6 +23,7 @@ import qs.Modules.Panels.Plugins
 import qs.Modules.Panels.SessionMenu
 import qs.Modules.Panels.Settings
 import qs.Modules.Panels.SetupWizard
+import qs.Modules.Panels.SystemStats
 import qs.Modules.Panels.Tray
 import qs.Modules.Panels.Wallpaper
 import qs.Modules.Panels.WiFi
@@ -35,44 +36,6 @@ import qs.Services.UI
 PanelWindow {
   id: root
 
-  // Expose panels as readonly property aliases
-  readonly property alias audioPanel: audioPanel
-  readonly property alias batteryPanel: batteryPanel
-  readonly property alias bluetoothPanel: bluetoothPanel
-  readonly property alias brightnessPanel: brightnessPanel
-  readonly property alias clockPanel: clockPanel
-  readonly property alias changelogPanel: changelogPanel
-  readonly property alias controlCenterPanel: controlCenterPanel
-  readonly property alias launcherPanel: launcherPanel
-  readonly property alias notificationHistoryPanel: notificationHistoryPanel
-  readonly property alias sessionMenuPanel: sessionMenuPanel
-  readonly property alias settingsPanel: settingsPanel
-  readonly property alias setupWizardPanel: setupWizardPanel
-  readonly property alias trayDrawerPanel: trayDrawerPanel
-  readonly property alias wallpaperPanel: wallpaperPanel
-  readonly property alias wifiPanel: wifiPanel
-  readonly property alias pluginPanel1: pluginPanel1
-  readonly property alias pluginPanel2: pluginPanel2
-
-  // Expose panel backgrounds for AllBackgrounds
-  readonly property var audioPanelPlaceholder: audioPanel.panelRegion
-  readonly property var batteryPanelPlaceholder: batteryPanel.panelRegion
-  readonly property var bluetoothPanelPlaceholder: bluetoothPanel.panelRegion
-  readonly property var brightnessPanelPlaceholder: brightnessPanel.panelRegion
-  readonly property var clockPanelPlaceholder: clockPanel.panelRegion
-  readonly property var changelogPanelPlaceholder: changelogPanel.panelRegion
-  readonly property var controlCenterPanelPlaceholder: controlCenterPanel.panelRegion
-  readonly property var launcherPanelPlaceholder: launcherPanel.panelRegion
-  readonly property var notificationHistoryPanelPlaceholder: notificationHistoryPanel.panelRegion
-  readonly property var sessionMenuPanelPlaceholder: sessionMenuPanel.panelRegion
-  readonly property var settingsPanelPlaceholder: settingsPanel.panelRegion
-  readonly property var setupWizardPanelPlaceholder: setupWizardPanel.panelRegion
-  readonly property var trayDrawerPanelPlaceholder: trayDrawerPanel.panelRegion
-  readonly property var wallpaperPanelPlaceholder: wallpaperPanel.panelRegion
-  readonly property var wifiPanelPlaceholder: wifiPanel.panelRegion
-  readonly property var pluginPanel1Placeholder: pluginPanel1.panelRegion
-  readonly property var pluginPanel2Placeholder: pluginPanel2.panelRegion
-
   Component.onCompleted: {
     Logger.d("MainScreen", "Initialized for screen:", screen?.name, "- Dimensions:", screen?.width, "x", screen?.height, "- Position:", screen?.x, ",", screen?.y);
   }
@@ -82,16 +45,23 @@ PanelWindow {
   WlrLayershell.namespace: "noctalia-background-" + (screen?.name || "unknown")
   WlrLayershell.exclusionMode: ExclusionMode.Ignore // Don't reserve space - BarExclusionZone handles that
   WlrLayershell.keyboardFocus: {
-    if (!root.isPanelOpen) {
+    // No panel open anywhere: no keyboard focus needed
+    if (!root.isAnyPanelOpen) {
       return WlrKeyboardFocus.None;
     }
-    
-    // If panel is collapsed, don't capture exclusive focus so user can type in other windows
-    if (PanelService.openedPanel && PanelService.openedPanel.isCollapsed) {
-      return WlrKeyboardFocus.OnDemand;
+    // Panel open on THIS screen: use panel's preferred focus mode
+    if (root.isPanelOpen) {
+      // Hyprland's Exclusive captures ALL input globally (including pointer),
+      // preventing click-to-close from working on other monitors.
+      // Workaround: briefly use Exclusive when panel opens (for text input focus),
+      // then switch to OnDemand (for click-to-close on other screens).
+      if (CompositorService.isHyprland) {
+        return PanelService.isInitializingKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
+      }
+      return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
     }
-    
-    return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
+    // Panel open on ANOTHER screen: OnDemand allows receiving pointer events for click-to-close
+    return WlrKeyboardFocus.OnDemand;
   }
 
   anchors {
@@ -105,20 +75,27 @@ PanelWindow {
   property real dimmerOpacity: Settings.data.general.dimmerOpacity ?? 0.8
   property bool isPanelOpen: (PanelService.openedPanel !== null) && (PanelService.openedPanel.screen === screen)
   property bool isPanelClosing: (PanelService.openedPanel !== null) && PanelService.openedPanel.isClosing
+  property bool isAnyPanelOpen: PanelService.openedPanel !== null
 
   color: {
-    // Don't dim if panel is collapsed
-    var collapsed = PanelService.openedPanel && PanelService.openedPanel.isCollapsed;
-    if (dimmerOpacity > 0 && isPanelOpen && !isPanelClosing && !collapsed) {
+    if (dimmerOpacity > 0 && isPanelOpen && !isPanelClosing) {
       return Qt.alpha(Color.mShadow, dimmerOpacity);
     }
     return Color.transparent;
   }
 
   Behavior on color {
+    enabled: !PanelService.closedImmediately
     ColorAnimation {
       duration: isPanelClosing ? Style.animationFaster : Style.animationNormal
       easing.type: Easing.OutQuad
+    }
+  }
+
+  // Reset closedImmediately flag after color change is applied
+  onColorChanged: {
+    if (PanelService.closedImmediately) {
+      PanelService.closedImmediately = false;
     }
   }
 
@@ -140,48 +117,19 @@ PanelWindow {
   // Make everything click-through except bar
   mask: Region {
     id: clickableMask
-    
-    // Helper properties for mask sizing
-    readonly property bool isCollapsed: PanelService.openedPanel && PanelService.openedPanel.isCollapsed
-    readonly property var panelItem: isCollapsed ? PanelService.openedPanel.panelRegion : null
 
-    // Start with EMPTY base region (pass-through everything)
+    // Cover entire window (everything is masked/click-through)
     x: 0
     y: 0
-    width: 0
-    height: 0
-    
-    // Use Union to ADD clickable regions
-    intersection: Intersection.Union
-    
-    regions: [panelMaskRegion, backgroundMaskRegion, barMaskRegion]
-    
-    // 1. Add Panel Region (Always clickable if open)
-    Region {
-      id: panelMaskRegion
-      // When collapsed, we add the specific panel rect
-      // When expanded, this is redundant if background covers it, but safe to add
-      property var item: PanelService.openedPanel ? PanelService.openedPanel.panelRegion : null
-      
-      x: item ? item.x : 0
-      y: item ? item.y : 0
-      width: item ? item.width : 0
-      height: item ? item.height : 0
-      intersection: Intersection.Union
-    }
+    width: root.width
+    height: root.height
+    intersection: Intersection.Xor
 
-    // 2. Add Background Region (Only if Expanded)
-    Region {
-      id: backgroundMaskRegion
-      x: 0
-      y: 0
-      // If expanded: Full Screen. If collapsed: Empty.
-      width: (root.isPanelOpen && !isPanelClosing && !clickableMask.isCollapsed) ? root.width : 0
-      height: (root.isPanelOpen && !isPanelClosing && !clickableMask.isCollapsed) ? root.height : 0
-      intersection: Intersection.Union
-    }
+    // Only include regions that are actually needed
+    // panelRegions is handled by PanelService, bar is local to this screen
+    regions: [barMaskRegion, backgroundMaskRegion]
 
-    // 3. Subtract Bar Region (Always a hole)
+    // Bar region - subtract bar area from mask (only if bar should be shown on this screen)
     Region {
       id: barMaskRegion
 
@@ -191,6 +139,17 @@ PanelWindow {
       // Set width/height to 0 if bar shouldn't show on this screen (makes region empty)
       width: root.barShouldShow ? barPlaceholder.width : 0
       height: root.barShouldShow ? barPlaceholder.height : 0
+      intersection: Intersection.Subtract
+    }
+
+    // Background region for click-to-close - reactive sizing
+    // Uses isAnyPanelOpen so clicking on any screen's background closes the panel
+    Region {
+      id: backgroundMaskRegion
+      x: 0
+      y: 0
+      width: root.isAnyPanelOpen ? root.width : 0
+      height: root.isAnyPanelOpen ? root.height : 0
       intersection: Intersection.Subtract
     }
   }
@@ -214,10 +173,10 @@ PanelWindow {
     }
 
     // Background MouseArea for closing panels when clicking outside
-    // Active whenever a panel is open - the mask ensures it only receives clicks when panel is open
+    // Uses isAnyPanelOpen so clicking on any screen's background closes the panel
     MouseArea {
       anchors.fill: parent
-      enabled: root.isPanelOpen
+      enabled: root.isAnyPanelOpen
       acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
       onClicked: mouse => {
                    if (PanelService.openedPanel) {
@@ -320,6 +279,12 @@ PanelWindow {
       screen: root.screen
     }
 
+    SystemStatsPanel {
+      id: systemStatsPanel
+      objectName: "systemStatsPanel-" + (root.screen?.name || "unknown")
+      screen: root.screen
+    }
+
     // ----------------------------------------------
     // Plugin panel slots
     // ----------------------------------------------
@@ -352,25 +317,24 @@ PanelWindow {
       readonly property string barPosition: Settings.data.bar.position || "top"
       readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
       readonly property bool barFloating: Settings.data.bar.floating || false
-      readonly property real barMarginH: barFloating ? Math.ceil(Settings.data.bar.marginHorizontal * Style.marginXL) : 0
-      readonly property real barMarginV: barFloating ? Math.ceil(Settings.data.bar.marginVertical * Style.marginXL) : 0
-      readonly property real attachmentOverlap: 1 // Attachment overlap to fix hairline gap with fractional scaling
+      readonly property real barMarginH: barFloating ? Math.floor(Settings.data.bar.marginHorizontal * Style.marginXL) : 0
+      readonly property real barMarginV: barFloating ? Math.floor(Settings.data.bar.marginVertical * Style.marginXL) : 0
 
       // Expose bar dimensions directly on this Item for BarBackground
       // Use screen dimensions directly
       x: {
         if (barPosition === "right")
-          return screen.width - Style.barHeight - barMarginH - attachmentOverlap; // Extend left towards panels
+          return screen.width - Style.barHeight - barMarginH;
         return barMarginH;
       }
       y: {
         if (barPosition === "bottom")
-          return screen.height - Style.barHeight - barMarginV - attachmentOverlap;
+          return screen.height - Style.barHeight - barMarginV;
         return barMarginV;
       }
       width: {
         if (barIsVertical) {
-          return Style.barHeight + attachmentOverlap;
+          return Style.barHeight;
         }
         return screen.width - barMarginH * 2;
       }
@@ -378,7 +342,7 @@ PanelWindow {
         if (barIsVertical) {
           return screen.height - barMarginV * 2;
         }
-        return Style.barHeight + attachmentOverlap;
+        return Style.barHeight;
       }
 
       // Corner states (same as Bar.qml)

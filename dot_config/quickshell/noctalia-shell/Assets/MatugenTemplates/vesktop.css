@@ -88,7 +88,7 @@ body {
 --bg-2: {{colors.surface_container_low.default.hex}}; /* dark buttons */
 --bg-3: {{colors.surface_container.default.hex}}; /* spacing, secondary elements */
 --bg-4: {{colors.surface.default.hex}}; /* main background color */
---hover: {{colors.surface_container_high.default.hex}}20; /* channels and buttons when hovered */
+--hover: {{colors.on_surface.default.hex}}15; /* channels and buttons when hovered */
 --active: {{colors.surface_container_highest.default.hex}}40; /* channels and buttons when clicked or selected */
 --active-2: {{colors.surface.default.hex}}30; /* extra state for transparent buttons */
 --message-hover: {{colors.surface_variant.default.hex}}40; /* messages when hovered */
@@ -174,11 +174,23 @@ body {
   color: var(--text-4) !important;
 }
 
+/* Make timestamps more readable by overriding inline styles */
+[class*="timestamp"],
+[class*="timestamp"] time {
+  color: var(--text-4) !important;
+}
+
 .postTitleText_faa96b {
-  color: var(--text-3) !important;
+  color: var(--text-2) !important;
 }
 
 .postTitleText_faa96b .highlight {
+  color: var(--text-2) !important;
+}
+
+/* Make thread titles more readable by overriding inline styles */
+[class*="headerText"] [class*="postTitleText"],
+[class*="headerText"] h3[class*="postTitleText"] {
   color: var(--text-2) !important;
 }
 
@@ -190,4 +202,18 @@ body {
 .messageContent_c19a55 .highlight,
 .messageContent_faa96b .highlight {
   color: var(--text-2) !important;
+}
+
+/* Make message content more readable by overriding inline styles */
+[class*="messageContent"] {
+  color: var(--text-3) !important;
+}
+
+[class*="messageContent"] .highlight {
+  color: var(--text-2) !important;
+}
+
+/* Make slowmode/cooldown text more readable by overriding inline styles */
+[class*="cooldownText"] {
+  color: var(--text-4) !important;
 }

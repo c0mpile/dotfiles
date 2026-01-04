@@ -33,7 +33,7 @@
       },
       "audio-visualizer": {
         "color-name": {
-          "description": "Wähle die Farbe für den Visualisierer aus.",
+          "description": "Wählen Sie die Farbe für den Visualisierer aus.",
           "label": "Füllfarbe"
         },
         "hide-when-idle": {
@@ -94,6 +94,10 @@
           "label": "Horizontale Statusleiste"
         },
         "preview": "Vorschau",
+        "tooltip-format": {
+          "description": "Formatzeichenfolge für den Tooltip, der beim Überfahren der Uhr angezeigt wird. Leer lassen, um den Standard-Tooltip zu verwenden.",
+          "label": "Tooltip-Format"
+        },
         "use-custom-font": {
           "description": "Überschreibt die Standard-Schriftart mit einer benutzerdefinierten Schriftart für die Uhr.",
           "label": "Benutzerdefinierte Schriftart verwenden"
@@ -138,12 +142,20 @@
           "description": "Wenn der Ausgabetext diesem Wert entspricht, wird die Schaltfläche eingeklappt.",
           "label": "Einklappbedingung"
         },
+        "color-selection": {
+          "description": "Designfarben auf Symbol und Text anwenden.",
+          "label": "Farbe auswählen"
+        },
         "display-command-output": {
           "description": "Befehl eingeben, der in regelmäßigen Abständen ausgeführt wird. Die erste Zeile seiner Ausgabe wird als Text angezeigt.",
           "label": "Befehlsausgabe anzeigen",
           "stream-description": "Geben Sie einen Befehl ein, der kontinuierlich ausgeführt werden soll."
         },
         "dynamic-text": "Dynamischer Text",
+        "enable-colorization": {
+          "description": "Färbung für das benutzerdefinierte Schaltflächensymbol und den Text aktivieren, Designfarben anwenden.",
+          "label": "Färbung aktivieren"
+        },
         "hide-mode": {
           "alwaysExpanded": "Immer erweitert",
           "description": "Steuert die Sichtbarkeit des Widgets, wenn der Befehl keine Ausgabe hat.",
@@ -220,6 +232,16 @@
         "display-mode": {
           "description": "Wählen Sie, wie dieser Wert angezeigt werden soll.",
           "label": "Anzeigemodus"
+        },
+        "show-icon": {
+          "description": "Das Tastaturlayout-Symbol anzeigen.",
+          "label": "Symbol anzeigen"
+        }
+      },
+      "launcher": {
+        "use-primary-color": {
+          "description": "Wenn aktiviert, wird die Primärfarbe zur Hervorhebung verwendet.",
+          "label": "Primärfarbe verwenden"
         }
       },
       "lock-keys": {
@@ -303,6 +325,10 @@
         }
       },
       "system-monitor": {
+        "compact-mode": {
+          "description": "Statistiken als Mini-Balkendiagramme anstelle von Textwerten anzeigen. Verhindert Layoutverschiebungen.",
+          "label": "Kompaktmodus"
+        },
         "cpu-temperature": {
           "description": "CPU-Temperaturwerte anzeigen, falls verfügbar.",
           "label": "CPU-Temperatur"
@@ -319,6 +345,10 @@
           "description": "Zeige GPU-Temperaturwerte an, falls verfügbar.",
           "label": "GPU-Temperatur"
         },
+        "load-average": {
+          "description": "Systemlastdurchschnitt anzeigen.",
+          "label": "Lastdurchschnitt"
+        },
         "memory-percentage": {
           "description": "Speicherverbrauch als Prozentsatz statt absolute Werte anzeigen.",
           "label": "Speicher als Prozentsatz"
@@ -334,6 +364,10 @@
         "storage-usage": {
           "description": "Festplattenspeicher-Nutzungsinformationen anzeigen.",
           "label": "Speichernutzung"
+        },
+        "use-monospace-font": {
+          "description": "Verwende eine Monospace-Schriftart für eine konsistente Zeichenbreite.",
+          "label": "Schriftart mit fester Breite"
         }
       },
       "taskbar": {
@@ -413,6 +447,10 @@
           "description": "Zeigt Arbeitsbereiche vom aktuell fokussierten Bildschirm an, statt vom Bildschirm, auf dem sich die Leiste befindet.",
           "label": "Fokussiertem Bildschirm folgen"
         },
+        "grouped-border-opacity": {
+          "description": "Lege die Deckkraft für Workspace-Container-Rahmen fest.",
+          "label": "Rahmen-Deckkraft"
+        },
         "hide-unoccupied": {
           "description": "Arbeitsbereiche ohne Fenster nicht anzeigen.",
           "label": "Unbesetzte ausblenden"
@@ -428,6 +466,10 @@
         "show-labels-only-when-occupied": {
           "description": "Arbeitsbereichsbezeichnungen nur anzeigen, wenn sie Fenster enthalten.",
           "label": "Beschriftungen nur anzeigen, wenn belegt"
+        },
+        "unfocused-icons-opacity": {
+          "description": "Transparenzgrad für nicht fokussierte App-Symbole festlegen",
+          "label": "Deckkraft unscharfer Symbole"
         }
       }
     }
@@ -461,17 +503,28 @@
       "device-address": "Geräteadresse",
       "disabled": "Bluetooth ist deaktiviert",
       "disconnect": "Trennen",
+      "disconnecting": "Verbindung wird getrennt...",
       "discoverable": "Sichtbar",
       "enable-message": "Aktivieren Sie Bluetooth, um verfügbare Geräte zu sehen.",
       "info": "Info",
       "known-devices": "Bekannte Geräte",
+      "no-devices": "Keine Geräte verfügbar",
       "pair": "Koppeln",
       "paired": "Gekoppelt",
       "paired-devices": "Gekoppelte Geräte",
       "pairing": "Koppeln...",
       "pairing-mode": "Stellen Sie sicher, dass sich Ihr Gerät im Kopplungsmodus befindet.",
+      "refresh-devices": "Geräte aktualisieren",
       "scanning": "Scannen nach Geräten...",
       "signal": "Signal",
+      "signal-text": {
+        "excellent": "Signal: Ausgezeichnet",
+        "fair": "Signal: Schwach",
+        "good": "Signal: Gut",
+        "poor": "Signal: Schlecht",
+        "unknown": "Signal: Unbekannt",
+        "very-poor": "Signal: Sehr schlecht"
+      },
       "title": "Bluetooth",
       "trusted": "Vertrauenswürdig",
       "unpair": "Entkoppeln"
@@ -526,7 +579,7 @@
     }
   },
   "clock": {
-    "tooltip": "Uhr"
+    "tooltip": "Kalender"
   },
   "common": {
     "add": "Hinzufügen",
@@ -551,6 +604,8 @@
     "enable-bluetooth": "Bluetooth aktivieren",
     "enable-dnd": "'Nicht stören' aktivieren",
     "enable-wifi": "WLAN aktivieren",
+    "launcher-settings": "Launcher-Einstellungen",
+    "lower-to-bottom": "Senken bis zum Anschlag / Ganz nach unten senken",
     "next": "Nächste/r/s",
     "open-calendar": "Kalender öffnen",
     "open-display-settings": "Anzeigeeinstellungen",
@@ -560,7 +615,9 @@
     "pause": "Pause",
     "play": "Spielen",
     "previous": "Vorherige",
+    "raise-to-top": "Nach oben verschieben",
     "random-wallpaper": "Zufälliges Hintergrundbild",
+    "reset": "Zurücksetzen",
     "toggle-mute": "Stummschaltung umschalten",
     "widget-settings": "Widget-Einstellungen"
   },
@@ -607,6 +664,32 @@
     },
     "delete": "Löschen",
     "pin": "Anheften",
+    "providers": {
+      "applications": "Anwendungen",
+      "calculator": "Rechner",
+      "calculator-deprecated": "Der Befehl >calc ist veraltet und wird bald entfernt. Bitte geben Sie stattdessen mathematische Ausdrücke direkt in die Suche ein.",
+      "calculator-description": "Rechner — mathematische Ausdrücke auswerten",
+      "calculator-enter-expression": "Mathematischen Ausdruck eingeben",
+      "calculator-error": "Fehler",
+      "calculator-name": "Rechner",
+      "clipboard": "Zwischenablageverlauf",
+      "clipboard-clear-description": "Gesamten Zwischenablageverlauf löschen",
+      "clipboard-clear-description-full": "Alle Elemente aus dem Zwischenablageverlauf entfernen",
+      "clipboard-clear-history": "Zwischenablageverlauf löschen",
+      "clipboard-delete": "Zwischenablageeintrag löschen",
+      "clipboard-history-disabled": "Zwischenablageverlauf deaktiviert",
+      "clipboard-history-disabled-description": "Zwischenablageverlauf in den Einstellungen aktivieren oder cliphist installieren",
+      "clipboard-loading": "Lade Zwischenablageverlauf...",
+      "clipboard-loading-description": "Bitte warten",
+      "clipboard-search-description": "Zwischenablageverlauf durchsuchen",
+      "command": "Befehl",
+      "command-description": "Shell-Befehle ausführen",
+      "command-name": "Befehl",
+      "emoji": "Emoji-Auswahl",
+      "emoji-loading": "Lade Emojis...",
+      "emoji-loading-description": "Bitte warten",
+      "emoji-search-description": "Emojis suchen und kopieren"
+    },
     "unpin": "Lösen"
   },
   "lock-screen": {
@@ -647,7 +730,8 @@
         "comfortable": "Bequem",
         "compact": "Kompakt",
         "default": "Standard",
-        "mini": "Mini"
+        "mini": "Mini",
+        "spacious": "Geräumig"
       },
       "position": {
         "bottom": "Unten",
@@ -701,10 +785,10 @@
         "bottom_center": "Unten mittig",
         "bottom_left": "Unten links",
         "bottom_right": "Unten rechts",
-        "center": "Mitte (Standard)",
+        "center": "Mitte",
         "center_left": "Links mittig",
         "center_right": "Rechts mittig",
-        "follow_bar": "Folge dem Balken (Standard)",
+        "follow_bar": "Folge der Leiste",
         "top_center": "Oben mittig",
         "top_left": "Oben links",
         "top_right": "Oben rechts"
@@ -726,6 +810,7 @@
       "audio-sources": {
         "both": "System-Ausgabe + Mikrofon-Eingabe",
         "microphone-input": "Mikrofon-Eingabe",
+        "none": "Kein Audio",
         "system-output": "System-Ausgabe"
       },
       "color-range": {
@@ -748,8 +833,12 @@
       "hover": "Beim Hover Scrollen",
       "never": "Nie Scrollen"
     },
+    "session-menu-grid-layout": {
+      "grid": "Raster",
+      "single-row": "Einzelne Reihe"
+    },
     "settings-panel-mode": {
-      "attached": "An Platte an einer Stange befestigt",
+      "attached": "Panel an der Leiste angeheftet",
       "centered": "Zentriertes Feld",
       "window": "Eigenes Fenster"
     },
@@ -796,31 +885,6 @@
     "search-wallpapers": "Zum Filtern von Hintergrundbildern eingeben...",
     "select": "Auswählen",
     "test": "Test"
-  },
-  "plugins": {
-    "applications": "Anwendungen",
-    "calculator": "Rechner",
-    "calculator-description": "Rechner — mathematische Ausdrücke auswerten",
-    "calculator-enter-expression": "Mathematischen Ausdruck eingeben",
-    "calculator-error": "Fehler",
-    "calculator-name": "Rechner",
-    "clipboard": "Zwischenablageverlauf",
-    "clipboard-clear-description": "Gesamten Zwischenablageverlauf löschen",
-    "clipboard-clear-description-full": "Alle Elemente aus dem Zwischenablageverlauf entfernen",
-    "clipboard-clear-history": "Zwischenablageverlauf löschen",
-    "clipboard-delete": "Zwischenablageeintrag löschen",
-    "clipboard-history-disabled": "Zwischenablageverlauf deaktiviert",
-    "clipboard-history-disabled-description": "Zwischenablageverlauf in den Einstellungen aktivieren oder cliphist installieren",
-    "clipboard-loading": "Lade Zwischenablageverlauf...",
-    "clipboard-loading-description": "Bitte warten",
-    "clipboard-search-description": "Zwischenablageverlauf durchsuchen",
-    "command": "Befehl",
-    "command-description": "Shell-Befehle ausführen",
-    "command-name": "Befehl",
-    "emoji": "Emoji-Auswahl",
-    "emoji-loading": "Lade Emojis...",
-    "emoji-loading-description": "Bitte warten",
-    "emoji-search-description": "Emojis suchen und kopieren"
   },
   "quickSettings": {
     "bluetooth": {
@@ -1025,6 +1089,10 @@
     },
     "bar": {
       "appearance": {
+        "background-opacity": {
+          "description": "Lege die Hintergrundtransparenz speziell für die Leiste fest.",
+          "label": "Leisten-Hintergrundtransparenz"
+        },
         "capsule-opacity": {
           "description": "Deckkraft der Widget-Hintergründe festlegen, wenn Kapsel angezeigt wird.",
           "label": "Kapsel-Deckkraft"
@@ -1063,9 +1131,9 @@
           "description": "Zeigt eine sichtbare Umrandung um jedes Widget an.",
           "label": "Widget-Umrisse anzeigen"
         },
-        "transparent": {
-          "description": "Dies verhindert, dass Paneele an der Stange befestigt werden können.",
-          "label": "Transparenter Hintergrund"
+        "use-separate-opacity": {
+          "description": "Ermöglicht die Verwendung eines separaten Deckkraftwerts für den Leistenhintergrund.",
+          "label": "Separate Leisten-Deckkraft"
         }
       },
       "monitors": {
@@ -1178,14 +1246,14 @@
         "compositors": {
           "description": "Compositor-Theming.",
           "hyprland": {
-            "description": "Schreibe {Dateipfad}."
+            "description": "Schreibe {filepath}"
           },
           "label": "Compositor",
           "mango": {
-            "description": "Schreibe {filepath}. Benötigt mango"
+            "description": "Schreibe {filepath} — benötigt Mango"
           },
           "niri": {
-            "description": "Schreibe {filepath}. Benötigt niri v25.11+"
+            "description": "Schreibe {filepath} — benötigt Niri v25.11+"
           }
         },
         "misc": {
@@ -1202,12 +1270,12 @@
           },
           "code": {
             "description": "Schreibe {filepath}",
-            "description-detected": "Auf Standardprofil angewendet. Erkannt: {clients}",
+            "description-detected": "Auf Standardprofil angewendet — erkannt: {clients}",
             "description-missing": "Kein Code-Editor erkannt (VSCode oder VSCodium)"
           },
           "description": "Anwendungsspezifisches Theming.",
           "discord": {
-            "description": "Schreibe {filepath} für {client} — Das Theme muss manuell aktiviert werden",
+            "description": "Schreibe {filepath} für {client} — das Theme muss manuell aktiviert werden",
             "description-detected": "Erkannt: {clients}",
             "description-missing": "Kein Discord-Client erkannt"
           },
@@ -1266,14 +1334,14 @@
         "ui": {
           "description": "Desktop-Umgebung und UI-Toolkit-Theming.",
           "gtk": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           },
           "kcolorscheme": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           },
           "label": "UI",
           "qt": {
-            "description": "Schreibt {filepath}"
+            "description": "Schreibe {filepath}"
           }
         }
       },
@@ -1356,6 +1424,10 @@
         "sectionLeft": "Links",
         "sectionRight": "Rechts"
       },
+      "system-monitor-disk-path": {
+        "description": "Wählen Sie, welchen Festplatten-Mountpunkt die Systemmonitor-Karte im Kontrollzentrum überwachen soll.",
+        "label": "Systemmonitor Festplattenpfad"
+      },
       "title": "Kontrollzentrum"
     },
     "desktop-widgets": {
@@ -1387,6 +1459,10 @@
           "label": "Minimaler Modus"
         },
         "preview": "Vorschau",
+        "rounded-corners": {
+          "description": "Verwende abgerundete Ecken für den Widget-Hintergrund.",
+          "label": "Abgerundete Ecken"
+        },
         "show-background": {
           "description": "Zeige den Hintergrundcontainer für das Uhr-Widget an.",
           "label": "Hintergrund anzeigen"
@@ -1402,7 +1478,7 @@
         "style": {
           "analog": "Analog",
           "binary": "Binär",
-          "description": "Wähle den Anzeigestil der Uhr.",
+          "description": "Wählen Sie den Anzeigestil der Uhr.",
           "digital": "Digital",
           "label": "Uhrstil",
           "minimal": "Minimal"
@@ -1453,6 +1529,14 @@
           "description": "Steuert das Verhalten des Widgets, wenn keine Medien abgespielt werden.",
           "label": "Ausblendmodus"
         },
+        "rounded-corners": {
+          "description": "Aktiviere abgerundete Ecken an den Widget-Kanten.",
+          "label": "Abgerundete Ecken"
+        },
+        "show-album-art": {
+          "description": "Zeige das Albumcover und die Titelinformationen (Titel und Künstler).",
+          "label": "Albumcover & Titel anzeigen"
+        },
         "show-background": {
           "description": "Zeige den Hintergrundcontainer für das Media-Player-Widget an.",
           "label": "Hintergrund anzeigen"
@@ -1461,13 +1545,13 @@
           "description": "Mediensteuerungstasten (Wiedergabe/Pause, Zurück, Weiter) im Media-Player-Widget anzeigen.",
           "label": "Tasten anzeigen"
         },
+        "show-visualizer": {
+          "description": "Audiovisualisierungs-Overlay anzeigen.",
+          "label": "Visualisierer anzeigen"
+        },
         "visualizer-type": {
           "description": "Wählen Sie einen Visualisierungstyp für den Hintergrund des Desktop-Mediaplayers.",
           "label": "Visualisierungsart"
-        },
-        "visualizer-visibility": {
-          "description": "Steuern Sie, wann der Audio-Visualizer sichtbar ist.",
-          "label": "Audio-Visualizer-Sichtbarkeit"
         }
       },
       "title": "Desktop-Widgets",
@@ -1545,8 +1629,8 @@
     "dock": {
       "appearance": {
         "background-opacity": {
-          "description": "Hintergrund-Transparenz des Docks anpassen.",
-          "label": "Hintergrund-Transparenz"
+          "description": "Hintergrundtransparenz des Docks anpassen.",
+          "label": "Hintergrundtransparenz"
         },
         "border-radius": {
           "description": "Den Radius der Dock-Umrandung anpassen.",
@@ -1740,6 +1824,11 @@
     },
     "launcher": {
       "settings": {
+        "annotation-tool": {
+          "description": "Befehl, der beim Klicken auf die Schaltfläche \"Annotieren\" im Zwischenablageverlauf ausgeführt wird. Das Bild wird an diesen Befehl weitergeleitet.",
+          "label": "Annotationstool",
+          "placeholder": "gradia, satty -f -"
+        },
         "clip-preview": {
           "description": "Zeige eine Vorschau des Inhalts der Zwischenablage an, wenn der Befehl >clip verwendet wird.",
           "label": "Clip-Vorschau aktivieren"
@@ -1764,6 +1853,10 @@
           "description": "Verwende native System-Icons anstelle von Tabler-Icons.",
           "label": "Native Icons verwenden"
         },
+        "ignore-mouse-input": {
+          "description": "Deaktivieren Sie die Mausinteraktion und das Mausrad im Launcher.",
+          "label": "Maus-Eingabe ignorieren"
+        },
         "position": {
           "description": "Wählen Sie, wo das Starter-Panel erscheint.",
           "label": "Position"
@@ -1775,6 +1868,10 @@
         "show-categories": {
           "description": "Kategorienregisterkarten zum Filtern von Anwendungen anzeigen.",
           "label": "Kategorien anzeigen"
+        },
+        "show-icon-background": {
+          "description": "Zeige einen abgerundeten Rechteck-Hintergrund hinter Icons.",
+          "label": "Symbolhintergrund anzeigen"
         },
         "sort-by-usage": {
           "description": "Wenn aktiviert, erscheinen häufig gestartete Apps zuerst in der Liste.",
@@ -1890,7 +1987,11 @@
     "network": {
       "bluetooth": {
         "description": "Bluetooth-Verwaltung aktivieren.",
-        "label": "Bluetooth aktivieren"
+        "label": "Bluetooth aktivieren",
+        "rssi-polling": {
+          "description": "Periodisch RSSI für verbundene Geräte über bluetoothctl abfragen. Ist möglicherweise nicht für alle Geräte verfügbar; verbraucht bei Aktivierung minimale Ressourcen.",
+          "label": "Bluetooth-Signalabfrage"
+        }
       },
       "section": {
         "description": "WLAN- und Bluetooth-Verbindungen verwalten."
@@ -1956,7 +2057,7 @@
         },
         "background-opacity": {
           "description": "Transparenz der Benachrichtigungshintergründe anpassen.",
-          "label": "Hintergrund-Transparenz"
+          "label": "Hintergrundtransparenz"
         },
         "do-not-disturb": {
           "description": "Alle Benachrichtigungs-Popups deaktivieren.",
@@ -2053,7 +2154,7 @@
       },
       "background-opacity": {
         "description": "Kontrolliert die Transparenz des OSD Hintergrunds.",
-        "label": "Hintergrund-Transparenz"
+        "label": "Hintergrundtransparenz"
       },
       "description": "Bildschirm-Overlays wie Lautstärke- und Helligkeitsanzeigen konfigurieren.",
       "duration": {
@@ -2121,6 +2222,11 @@
         "no-plugins-description": "Überprüfen Sie Ihre Plugin-Quellen oder aktualisieren Sie die Liste.",
         "no-plugins-label": "Keine Plugins verfügbar"
       },
+      "collision": {
+        "already-installed": "Dieses Plugin ist bereits installiert.",
+        "custom-version-exists": "Eine benutzerdefinierte Version von \"{source}\" ist bereits installiert.",
+        "official-version-exists": "Die offizielle Version dieses Plugins ist bereits installiert."
+      },
       "filter": {
         "all": "Alle",
         "downloaded": "Heruntergeladen",
@@ -2141,6 +2247,7 @@
         "no-plugins-label": "Keine Plugins installiert"
       },
       "installing": "{Plugin} wird installiert...",
+      "open-plugins-tab": "Plugin-Einstellungen öffnen",
       "plugin-settings-title": "{plugin} Einstellungen",
       "refresh": {
         "refreshing": "Aktualisiere Plugin-Liste...",
@@ -2151,6 +2258,10 @@
       },
       "settings-error-not-loaded": "Plugin nicht geladen",
       "settings-saved": "Plugin-Einstellungen gespeichert",
+      "source": {
+        "custom": "Benutzerdefinierte Quelle",
+        "official": "Offiziell"
+      },
       "sources": {
         "add-custom": "Benutzerdefiniertes Repository hinzufügen",
         "add-dialog": {
@@ -2182,6 +2293,7 @@
       "update-all": "Alle aktualisieren ({count})",
       "update-all-success": "Alle Plugins wurden erfolgreich aktualisiert.",
       "update-available": "{count} Plugin-Update(s) verfügbar",
+      "update-available_plural": "{count} Plugin-Aktualisierungen verfügbar",
       "update-error": "Fehler beim Aktualisieren des Plugins: {plugin}: {error}",
       "update-incompatible": "Benötigt Noctalia v{version} oder höher",
       "update-success": "{plugin} wurde auf v{version} aktualisiert",
@@ -2204,6 +2316,10 @@
         }
       },
       "general": {
+        "copy-to-clipboard": {
+          "description": "Kopiere die Datei nach Beendigung der Aufnahme in die Zwischenablage.",
+          "label": "In die Zwischenablage kopieren"
+        },
         "output-folder": {
           "description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden.",
           "label": "Ausgabe-Ordner",
@@ -2285,6 +2401,10 @@
           "label": "Allgemein"
         }
       },
+      "large-buttons-layout": {
+        "description": "Wählen Sie, wie die Sitzungsmenü-Schaltflächen angezeigt werden.",
+        "label": "Layout mit großen Schaltflächen"
+      },
       "large-buttons-style": {
         "description": "Das Sitzungsmenü mit großen Schaltflächen in einem Rasterlayout anzeigen.",
         "label": "Stil: Große Schaltflächen"
@@ -2313,12 +2433,21 @@
       "custom-highlight-colors-title": {
         "label": "Benutzerdefinierte Hervorhebungsfarben"
       },
+      "disk-path": {
+        "description": "Wählen Sie, welchen Festplatten-Mountpunkt überwacht werden soll.",
+        "label": "Festplattenpfad"
+      },
       "disk-section": {
         "label": "Festplattennutzung"
       },
       "enable-dgpu-monitoring": {
         "description": "Warnung: Dies aktiviert Ihre dedizierte GPU (NVIDIA/AMD), was die Akkulaufzeit von Laptops mit Hybridgrafik erheblich beeinträchtigen kann.",
         "label": "Dedizierte GPU-Überwachung aktivieren"
+      },
+      "external-monitor": {
+        "description": "Geben Sie den Befehl oder Anwendungspfad ein, um die externe Systemmonitor-Anwendung zu starten.",
+        "label": "Externer Systemmonitor-Befehl",
+        "placeholder": "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"
       },
       "general": {
         "section": {
@@ -2331,6 +2460,9 @@
       },
       "highlight-colors-section": {
         "label": "Hervorhebungsfarben"
+      },
+      "load-average-section": {
+        "label": "Lastdurchschnitt"
       },
       "memory-section": {
         "label": "Speicherverbrauch"
@@ -2375,6 +2507,10 @@
         "label": "Animationsgeschwindigkeit",
         "reset": "Animationsgeschwindigkeit zurücksetzen"
       },
+      "box-border": {
+        "description": "Zeigt eine Umrandung um Inhaltsbereiche an.",
+        "label": "Containerumriss"
+      },
       "box-border-radius": {
         "description": "Passt die Eckenrundung wichtiger Layoutbereiche an, wie z. B. Seitenleisten, Karten und Inhaltsbereiche.",
         "label": "Behälterradius",
@@ -2416,11 +2552,11 @@
         "label": "Aussehen"
       },
       "settings-panel-mode": {
-        "description": "Wähle das Layout der Einstellungen (möglicherweise ist ein Neustart erforderlich).",
-        "label": "Einstellungsfeldmodus"
+        "description": "Wählen Sie das Layout der Einstellungen (möglicherweise ist ein Neustart erforderlich).",
+        "label": "Einstellungs-Panel-Modus"
       },
       "shadows": {
-        "description": "Aktiviert Schlagschatten unter Balken und Panels.",
+        "description": "Aktiviert Schlagschatten unter Leisten und Panels.",
         "direction": {
           "description": "Wählen, aus welcher Richtung der Schatten fällt.",
           "label": "Schattenrichtung"
@@ -2501,8 +2637,8 @@
           "tooltip": "Hintergrundbild-Ordner"
         },
         "hide-wallpaper-filenames": {
-          "description": "Hintergrundbilddateinamen im Auswahlmenü ausblenden.",
-          "label": "Dateinamen ausblenden"
+          "tooltip-hide": "Dateinamen ausblenden",
+          "tooltip-show": "Dateinamen anzeigen"
         },
         "monitor-specific": {
           "description": "Unterschiedlichen Hintergrundbild-Ordner für jeden Monitor festlegen.",
@@ -2578,6 +2714,19 @@
     "welcome-back": "Willkommen zurück,",
     "widget-settings-title": "{widget} Einstellungen"
   },
+  "system-monitor": {
+    "cpu-temp": "CPU-Temperatur",
+    "cpu-usage": "CPU-Auslastung",
+    "disk": "Festplatte",
+    "download": "Herunterladen",
+    "download-speed": "Download-Geschwindigkeit",
+    "gpu-temp": "GPU-Temperatur",
+    "load-average": "Lastdurchschnitt",
+    "memory": "Arbeitsspeicher",
+    "title": "Systemüberwachung",
+    "upload": "Hochladen",
+    "upload-speed": "Upload-Geschwindigkeit"
+  },
   "toast": {
     "airplane-mode": {
       "disabled": "Deaktiviert",
@@ -2589,6 +2738,7 @@
       "low-desc": "Batterie ist bei {percent}%. Bitte schließen Sie das Ladegerät an."
     },
     "bluetooth": {
+      "address-copied": "Adresse in die Zwischenablage kopiert",
       "confirm-code": "Bestätigungscode {value} auf dem anderen Gerät bestätigen.",
       "connect-failed": "Verbindung mit dem Gerät fehlgeschlagen",
       "disabled": "Deaktiviert",
@@ -2631,7 +2781,8 @@
       "enabled": "Aktiviert"
     },
     "keyboard-layout": {
-      "changed": "Tastaturlayout geändert zu {layout}"
+      "changed": "Tastaturlayout geändert zu {layout}",
+      "title": "Tastatur"
     },
     "kofi": {
       "opened": "Ko-fi-Seite in Ihrem Browser geöffnet"
@@ -2705,6 +2856,7 @@
     "close": "Schließen",
     "collapse": "Seitenleiste einklappen",
     "connect-disconnect-devices": "Bluetooth-Gerät",
+    "copy-address": "Adresse kopieren",
     "delete-notification": "Benachrichtigung löschen",
     "disable-keep-awake": "Wach halten",
     "do-not-disturb-disabled": "Nicht stören",
@@ -2736,6 +2888,7 @@
     "night-light-not-installed": "Nachtlicht (nicht verfügbar)",
     "noctalia-performance-disabled": "Noctalia-Leistungsmodus",
     "noctalia-performance-enabled": "Noctalia-Leistungsmodus",
+    "open-annotation-tool": "Mit dem Anmerkungswerkzeug öffnen",
     "open-control-center": "Kontrollzentrum",
     "open-notification-history-disable-dnd": "Benachrichtigungsverlauf",
     "open-notification-history-enable-dnd": "Benachrichtigungsverlauf",
@@ -2780,6 +2933,11 @@
     "no-match": "Keine Übereinstimmung gefunden.",
     "no-wallpaper": "Kein Hintergrundbild gefunden.",
     "panel": {
+      "apikey": {
+        "help": "Ein API-Schlüssel ist erforderlich, um auf NSFW-Inhalte zuzugreifen.",
+        "label": "API-Schlüssel",
+        "placeholder": "Gib deinen Wallhaven API-Schlüssel ein"
+      },
       "apply-all-monitors": {
         "description": "Ausgewähltes Hintergrundbild auf alle Monitore gleichzeitig anwenden.",
         "label": "Auf alle Monitore anwenden"
@@ -2798,6 +2956,7 @@
       "purity": {
         "all": "Alle",
         "label": "Inhaltsfilter",
+        "nsfw": "Nicht jugendfrei",
         "sfw": "SFW",
         "sketchy": "Sketchy"
       },
@@ -2814,6 +2973,9 @@
         }
       },
       "search": "Suchen:",
+      "solid-color": {
+        "tooltip": "Einfarbiger Hintergrund"
+      },
       "sorting": {
         "date_added": "Hinzugefügt am",
         "favorites": "Favoriten",
@@ -2945,8 +3107,8 @@
   },
   "wifi": {
     "panel": {
-      "available-networks": "Verfügbare Netzwerke",
       "action-required": "Aktion erforderlich",
+      "available-networks": "Verfügbare Netzwerke",
       "connect": "Verbinden",
       "connected": "Verbunden",
       "disabled": "WLAN ist deaktiviert",
@@ -2977,11 +3139,11 @@
     },
     "signal": {
       "excellent": "Ausgezeichnet",
-      "very-good": "Sehr gut",
-      "good": "Gut",
       "fair": "Mäßig",
-      "weak": "Schwach",
-      "poor": "Schlecht"
+      "good": "Gut",
+      "poor": "Schlecht",
+      "very-good": "Sehr gut",
+      "weak": "Schwach"
     }
   }
 }

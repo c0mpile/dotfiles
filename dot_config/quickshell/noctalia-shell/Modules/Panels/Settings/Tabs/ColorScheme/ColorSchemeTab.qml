@@ -44,7 +44,7 @@ ColumnLayout {
     var schemeName = filename.replace(".json", "");
 
     if (schemeName === "Noctalia-default") {
-      schemeName = "Verve (default)";
+      schemeName = "Noctalia (default)";
     } else if (schemeName === "Noctalia-legacy") {
       schemeName = "Noctalia (legacy)";
     } else if (schemeName === "Tokyo-Night") {
@@ -114,7 +114,7 @@ ColumnLayout {
   // Simple process to check if matugen exists
   Process {
     id: matugenCheck
-    command: ["which", "matugen"]
+    command: ["sh", "-c", "command -v matugen"]
     running: false
 
     onExited: function (exitCode) {
@@ -318,6 +318,9 @@ ColumnLayout {
                   Settings.data.colorSchemes.matugenSchemeType = key;
                   AppThemeService.generate();
                 }
+
+    isSettings: true
+    defaultValue: Settings.getDefaultValue("colorSchemes.matugenSchemeType")
   }
 
   NDivider {

@@ -4,10 +4,11 @@
     "position": "top",
     "monitors": [],
     "density": "default",
-    "transparent": false,
     "showOutline": false,
     "showCapsule": true,
     "capsuleOpacity": 1,
+    "backgroundOpacity": 0.93,
+    "useSeparateOpacity": false,
     "floating": false,
     "marginVertical": 0.25,
     "marginHorizontal": 0.25,
@@ -16,13 +17,10 @@
     "widgets": {
       "left": [
         {
-          "icon": "rocket",
-          "id": "CustomButton",
-          "leftClickExec": "qs -c noctalia-shell ipc call launcher toggle"
+          "id": "Launcher"
         },
         {
-          "id": "Clock",
-          "usePrimaryColor": false
+          "id": "Clock"
         },
         {
           "id": "SystemMonitor"
@@ -93,12 +91,10 @@
     "fontDefaultScale": 1,
     "fontFixedScale": 1,
     "tooltipsEnabled": true,
-    "panelBackgroundOpacity": 0.85,
+    "panelBackgroundOpacity": 0.93,
     "panelsAttachedToBar": true,
     "settingsPanelMode": "attached",
-    "wifiDetailsViewMode": "grid",
-    "bluetoothDetailsViewMode": "grid",
-    "bluetoothHideUnnamedDevices": false
+    "boxBorderEnabled": false
   },
   "location": {
     "name": "Tokyo",
@@ -140,6 +136,7 @@
     "quality": "very_high",
     "colorRange": "limited",
     "showCursor": true,
+    "copyToClipboard": false,
     "audioSource": "default_output",
     "videoSource": "portal"
   },
@@ -153,6 +150,8 @@
     "setWallpaperOnAllMonitors": true,
     "fillMode": "crop",
     "fillColor": "#000000",
+    "useSolidColor": false,
+    "solidColor": "#1a1a2e",
     "randomEnabled": false,
     "wallpaperChangeMode": "random",
     "randomIntervalSec": 300,
@@ -185,10 +184,14 @@
     "customLaunchPrefix": "",
     "viewMode": "list",
     "showCategories": true,
-    "iconMode": "tabler"
+    "iconMode": "tabler",
+    "showIconBackground": true,
+    "ignoreMouseInput": false,
+    "screenshotAnnotationTool": ""
   },
   "controlCenter": {
     "position": "close_to_bar_button",
+    "diskPath": "/",
     "shortcuts": {
       "left": [
         {
@@ -264,9 +267,11 @@
     "memPollingInterval": 3000,
     "diskPollingInterval": 3000,
     "networkPollingInterval": 3000,
+    "loadAvgPollingInterval": 3000,
     "useCustomColors": false,
     "warningColor": "",
-    "criticalColor": ""
+    "criticalColor": "",
+    "externalMonitor": "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"
   },
   "dock": {
     "enabled": true,
@@ -284,7 +289,12 @@
     "animationSpeed": 1
   },
   "network": {
-    "wifiEnabled": true
+    "wifiEnabled": true,
+    "bluetoothRssiPollingEnabled": false,
+    "bluetoothRssiPollIntervalMs": 10000,
+    "wifiDetailsViewMode": "grid",
+    "bluetoothDetailsViewMode": "grid",
+    "bluetoothHideUnnamedDevices": false
   },
   "sessionMenu": {
     "enableCountdown": true,
@@ -292,6 +302,7 @@
     "position": "center",
     "showHeader": true,
     "largeButtonsStyle": false,
+    "largeButtonsLayout": "grid",
     "showNumberLabels": true,
     "powerOptions": [
       {
@@ -376,7 +387,7 @@
   },
   "colorSchemes": {
     "useWallpaperColors": false,
-    "predefinedScheme": "Verve (default)",
+    "predefinedScheme": "Noctalia (default)",
     "darkMode": true,
     "schedulingMode": "off",
     "manualSunrise": "06:30",

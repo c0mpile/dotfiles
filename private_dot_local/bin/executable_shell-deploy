@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-SOURCE_DIR="$HOME/dev/verve-shell/"
+SOURCE_DIR="$HOME/dev/noctalia-shell/"
 DEST_DIR="$HOME/.config/quickshell/noctalia-shell"
 BACKUP_ROOT="$DEST_DIR/backup"
 
@@ -55,6 +55,7 @@ if [ "$MODE" == "deploy" ]; then
         --exclude '.gitignore' \
         --exclude '.github' \
         --exclude '.agent' \
+        --exclude '.antigravity' \
         --exclude 'nix' \
         --exclude 'flake.nix' \
         --exclude 'shell.nix' \

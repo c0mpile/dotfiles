@@ -13,10 +13,15 @@ NIconButton {
 
   property ShellScreen screen
 
+  // Widget properties passed from Bar.qml for per-instance settings
+  property string widgetId: ""
+  property string section: ""
+  property int sectionWidgetIndex: -1
+  property int sectionWidgetsCount: 0
+
   icon: ScreenRecorderService.isPending ? "" : "camera-video"
   tooltipText: ScreenRecorderService.isRecording ? I18n.tr("tooltips.click-to-stop-recording") : I18n.tr("tooltips.click-to-start-recording")
   tooltipDirection: BarService.getTooltipDirection()
-  density: Settings.data.bar.density
   baseSize: Style.capsuleHeight
   applyUiScale: false
   customRadius: Style.radiusL
@@ -48,15 +53,8 @@ NIconButton {
     id: pendingSpinner
     icon: "loader-2"
     visible: ScreenRecorderService.isPending
-    pointSize: {
-      switch (root.density) {
-      case "compact":
-        return Math.max(1, root.width * 0.65);
-      default:
-        return Math.max(1, root.width * 0.48);
-      }
-    }
-    applyUiScale: root.applyUiScale
+    pointSize: Style.barFontSize
+    applyUiScale: false
     color: root.enabled && root.hovering ? colorFgHover : colorFg
     anchors.centerIn: parent
     transformOrigin: Item.Center
