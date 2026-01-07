@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Convert Linux paths to Windows paths for Wine
+WIN_SRC=$(winepath -w "$1")
+WIN_DST=$(winepath -w "$2")
+
+wine /home/kevin/.wine/drive_c/qaac/qaac64.exe -V 127 --quality 2 "$WIN_SRC" -o "$WIN_DST"

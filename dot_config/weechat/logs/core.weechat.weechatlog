@@ -1,0 +1,111 @@
+2026-01-05 21:27:46.881113Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 2.
+2026-01-05 21:27:46.881223Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3.
+2026-01-05 21:27:46.881278Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not"
+2026-01-05 21:27:46.881335Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not Found"
+2026-01-05 21:27:46.881335Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl aborted due to compilation errors.
+2026-01-05 21:27:46.881434Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl"
+2026-01-05 21:27:46.888957Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 2.
+2026-01-05 21:27:46.889038Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3.
+2026-01-05 21:27:46.889094Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not"
+2026-01-05 21:27:46.889148Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not Found"
+2026-01-05 21:27:46.889148Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl aborted due to compilation errors.
+2026-01-05 21:27:46.889248Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl"
+2026-01-05 21:27:46.901773Z		perl scripts loaded: highmon, notify_send, stats_bar, sysinfo
+2026-01-05 21:27:46.960318Z		python scripts loaded: apply_corrections, autosort, colorize_nicks, go, urlgrab
+2026-01-05 21:27:46.960898Z		Plugins loaded: alias, buflist, charset, exec, fifo, fset, guile, irc, logger, lua, perl, python, relay, script, spell, trigger, typing, xfer
+2026-01-05 21:27:46.961009Z		Passphrase added
+2026-01-05 21:27:46.961087Z		Secured data "libera_pass" set
+2026-01-05 21:27:46.961282Z		Options saved to sec.conf
+2026-01-05 21:27:46.961425Z		Options saved to sec.conf
+2026-01-05 21:27:46.961624Z		Options saved to weechat.conf
+2026-01-05 21:27:46.961727Z		Options saved to plugins.conf
+2026-01-05 21:27:46.961810Z		Options saved to charset.conf
+2026-01-05 21:27:46.961892Z		Options saved to logger.conf
+2026-01-05 21:27:46.961970Z		Options saved to exec.conf
+2026-01-05 21:27:46.962058Z		Options saved to trigger.conf
+2026-01-05 21:27:46.962139Z		Options saved to spell.conf
+2026-01-05 21:27:46.962240Z		Options saved to alias.conf
+2026-01-05 21:27:46.962399Z		Options saved to buflist.conf
+2026-01-05 21:27:46.962542Z		Options saved to fifo.conf
+2026-01-05 21:27:46.962679Z		Options saved to typing.conf
+2026-01-05 21:27:46.962836Z		Options saved to xfer.conf
+2026-01-05 21:27:46.963069Z		Options saved to irc.conf
+2026-01-05 21:27:46.963227Z		Options saved to relay.conf
+2026-01-05 21:27:46.963385Z		Options saved to guile.conf
+2026-01-05 21:27:46.963545Z		Options saved to lua.conf
+2026-01-05 21:27:46.963663Z		Options saved to perl.conf
+2026-01-05 21:27:46.963753Z		Options saved to python.conf
+2026-01-05 21:27:46.963840Z		Options saved to script.conf
+2026-01-05 21:27:46.963930Z		Options saved to fset.conf
+2026-01-05 21:27:46.964009Z		Options saved to autosort.conf
+2026-01-05 21:27:46.964087Z		Options saved to colorize_nicks.conf
+2026-01-05 21:27:46.964167Z		Options saved to urlgrab.conf
+2026-01-05 21:27:46.970691Z		python: scripts unloaded
+2026-01-05 21:27:46.971877Z		Highmon buffer has been closed but output is still set to buffer, unusual results may occur. To recreate the buffer use /highmon fix
+2026-01-05 21:27:46.974817Z		perl: scripts unloaded
+2026-01-05 21:29:15.494771Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 2.
+2026-01-05 21:29:15.494863Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3.
+2026-01-05 21:29:15.494917Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not"
+2026-01-05 21:29:15.494969Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not Found"
+2026-01-05 21:29:15.494969Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl aborted due to compilation errors.
+2026-01-05 21:29:15.495067Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl"
+2026-01-05 21:29:15.503150Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 2.
+2026-01-05 21:29:15.503233Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3.
+2026-01-05 21:29:15.503288Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not"
+2026-01-05 21:29:15.503351Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not Found"
+2026-01-05 21:29:15.503351Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl aborted due to compilation errors.
+2026-01-05 21:29:15.503454Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl"
+2026-01-05 21:29:15.515778Z		perl scripts loaded: highmon, notify_send, stats_bar, sysinfo
+2026-01-05 21:29:15.574828Z		python scripts loaded: apply_corrections, autosort, colorize_nicks, go, urlgrab
+2026-01-05 21:29:15.575423Z		Plugins loaded: alias, buflist, charset, exec, fifo, fset, guile, irc, logger, lua, perl, python, relay, script, spell, trigger, typing, xfer
+2026-01-05 21:29:21.699417Z		python: stdout/stderr (urlgrab): failed to log url check that ~/.weechat/urls.log is valid path
+2026-01-05 21:29:21.699619Z		python: stdout/stderr (urlgrab): failed to log url check that ~/.weechat/urls.log is valid path
+2026-01-05 21:29:21.699791Z		python: stdout/stderr (urlgrab): failed to log url check that ~/.weechat/urls.log is valid path
+2026-01-05 21:29:23.637627Z		Passphrase added
+2026-01-05 21:29:23.642197Z		Secured data "libera_pass" set
+2026-01-05 21:29:23.642681Z		Options saved to sec.conf
+2026-01-05 21:29:23.643007Z		Options saved to sec.conf
+2026-01-05 21:29:23.643252Z		Options saved to weechat.conf
+2026-01-05 21:29:23.643379Z		Options saved to plugins.conf
+2026-01-05 21:29:23.643467Z		Options saved to charset.conf
+2026-01-05 21:29:23.643553Z		Options saved to logger.conf
+2026-01-05 21:29:23.643634Z		Options saved to exec.conf
+2026-01-05 21:29:23.643725Z		Options saved to trigger.conf
+2026-01-05 21:29:23.643816Z		Options saved to spell.conf
+2026-01-05 21:29:23.643918Z		Options saved to alias.conf
+2026-01-05 21:29:23.644005Z		Options saved to buflist.conf
+2026-01-05 21:29:23.644083Z		Options saved to fifo.conf
+2026-01-05 21:29:23.644176Z		Options saved to typing.conf
+2026-01-05 21:29:23.644273Z		Options saved to xfer.conf
+2026-01-05 21:29:23.644420Z		Options saved to irc.conf
+2026-01-05 21:29:23.644509Z		Options saved to relay.conf
+2026-01-05 21:29:23.644628Z		Options saved to guile.conf
+2026-01-05 21:29:23.644708Z		Options saved to lua.conf
+2026-01-05 21:29:23.644786Z		Options saved to perl.conf
+2026-01-05 21:29:23.644863Z		Options saved to python.conf
+2026-01-05 21:29:23.644968Z		Options saved to script.conf
+2026-01-05 21:29:23.645073Z		Options saved to fset.conf
+2026-01-05 21:29:23.645186Z		Options saved to autosort.conf
+2026-01-05 21:29:23.645385Z		Options saved to colorize_nicks.conf
+2026-01-05 21:29:23.645575Z		Options saved to urlgrab.conf
+2026-01-05 21:29:23.657020Z		python: scripts unloaded
+2026-01-05 21:29:23.658581Z		Highmon buffer has been closed but output is still set to buffer, unusual results may occur. To recreate the buffer use /highmon fix
+2026-01-05 21:29:23.662139Z		perl: scripts unloaded
+2026-01-05 21:29:50.411650Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 2.
+2026-01-05 21:29:50.411749Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3.
+2026-01-05 21:29:50.411807Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not"
+2026-01-05 21:29:50.411860Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl line 3, near "404 Not Found"
+2026-01-05 21:29:50.411860Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl aborted due to compilation errors.
+2026-01-05 21:29:50.411960Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/buffers.pl"
+2026-01-05 21:29:50.419522Z		perl: warning: Unquoted string "html" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 2.
+2026-01-05 21:29:50.419603Z		perl: warning: Unquoted string "title" may clash with future reserved word at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3.
+2026-01-05 21:29:50.419659Z		perl: warning: Bareword found where operator expected (Missing operator before "Not"?) at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not"
+2026-01-05 21:29:50.419713Z		perl: error: syntax error at /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl line 3, near "404 Not Found"
+2026-01-05 21:29:50.419713Z		Execution of /opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl aborted due to compilation errors.
+2026-01-05 21:29:50.419814Z	!!	perl: function "register" not found (or failed) in file "/opt/dotfiles/dot_config/weechat/perl/autoload/iset.pl"
+2026-01-05 21:29:50.431851Z		perl scripts loaded: highmon, notify_send, stats_bar, sysinfo
+2026-01-05 21:29:50.490713Z		python scripts loaded: apply_corrections, autosort, colorize_nicks, go, urlgrab
+2026-01-05 21:29:50.491453Z		Plugins loaded: alias, buflist, charset, exec, fifo, fset, guile, irc, logger, lua, perl, python, relay, script, spell, trigger, typing, xfer
+2026-01-05 21:29:50.505225Z		python: scripts unloaded
+2026-01-05 21:29:50.506901Z		Highmon buffer has been closed but output is still set to buffer, unusual results may occur. To recreate the buffer use /highmon fix
+2026-01-05 21:29:50.510224Z		perl: scripts unloaded

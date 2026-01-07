@@ -1,0 +1,83 @@
+2026-01-05 21:29:15.576904Z	--	irc: connecting to server irc.broadcasthe.net/6697 (TLS)...
+2026-01-05 21:29:15.863049Z	--	gnutls: receiving 2 certificates
+2026-01-05 21:29:15.863418Z	--	 - certificate[1] info:
+2026-01-05 21:29:15.863518Z	--	   - subject `CN=irc.broadcasthe.net', issuer `CN=R12,O=Let's Encrypt,C=US', serial 0x06bdda7be78632e80a599bb29222f36357f3, RSA key 2048 bits, signed using RSA-SHA256, activated `2025-11-24 13:27:31 UTC', expires `2026-02-22 13:27:30 UTC', pin-sha256="zg7J2lMs6+sMNqiOBihgUxpCZfQA7eQGWLX1Lj81Xnk="
+2026-01-05 21:29:15.863672Z	--	 - certificate[2] info:
+2026-01-05 21:29:15.863740Z	--	   - subject `CN=R12,O=Let's Encrypt,C=US', issuer `CN=ISRG Root X1,O=Internet Security Research Group,C=US', serial 0x00c212324b70a9b49171dc40f7e285263c, RSA key 2048 bits, signed using RSA-SHA256, activated `2024-03-13 00:00:00 UTC', expires `2027-03-12 23:59:59 UTC', pin-sha256="kZwN96eHtZftBWrOZUsd6cA4es80n3NzSk/XtYz2EqQ="
+2026-01-05 21:29:15.866063Z	--	gnutls: peer's certificate is trusted
+2026-01-05 21:29:15.866222Z	--	irc: connected to irc.broadcasthe.net/6697 (185.7.78.51)
+2026-01-05 21:29:16.119853Z	--	killua-ng.irc.broadcasthe.net: *** Looking up your hostname...
+2026-01-05 21:29:16.120137Z	--	killua-ng.irc.broadcasthe.net: *** Looking up your hostname...
+2026-01-05 21:29:16.120277Z	--	irc: client capability, server supports: account-notify away-notify batch cap-notify chghost echo-message extended-join inspircd.org/poison inspircd.org/standard-replies invite-notify labeled-response message-tags multi-prefix sasl server-time setname tls userhost-in-names
+2026-01-05 21:29:16.120452Z	--	irc: client capability, requesting: account-notify away-notify batch cap-notify chghost echo-message extended-join invite-notify message-tags multi-prefix server-time setname userhost-in-names
+2026-01-05 21:29:16.165000Z	--	irc: client capability, enabled: account-notify away-notify batch cap-notify chghost echo-message extended-join invite-notify message-tags multi-prefix server-time setname userhost-in-names
+2026-01-05 21:29:16.341000Z	--	killua-ng.irc.broadcasthe.net: *** Found your hostname (c-174-166-177-180.hsd1.nj.comcast.net)
+2026-01-05 21:29:17.013000Z	--	Welcome to the BroadcasTheNet IRC Network redhat!redhat@c-174-166-177-180.hsd1.nj.comcast.net
+2026-01-05 21:29:17.013000Z	--	Your host is killua-ng.irc.broadcasthe.net, running version InspIRCd-3
+2026-01-05 21:29:17.013000Z	--	This server was created 04:22:06 Dec 17 2025
+2026-01-05 21:29:17.013000Z	--	killua-ng.irc.broadcasthe.net InspIRCd-3 BHILQRSWZcdghikorstwx ABCDFHIJKLMNOPQRSTWXYZabcdefhijklmnopqrstuvz BFHIJLXYabdefhjkloqv
+2026-01-05 21:29:17.013000Z	--	ACCEPT=30 AWAYLEN=200 BOT=B CALLERID=g CASEMAPPING=rfc1459 CHANLIMIT=#:64 CHANMODES=IXbe,k,BFHJLdfjl,ACDKMNOPQRSTWZcimnprstuz CHANNELLEN=64 CHANTYPES=# ELIST=CMNTU ESILENCE=CcdiNnPpTtx EXCEPTS=e are supported by this server
+2026-01-05 21:29:17.013000Z	--	EXTBAN=,ACNOQRSTUYZcmpwz HOSTLEN=64 INVEX=I KEYLEN=32 KICKLEN=255 LINELEN=512 MAXLIST=I:100,X:100,b:100,e:100 MAXTARGETS=20 MODES=20 MONITOR=30 NAMELEN=128 NAMESX NETWORK=BroadcasTheNet are supported by this server
+2026-01-05 21:29:17.013000Z	--	NICKLEN=31 PREFIX=(Yqaohv)!~&@%+ REMOVE SAFELIST SECURELIST=60 SILENCE=32 STATUSMSG=!~&@%+ TOPICLEN=307 UHNAMES USERIP USERLEN=11 USERMODES=,,s,BHILQRSWZcdghikortwx WATCH=30 are supported by this server
+2026-01-05 21:29:17.013000Z	--	WHOX are supported by this server
+2026-01-05 21:29:17.013000Z	--	There are 2450 users and 440 invisible on 4 servers
+2026-01-05 21:29:17.013000Z	--	47 operator(s) online
+2026-01-05 21:29:17.013000Z	--	3 unknown connections
+2026-01-05 21:29:17.013000Z	--	88 channels formed
+2026-01-05 21:29:17.013000Z	--	I have 2885 clients and 1 servers
+2026-01-05 21:29:17.013000Z	--	Current local users: 2885  Max: 2903
+2026-01-05 21:29:17.013000Z	--	Current global users: 2890  Max: 2908
+2026-01-05 21:29:17.013000Z	--	killua-ng.irc.broadcasthe.net message of the day
+2026-01-05 21:29:17.013000Z	--	  _          _                     _            _   _                   _   
+2026-01-05 21:29:17.013000Z	--	 (_)_ _ __  | |__ _ _ ___  __ _ __| |__ __ _ __| |_| |_  ___   _ _  ___| |_ 
+2026-01-05 21:29:17.013000Z	--	 | | '_/ _|_| '_ \ '_/ _ \/ _` / _` / _/ _` (_-<  _| ' \/ -_)_| ' \/ -_)  _|
+2026-01-05 21:29:17.013000Z	--	 |_|_| \__(_)_.__/_| \___/\__,_\__,_\__\__,_/__/\__|_||_\___(_)_||_\___|\__|
+2026-01-05 21:29:17.013000Z	--	 
+2026-01-05 21:29:17.013000Z	--	                                                                  
+2026-01-05 21:29:17.013000Z	--	                                                   @@@@@            
+2026-01-05 21:29:17.013000Z	--	       @@                                         @@@@@@@           
+2026-01-05 21:29:17.013000Z	--	     @@@@@                                       @@@ @@@            
+2026-01-05 21:29:17.013000Z	--	        @@@@@                                   @@@                 
+2026-01-05 21:29:17.013000Z	--	            @@@@@                              @@                   
+2026-01-05 21:29:17.013000Z	--	               @@@@@@                         @@                    
+2026-01-05 21:29:17.013000Z	--	                    @@@@                    @@@@                    
+2026-01-05 21:29:17.013000Z	--	                      @@@@@                @@@                      
+2026-01-05 21:29:17.013000Z	--	                          @@@@          @@@@@@@@@@@@@@@@@@@@        
+2026-01-05 21:29:17.013000Z	--	         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                @@@       
+2026-01-05 21:29:17.013000Z	--	          @@                                              @@@       
+2026-01-05 21:29:17.013000Z	--	          @@                     @@                       @@@       
+2026-01-05 21:29:17.013000Z	--	          @@                     @@@                      @@@       
+2026-01-05 21:29:17.013000Z	--	          @@                      @@   @@@                 @@       
+2026-01-05 21:29:17.013000Z	--	          @@                 @@   @@@    @@@@@             @@       
+2026-01-05 21:29:17.013000Z	--	          @@               @@@     @@       @@@            @@       
+2026-01-05 21:29:17.013000Z	--	          @@              @@@               @@@            @@       
+2026-01-05 21:29:17.013000Z	--	          @@              @@@               @@@            @@       
+2026-01-05 21:29:17.013000Z	--	          @@               @@@             @@@             @@       
+2026-01-05 21:29:17.013000Z	--	          @@                 @@@@@@@@@@@@@@@@              @@       
+2026-01-05 21:29:17.013000Z	--	          @@                    @@@@@@@@@                  @@       
+2026-01-05 21:29:17.013000Z	--	          @@@                                              @@       
+2026-01-05 21:29:17.013000Z	--	          @@@@@@@@@@@@@                              @@@@@@@@       
+2026-01-05 21:29:17.013000Z	--	           @         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@           
+2026-01-05 21:29:17.013000Z	--	                                                                    
+2026-01-05 21:29:17.013000Z	--	                                                                    
+2026-01-05 21:29:17.013000Z	--	          @@@@@                                                     
+2026-01-05 21:29:17.013000Z	--	        @@@@ @@@@              @@@@@@@@@@@         @@@          @@@ 
+2026-01-05 21:29:17.013000Z	--	       @@@     @@@            @@@@ @@@@            @@@@@       @@@  
+2026-01-05 21:29:17.013000Z	--	       @@  @@@@@@@                 @@@             @@@ @@@    @@@   
+2026-01-05 21:29:17.013000Z	--	       @@@ @@@@@@@@@@               @@              @@  @@@   @@    
+2026-01-05 21:29:17.013000Z	--	       @@@          @@              @@@             @@    @@@@@@    
+2026-01-05 21:29:17.013000Z	--	       @@@          @@               @@             @@     @@@@@    
+2026-01-05 21:29:17.013000Z	--	       @@@       @@@@@               @@@            @@              
+2026-01-05 21:29:17.013000Z	--	       @@@@@@@@@@@
+2026-01-05 21:29:17.013000Z	--	 
+2026-01-05 21:29:17.013000Z	--	 For help or issues with the IRC network, #support
+2026-01-05 21:29:17.013000Z	--	 For help or issues with BTN, #BTN-Support
+2026-01-05 21:29:17.013000Z	--	 
+2026-01-05 21:29:17.013000Z	--	 To create a channel, ask an oper in #support
+2026-01-05 21:29:17.013000Z	--	 Hate speech, warez, underage pornography, and other
+2026-01-05 21:29:17.013000Z	--	 illegal activities are expressly forbidden on this network.
+2026-01-05 21:29:17.013000Z	--	 
+2026-01-05 21:29:17.013000Z	--	End of message of the day.
+2026-01-05 21:29:17.013000Z	--	cloak-up3vgr.nj.comcast.net is now your displayed host
+2026-01-05 21:29:17.013000Z	--	User mode [+Rx] by redhat
+2026-01-05 21:29:50.493800Z	--	irc: connecting to server irc.broadcasthe.net/6697 (TLS)...

@@ -1,5 +1,6 @@
 {
     "appLauncher": {
+        "autoPasteClipboard": false,
         "customLaunchPrefix": "",
         "customLaunchPrefixEnabled": false,
         "enableClipPreview": true,
@@ -160,7 +161,6 @@
     },
     "colorSchemes": {
         "darkMode": true,
-        "generateTemplatesForPredefined": true,
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "matugenSchemeType": "scheme-rainbow",
@@ -269,6 +269,7 @@
         "shadowDirection": "bottom_right",
         "shadowOffsetX": 2,
         "shadowOffsetY": 3,
+        "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
         "showScreenCorners": false,
         "showSessionButtonsOnLockScreen": true
@@ -285,6 +286,8 @@
     "location": {
         "analogClockInCalendar": false,
         "firstDayOfWeek": -1,
+        "hideWeatherCityName": false,
+        "hideWeatherTimezone": false,
         "name": "Laurel Springs, New Jersey",
         "showCalendarEvents": false,
         "showCalendarWeather": true,
@@ -449,18 +452,23 @@
         "walker": false,
         "wezterm": false,
         "yazi": true,
-        "zed": false
+        "zed": false,
+        "zenBrowser": false
     },
     "ui": {
+        "bluetoothDetailsViewMode": "grid",
+        "bluetoothHideUnnamedDevices": false,
         "boxBorderEnabled": true,
-        "fontDefault": "MesloLGS Nerd Font Mono",
+        "fontDefault": "MesloLGS Nerd Font",
         "fontDefaultScale": 1,
         "fontFixed": "MesloLGS Nerd Font Mono",
         "fontFixedScale": 1,
+        "networkPanelView": "wifi",
         "panelBackgroundOpacity": 0.85,
         "panelsAttachedToBar": true,
         "settingsPanelMode": "centered",
-        "tooltipsEnabled": true
+        "tooltipsEnabled": true,
+        "wifiDetailsViewMode": "grid"
     },
     "wallpaper": {
         "directory": "/home/kevin/Pictures/Wallpapers",

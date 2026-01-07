@@ -1,0 +1,41 @@
+directory: ~/masters
+library: ~/.config/beets/library.db
+
+import:
+  write: no
+  move: no
+  copy: no
+  autotag: no
+  incremental: yes
+
+plugins: missing convert fetchart
+
+missing:
+  count: yes
+  total: yes
+
+fetchart:
+  sources: filesystem
+  filenames: cover.jpg folder.jpg album.jpg
+  store_source: yes
+
+convert:
+  dest: ~/test/output
+  format: aac
+  formats:
+    aac:
+      command: beets-qaac $source $dest
+      extension: m4a
+  threads: 16
+  copy_album_art: yes
+  album_art_maxwidth: 0
+  #  command: ffmpeg -i $source -map_metadata 0 -c:a libopus -b:a 256k -vbr on -compression_level 10 -frame_duration 20 -ar 48000 $dest
+  #extension: opus
+  paths:
+    "disctotal:2..": $albumartist/$album ($year)/$disc-$track. $artist - $title
+    # Standard: Artist/Album [Opus][256]/01 - Artist - Song.opus
+    default: $albumartist/$album ($year)/$track. $artist - $title
+    # Singletons: Artist/Non-Album [Opus][256]/Artist - Song.opus
+    singleton: $artist/Non-Album ($year)/$artist - $title
+    # Compilations: Compilations/Album [Opus][256]/01 - Artist - Song.opus
+    comp: Compilations/$album ($year)/$track. $artist - $title

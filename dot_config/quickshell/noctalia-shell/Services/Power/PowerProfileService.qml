@@ -78,6 +78,18 @@ Singleton {
       setProfile(PowerProfile.Balanced);
   }
 
+  function cycleProfileReverse() {
+    if (!available)
+      return;
+    const current = powerProfiles.profile;
+    if (current === PowerProfile.Performance)
+      setProfile(PowerProfile.Balanced);
+    else if (current === PowerProfile.Balanced)
+      setProfile(PowerProfile.PowerSaver);
+    else if (current === PowerProfile.PowerSaver)
+      setProfile(PowerProfile.Performance);
+  }
+
   function isDefault() {
     if (!available)
       return true;
@@ -91,9 +103,9 @@ Singleton {
       // Only show toast if we have a valid profile name (not "Unknown")
       const profileName = root.getName();
       if (profileName !== "Unknown") {
-        ToastService.showNotice(I18n.tr("toast.power-profile.changed"), I18n.tr("toast.power-profile.profile-name", {
-                                                                                  "profile": profileName
-                                                                                }), profileName.toLowerCase().replace(" ", ""));
+        ToastService.showNotice(I18n.tr("toast.power-profile.profile-name", {
+                                          "profile": profileName
+                                        }), I18n.tr("toast.power-profile.changed"), profileName.toLowerCase().replace(" ", ""));
       }
     }
   }

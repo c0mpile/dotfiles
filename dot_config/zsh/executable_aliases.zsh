@@ -70,6 +70,7 @@ alias cza='chezmoi add'
 alias czra='chezmoi re-add'
 alias czf='chezmoi forget'
 alias czu='chezmoi update'
+alias czfall='chezmoi status | grep "^DA" | cut -c 4- | xargs chezmoi forget'
 
 # Bitwarden
 alias bws='bw status'
@@ -79,3 +80,6 @@ function bw-unlock() {
     export BW_SESSION=$(bw unlock --raw)
 }
 alias bwu='bw-unlock'
+
+# qaac
+alias qaac="WINEDEBUG=-all wine ~/.wine/drive_c/qaac/qaac64.exe"

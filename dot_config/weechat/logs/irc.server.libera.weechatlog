@@ -1,0 +1,48 @@
+2026-01-05 21:29:15.575722Z	--	irc: connecting to server irc.libera.chat/6697 (TLS)...
+2026-01-05 21:29:15.959117Z	--	gnutls: receiving 2 certificates
+2026-01-05 21:29:15.959341Z	--	 - certificate[1] info:
+2026-01-05 21:29:15.959433Z	--	   - subject `CN=zinc.libera.chat', issuer `CN=R12,O=Let's Encrypt,C=US', serial 0x066340c4f2e90747c02ed887f13907811591, RSA key 4096 bits, signed using RSA-SHA256, activated `2025-11-17 05:13:53 UTC', expires `2026-02-15 05:13:52 UTC', pin-sha256="aLSyqHVU7IzxX7A0h/D0CZ0wh/poViLIoXdMNUTm1sg="
+2026-01-05 21:29:15.959579Z	--	 - certificate[2] info:
+2026-01-05 21:29:15.959644Z	--	   - subject `CN=R12,O=Let's Encrypt,C=US', issuer `CN=ISRG Root X1,O=Internet Security Research Group,C=US', serial 0x00c212324b70a9b49171dc40f7e285263c, RSA key 2048 bits, signed using RSA-SHA256, activated `2024-03-13 00:00:00 UTC', expires `2027-03-12 23:59:59 UTC', pin-sha256="kZwN96eHtZftBWrOZUsd6cA4es80n3NzSk/XtYz2EqQ="
+2026-01-05 21:29:15.961799Z	--	gnutls: peer's certificate is trusted
+2026-01-05 21:29:15.961944Z	--	irc: connected to irc.libera.chat/6697 (2001:708:40:2001::11ba)
+2026-01-05 21:29:16.406837Z	--	zinc.libera.chat: *** Checking Ident
+2026-01-05 21:29:16.407009Z	--	zinc.libera.chat: *** Looking up your hostname...
+2026-01-05 21:29:16.407129Z	--	zinc.libera.chat: *** Couldn't look up your hostname
+2026-01-05 21:29:21.323497Z	--	zinc.libera.chat: *** No Ident response
+2026-01-05 21:29:21.323787Z	--	irc: client capability, server supports: account-notify away-notify chghost extended-join multi-prefix sasl=ECDSA-NIST256P-CHALLENGE,EXTERNAL,PLAIN,SCRAM-SHA-512 tls account-tag cap-notify echo-message server-time solanum.chat/identify-msg solanum.chat/oper solanum.chat/realhost
+2026-01-05 21:29:21.323927Z	--	irc: client capability, requesting: account-notify away-notify chghost extended-join multi-prefix account-tag cap-notify echo-message server-time
+2026-01-05 21:29:21.457004Z	--	irc: client capability, enabled: account-notify away-notify chghost extended-join multi-prefix account-tag cap-notify echo-message server-time
+2026-01-05 21:29:21.516000Z	--	Welcome to the Libera.Chat Internet Relay Chat Network cptknots
+2026-01-05 21:29:21.516000Z	--	Your host is zinc.libera.chat[2001:708:40:2001::11ba/6697], running version solanum-1.0-dev
+2026-01-05 21:29:21.516000Z	--	This server was created Thu Jul 31 2025 at 03:12:59 UTC
+2026-01-05 21:29:21.516000Z	--	zinc.libera.chat solanum-1.0-dev DGIMQRSZaghilopsuwz CFILMPQRSTbcefgijklmnopqrstuvz bkloveqjfI
+2026-01-05 21:29:21.516000Z	--	ACCOUNTEXTBAN=a WHOX CALLERID=g SAFELIST ELIST=CMNTU MONITOR=100 ETRACE FNC KNOCK CHANTYPES=# EXCEPTS INVEX are supported by this server
+2026-01-05 21:29:21.516000Z	--	CHANMODES=eIbq,k,flj,CFLMPQRSTcgimnprstuz CHANLIMIT=#:250 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=Libera.Chat STATUSMSG=@+ CASEMAPPING=rfc1459 NICKLEN=16 MAXNICKLEN=16 CHANNELLEN=50 TOPICLEN=390 are supported by this server
+2026-01-05 21:29:21.516000Z	--	DEAF=D TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,agjrxz are supported by this server
+2026-01-05 21:29:21.516000Z	--	There are 54 users and 31120 invisible on 28 servers
+2026-01-05 21:29:21.516000Z	--	37 IRC Operators online
+2026-01-05 21:29:21.516000Z	--	32 unknown connection(s)
+2026-01-05 21:29:21.516000Z	--	22533 channels formed
+2026-01-05 21:29:21.516000Z	--	I have 1982 clients and 1 servers
+2026-01-05 21:29:21.516000Z	--	1982 4084 Current local users 1982, max 4084
+2026-01-05 21:29:21.516000Z	--	31174 49927 Current global users 31174, max 49927
+2026-01-05 21:29:21.516000Z	--	Highest connection count: 4085 (4084 clients) (294255 connections received)
+2026-01-05 21:29:21.516000Z	--	- zinc.libera.chat Message of the Day - 
+2026-01-05 21:29:21.516000Z	--	- Welcome to Libera Chat, the IRC network for
+2026-01-05 21:29:21.516000Z	--	- free & open-source software and peer directed projects.
+2026-01-05 21:29:21.516000Z	--	-  
+2026-01-05 21:29:21.516000Z	--	- Use of Libera Chat is governed by our network policies.
+2026-01-05 21:29:21.516000Z	--	-  
+2026-01-05 21:29:21.516000Z	--	- To reduce network abuses we perform open proxy checks
+2026-01-05 21:29:21.516000Z	--	- on hosts at connection time.
+2026-01-05 21:29:21.516000Z	--	-  
+2026-01-05 21:29:21.516000Z	--	- Please visit us in #libera for questions and support.
+2026-01-05 21:29:21.516000Z	--	-  
+2026-01-05 21:29:21.516000Z	--	- Website and documentation:  https://libera.chat
+2026-01-05 21:29:21.516000Z	--	- Webchat:                    https://web.libera.chat
+2026-01-05 21:29:21.516000Z	--	- Network policies:           https://libera.chat/policies
+2026-01-05 21:29:21.516000Z	--	- Email:                      support@libera.chat
+2026-01-05 21:29:21.516000Z	--	End of /MOTD command.
+2026-01-05 21:29:21.516000Z	--	User mode [+Ziw] by cptknots
+2026-01-05 21:29:50.492250Z	--	irc: connecting to server irc.libera.chat/6697 (TLS)...
