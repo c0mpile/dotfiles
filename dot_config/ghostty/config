@@ -3,6 +3,7 @@ font-family = "MesloLGS Nerd Font Mono"
 font-size = 12
 window-padding-x = 15
 window-padding-y = 15 
+background-opacity = 0.95
 background-blur-radius = 0
 working-directory = home
 window-inherit-working-directory = false

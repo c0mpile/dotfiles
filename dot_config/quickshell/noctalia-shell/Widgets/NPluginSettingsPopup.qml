@@ -102,6 +102,8 @@ Popup {
   }
 
   onClosed: {
+    // Clear both source and sourceComponent to ensure full cleanup
+    settingsLoader.sourceComponent = null;
     settingsLoader.source = "";
     currentPlugin = null;
     currentPluginApi = null;
@@ -110,10 +112,12 @@ Popup {
   function openPluginSettings(pluginManifest) {
     currentPlugin = pluginManifest;
 
-    // Get plugin API
-    currentPluginApi = PluginService.getPluginAPI(pluginManifest.id);
+    // Use composite key if available (for custom plugins), otherwise use manifest ID (for official plugins)
+    var pluginId = pluginManifest.compositeKey || pluginManifest.id;
+
+    currentPluginApi = PluginService.getPluginAPI(pluginId);
     if (!currentPluginApi) {
-      Logger.e("NPluginSettingsPopup", "Cannot open settings: plugin not loaded:", pluginManifest.id);
+      Logger.e("NPluginSettingsPopup", "Cannot open settings: plugin not loaded:", pluginId);
       if (showToastOnSave) {
         ToastService.showError(I18n.tr("panels.plugins.title"), I18n.tr("panels.plugins.settings-error-not-loaded"));
       }
@@ -121,12 +125,10 @@ Popup {
     }
 
     // Get plugin directory
-    var pluginDir = PluginRegistry.getPluginDir(pluginManifest.id);
+    var pluginDir = PluginRegistry.getPluginDir(pluginId);
     var settingsPath = pluginDir + "/" + pluginManifest.entryPoints.settings;
-    var loadVersion = PluginRegistry.pluginLoadVersions[pluginManifest.id] || 0;
 
-    // Load settings component (use version counter to avoid caching)
-    settingsLoader.setSource("file://" + settingsPath + "?v=" + loadVersion, {
+    settingsLoader.setSource("file://" + settingsPath, {
                                "pluginApi": currentPluginApi
                              });
 

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Sync the nvim directory to root's config
+sudo mkdir -p /root/.config
+sudo cp -r {{ .chezmoi.homeDir }}/.config/nvim /root/.config/
+
+# Sync the zsh directory to root's config
+sudo mkdir -p /root/.config
+sudo cp -r {{ .chezmoi.homeDir }}/.config/zsh /root/.config/
+sudo cp -r {{ .chezmoi.homeDir }}/.zshenv /root/
+
+# Sync the local bin scripts to root's bin
+sudo mkdir -p /root/.local/bin
+sudo cp -r {{ .chezmoi.homeDir }}/.local/bin/* /root/.local/bin/

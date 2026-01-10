@@ -5,3 +5,4 @@ image/png=viewnior.desktop
 image/gif=viewnior.desktop
 image/webp=viewnior.desktop
 image/bmp=viewnior.desktop
+x-scheme-handler/discord=vesktop.desktop

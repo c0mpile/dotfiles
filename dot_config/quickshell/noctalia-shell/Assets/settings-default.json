@@ -10,8 +10,8 @@
     "backgroundOpacity": 0.93,
     "useSeparateOpacity": false,
     "floating": false,
-    "marginVertical": 0.25,
-    "marginHorizontal": 0.25,
+    "marginVertical": 4,
+    "marginHorizontal": 4,
     "outerCorners": true,
     "exclusive": true,
     "widgets": {
@@ -38,9 +38,6 @@
         }
       ],
       "right": [
-        {
-          "id": "ScreenRecorder"
-        },
         {
           "id": "Tray"
         },
@@ -127,25 +124,9 @@
       },
       {
         "enabled": true,
-        "id": "timer-card"
-      },
-      {
-        "enabled": true,
         "id": "weather-card"
       }
     ]
-  },
-  "screenRecorder": {
-    "directory": "",
-    "frameRate": 60,
-    "audioCodec": "opus",
-    "videoCodec": "h264",
-    "quality": "very_high",
-    "colorRange": "limited",
-    "showCursor": true,
-    "copyToClipboard": false,
-    "audioSource": "default_output",
-    "videoSource": "portal"
   },
   "wallpaper": {
     "enabled": true,
@@ -183,8 +164,9 @@
     "enableClipboardHistory": false,
     "autoPasteClipboard": false,
     "enableClipPreview": true,
+    "clipboardWrapText": true,
     "position": "center",
-    "pinnedExecs": [],
+    "pinnedApps": [],
     "useApp2Unit": false,
     "sortByMostUsed": true,
     "terminalCommand": "xterm -e",
@@ -193,7 +175,7 @@
     "viewMode": "list",
     "showCategories": true,
     "iconMode": "tabler",
-    "showIconBackground": true,
+    "showIconBackground": false,
     "ignoreMouseInput": false,
     "screenshotAnnotationTool": ""
   },
@@ -207,9 +189,6 @@
         },
         {
           "id": "Bluetooth"
-        },
-        {
-          "id": "ScreenRecorder"
         },
         {
           "id": "WallpaperSelector"
@@ -374,8 +353,7 @@
     "enabledTypes": [
       0,
       1,
-      2,
-      4
+      2
     ],
     "monitors": []
   },
@@ -385,8 +363,7 @@
     "cavaFrameRate": 30,
     "visualizerType": "linear",
     "mprisBlacklist": [],
-    "preferredPlayer": "",
-    "externalMixer": "pwvucontrol || pavucontrol"
+    "preferredPlayer": ""
   },
   "brightness": {
     "brightnessStep": 5,
