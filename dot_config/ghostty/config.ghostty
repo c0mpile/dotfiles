@@ -1,0 +1,49 @@
+# Theme
+theme = noctalia
+
+# Font configuration
+font-family = "MesloLGM Nerd Font Mono"
+font-size = 12
+
+# Window appearance & opacity
+background-opacity = 0.85
+window-padding-x = 15
+window-padding-y = 15
+window-padding-balance = true
+
+# Cursor configuration
+cursor-style = block
+cursor-style-blink = true
+shell-integration-features = no-cursor
+
+# Scrollback
+scrollback-limit = 100000
+
+# Mouse
+mouse-scroll-multiplier = 3
+mouse-hide-while-typing = false
+
+# Bell
+bell-features = no-audio
+
+# Clipboard
+clipboard-paste-protection = false
+clipboard-trim-trailing-spaces = true
+
+# Confirmation
+confirm-close-surface = false
+
+# Keybindings
+keybind = ctrl+shift+s=paste_from_selection
+keybind = shift+insert=paste_from_selection
+keybind = ctrl+shift+k=scroll_page_lines:-1
+keybind = ctrl+shift+j=scroll_page_lines:1
+keybind = ctrl+shift+page_up=scroll_page_up
+keybind = ctrl+shift+page_down=scroll_page_down
+keybind = ctrl+shift+home=scroll_to_top
+keybind = ctrl+shift+end=scroll_to_bottom
+keybind = ctrl+shift+h=write_scrollback_file:open
+keybind = ctrl+shift+backspace=reset_font_size
+
+# Links
+link-previews = true

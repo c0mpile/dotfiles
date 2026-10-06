@@ -1,0 +1,233 @@
+[bar.default]
+background_opacity = 0.0
+capsule = true
+capsule_opacity = 0.4999999888241291
+capsule_padding = 8.0
+capsule_thickness = 0.84999998472630978
+center = ["workspaces"]
+end = [
+  "media",
+  "notifications",
+  "volume",
+  "brightness",
+  "battery",
+  "clock",
+  "control-center",
+  "btn",
+]
+font_family = "MesloLGS Nerd Font"
+font_weight = 400
+margin_ends = 0
+padding = 10
+shadow = false
+start = ["launcher", "tray", "active_window"]
+thickness = 40
+
+[control_center]
+sidebar = "full"
+
+[[control_center.shortcuts]]
+type = "wifi"
+
+[[control_center.shortcuts]]
+type = "bluetooth"
+
+[[control_center.shortcuts]]
+type = "caffeine"
+
+[[control_center.shortcuts]]
+type = "power_profile"
+
+[[control_center.shortcuts]]
+type = "8bury/lid-guard:lid-guard-toggle"
+
+[[control_center.shortcuts]]
+type = "audio"
+
+[desktop_widgets]
+enabled = false
+
+[idle]
+behavior_order = ["lock", "screen-off"]
+pre_action_fade_seconds = 0
+
+[idle.behavior.lock]
+action = "lock"
+enabled = true
+timeout = 600.0
+
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = true
+timeout = 660.0
+
+[lockscreen]
+blur_intensity = 0.5
+tint_intensity = 0
+transition = []
+
+[notification]
+background_opacity = 0.99999997764825821
+
+[plugin_settings."ezequiel/mango_layouts"]
+panel_position = "center"
+
+[plugin_settings."noctalia/wallhaven"]
+browser_placement = "floating"
+browser_position = "center"
+download_dir = "~/Pictures/Wallpapers/wallhaven"
+
+[plugins]
+auto_update = "all"
+enabled = [
+  "piero-93/battery-power-management",
+  "nightwatch75/dns-switcher",
+  "8bury/lid-guard",
+  "weinguyen/shell-command",
+  "aristides/udiskie",
+  "noctalia/wallhaven",
+  "umedbazarov/webapp-maker",
+  "yuuto/arch-updater",
+]
+
+[[plugins.source]]
+auto_update = true
+kind = "git"
+location = "https://github.com/noctalia-dev/official-plugins"
+name = "official"
+
+[[plugins.source]]
+auto_update = true
+kind = "git"
+location = "https://github.com/noctalia-dev/community-plugins"
+name = "community"
+
+[[plugins.source]]
+auto_update = true
+enabled = false
+kind = "git"
+location = "https://github.com/olafkfreund/nocatalia-v5-plugin"
+name = "ported-legacy-plugins"
+
+[shell]
+avatar_path = "/home/kevin/.face.png"
+clipboard_auto_paste = "off"
+font_family = "MesloLGL Nerd Font Mono"
+polkit_agent = true
+settings_show_advanced = true
+telemetry_enabled = false
+umbriel_overview_type_to_launch_enabled = true
+
+[shell.animation]
+speed = 2.0000000298023224
+
+[shell.greeter_sync]
+auto_sync = true
+
+[shell.panel]
+control_center_placement = "floating"
+open_near_click_control_center = true
+session_placement = "floating"
+session_position = "center"
+transparency_mode = "soft"
+wallpaper_placement = "floating"
+wallpaper_position = "center"
+
+[shell.screenshot]
+directory = "/home/kevin/Pictures/Screenshots"
+
+[shell.session]
+show_shortcuts = false
+
+[system.monitor]
+enabled = false
+
+[theme]
+mode = "dark"
+shell_mode = "dark"
+source = "wallpaper"
+wallpaper_scheme = "m3-tonal-spot"
+
+[theme.templates]
+builtin_ids = [
+  "btop",
+  "gtk3",
+  "gtk4",
+  "ghostty",
+  "kitty",
+  "qt",
+  "starship",
+  "umbriel",
+]
+community_ids = [
+  "antigravity",
+  "opencode",
+  "brave",
+  "brave-origin",
+  "gimp",
+  "neovim",
+  "obsidian",
+  "vscode",
+  "heroiclauncher",
+  "prismlauncher",
+  "obs",
+  "zathura",
+  "papirus-icons",
+  "bat",
+  "fzf",
+  "lazygit",
+  "yazi",
+]
+
+[wallpaper]
+directory = "/home/kevin/Pictures/Wallpapers"
+
+[weather]
+effects = false
+unit = "imperial"
+
+[widget.active_window]
+capsule = true
+
+[widget.battery]
+capsule = true
+
+[widget.brightness]
+capsule = true
+
+[widget.clock]
+capsule = true
+
+[widget.control-center]
+capsule = true
+enabled = false
+font_weight = 700
+glyph = "brand-windows-filled"
+
+[widget.media]
+capsule = true
+hide_when_no_media = true
+title_scroll = "on_hover"
+
+[widget.notifications]
+capsule = true
+hide_when_no_unread = true
+
+[widget.tray]
+capsule = true
+
+[widget.volume]
+capsule = true
+font_weight = 700
+
+[widget.workspaces]
+anchor = true
+capsule = true
+capsule_opacity = 0.5
+capsule_padding = 5
+capsule_radius = "auto"
+focused_output_only = true
+font_weight = 700
+hide_when_empty = true
+labels_only_when_occupied = true
+scale = 1.1000000000000001

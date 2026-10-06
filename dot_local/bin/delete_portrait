@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# delete_portrait.sh - recursively delete portrait-orientation images (height > width).
+#
+# Usage: delete_portrait.sh [-n] [-j JOBS] [DIR]    (default: current directory, all CPU cores)
+#   -n   dry run: only list what would be deleted
+#   -j   number of parallel jobs
+#
+# - EXIF orientation is honored: a photo stored as landscape but tagged "rotate 90"
+#   is displayed as portrait, so it is treated as portrait (and vice versa).
+# - Square images are kept (they are not taller than wide).
+# - Images that can't be read are reported and left alone.
+# Requires ImageMagick (identify / magick).
+
+set -u
+
+dry=0
+jobs=$(nproc 2>/dev/null || echo 4)
+while getopts ":nj:" opt; do
+    case $opt in
+        n) dry=1 ;;
+        j) jobs=$OPTARG ;;
+        *) echo "Usage: $0 [-n] [-j JOBS] [DIR]" >&2; exit 2 ;;
+    esac
+done
+shift $((OPTIND - 1))
+[[ $jobs =~ ^[1-9][0-9]*$ ]] || { echo "JOBS must be a positive integer" >&2; exit 2; }
+
+root=${1:-.}
+cd "$root" || { echo "Cannot enter $root" >&2; exit 1; }
+
+if command -v magick >/dev/null; then
+    IDENT=(magick identify)
+elif command -v identify >/dev/null; then
+    IDENT=(identify)
+else
+    echo "ImageMagick not found (install it, e.g. 'sudo pacman -S imagemagick')." >&2
+    exit 1
+fi
+export DRY=$dry
+export IDENT_CMD="${IDENT[*]}"
+
+process() {
+    local f=$1 w h o tmp
+    # [0] = first frame only (animated gif/webp); ping avoids decoding pixel data.
+    # shellcheck disable=SC2086
+    if ! out=$($IDENT_CMD -ping -format '%w %h %[exif:Orientation]' -- "${f}[0]" 2>/dev/null); then
+        echo "SKIPPED (unreadable): $f" >&2
+        return 0
+    fi
+    read -r w h o <<<"$out"
+    [[ $w =~ ^[0-9]+$ && $h =~ ^[0-9]+$ ]] || { echo "SKIPPED (no size): $f" >&2; return 0; }
+
+    # EXIF orientations 5-8 mean the image is displayed rotated 90 degrees.
+    case ${o:-1} in
+        5|6|7|8) tmp=$w; w=$h; h=$tmp ;;
+    esac
+
+    if (( h > w )); then
+        if (( DRY )); then
+            echo "Would delete: $f (${w}x${h})"
+        else
+            rm -f -- "$f" && echo "Deleted: $f (${w}x${h})"
+        fi
+    fi
+}
+export -f process
+
+find . -type f \( \
+    -iname '*.jpg'  -o -iname '*.jpeg' -o -iname '*.png'  -o -iname '*.gif'  -o \
+    -iname '*.webp' -o -iname '*.bmp'  -o -iname '*.tif'  -o -iname '*.tiff' -o \
+    -iname '*.heic' -o -iname '*.heif' -o -iname '*.avif' -o -iname '*.jxl' \
+\) -print0 | xargs -0 -P "$jobs" -n 1 bash -c 'process "$0"'
+
+echo "Done."

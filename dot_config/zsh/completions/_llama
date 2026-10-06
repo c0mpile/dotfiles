@@ -1,0 +1,32 @@
+#compdef llama
+
+_llama() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '1:command:->command' \
+    '*::args:->args'
+
+  case $state in
+    command)
+      local -a subcommands
+      subcommands=(
+        'serve:HTTP API server'
+        'cli:Command-line interactive interface'
+        'update:Update llama to the latest release'
+        'download:Download a model'
+        'version:Show version'
+        'licenses:Show third-party licenses'
+        'help:Show available commands'
+      )
+      _describe -t subcommands 'llama command' subcommands
+      ;;
+    args)
+      # Complete flags/options dynamically using _arguments --
+      _arguments '*:arg:_default' --
+      ;;
+  esac
+}
+
+_llama "$@"

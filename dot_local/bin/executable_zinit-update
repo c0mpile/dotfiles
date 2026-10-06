@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+# Update zinit plugins, regenerate cached CLI integrations, and recompile .zwc files
+set -euo pipefail
+
+export ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
+local static_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-static"
+
+# Bootstrap zinit if present
+local zinit_home="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ -f "$zinit_home/zinit.zsh" ]]; then
+  source "$zinit_home/zinit.zsh"
+
+  # Update all zinit plugins and snippets
+  zinit update --all --quiet
+fi
+
+# Regenerate static CLI integration files
+mkdir -p "$static_cache"
+if (( $+commands[pay-respects] )); then
+  pay-respects zsh >| "$static_cache/pay-respects.zsh"
+fi
+if (( $+commands[zoxide] )); then
+  zoxide init zsh >| "$static_cache/zoxide.zsh"
+fi
+if (( $+commands[fzf] )); then
+  fzf --zsh >| "$static_cache/fzf.zsh" 2>/dev/null
+fi
+
+# Byte-compile all config files and static scripts
+setopt extendedglob
+for f in "$ZDOTDIR"/*.zsh(N) "$ZDOTDIR"/.zshrc(N) "$static_cache"/*.zsh(N); do
+  [[ -f "$f" && (! -s "${f}.zwc" || "$f" -nt "${f}.zwc") ]] && zcompile "$f"
+done

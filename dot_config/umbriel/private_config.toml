@@ -1,0 +1,692 @@
+# Umbriel Configuration
+#
+# Reference: https://docs.noctalia.dev/umbriel/
+
+############
+# Includes #
+############
+
+[include]
+files = []
+
+########################
+# Environent variables #
+########################
+
+[environment]
+QT_QPA_PLATFORM = "wayland;xcb"
+ELECTRON_OZONE_PLATFORM_HINT = "auto"
+SDL_VIDEODRIVER = "wayland"
+QT_QPA_PLATFORMTHEME = "qt6ct"
+QT_QPA_PLATFORMTHEME_QT6 = "qt6ct"
+TERMINAL = "ghostty"
+SECRET_SERVICE_BUS_NAME = "org.freedesktop.secrets"
+
+###########
+# General #
+###########
+
+[general]
+autostart = [
+  "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP",
+  "gnome-keyring-daemon --start --components=secrets",
+  "bash -c 'wl-paste --watch cliphist store & wl-paste -t text -w xclip -selection clipboard'",
+  "xrdb -merge ~/.Xresources",
+  "noctalia",
+]
+xwayland = true
+show_cheatsheet = false
+focus_on_activate = false
+honor_restored_maximize = false
+
+##############
+# Workspaces #
+##############
+
+[workspaces]
+back_and_forth = false
+empty_above = false
+
+#############
+# Animation #
+#############
+
+[animation]
+enabled = true
+duration_ms = 250
+curve = "easeout"
+
+[animation.windows_in]
+enabled = true
+curve = "spring:1,900"
+style = "popin"
+scale = 0.5
+
+[animation.windows_out]
+enabled = true
+curve = "spring:1,1400"
+style = "popin"
+scale = 0.8
+
+[animation.windows_move]
+enabled = true
+curve = "spring:1,900"
+
+[animation.workspaces]
+enabled = true
+curve = "spring:1,800"
+
+[animation.overview]
+enabled = true
+curve = "spring:1,800"
+workspace_curve = "spring:1,1000"
+
+[animation.scratchpad]
+enabled = true
+curve = "spring:1,800"
+dim = 0.8
+blur = false
+scale = 0.0
+maximize = false
+fullscreen = false
+
+[animation.border]
+enabled = true
+curve = "spring:1,900"
+
+[animation.dim_unfocused]
+enabled = false
+dim = 0.0
+
+[animation.layers]
+enabled = false
+
+[animation.windows_drag]
+physics = false
+
+##############
+# Appearance #
+##############
+
+[appearance]
+prefer_no_csd = true
+border_width = 1
+outer_border_width = 0
+corner_radius = 8
+drag_opacity = 0.75
+
+[appearance.blur]
+enabled = false
+optimized = true
+passes = 3
+radius = 3
+noise = 0.02
+brightness = 0.9
+contrast = 0.9
+saturation = 1.1
+
+[appearance.shadow]
+enabled = false
+softness = 10
+offset_x = 2
+offset_y = 2
+
+############
+# Overview #
+############
+
+[overview]
+zoom = 0.5
+scroll_factor_horizontal = 1.0
+scroll_factor_vertical = 1.0
+background_blur = true
+workspace_wallpaper = true
+shortcuts = true
+shortcut_keys = "1234567890"
+
+###############
+# Hot corners #
+###############
+
+[hot_corners.top_left]
+enabled = true
+delay_ms = 500
+action = "overview-open"
+
+##########
+# Layout #
+##########
+
+[layout]
+mode = "dwindle"
+gap = 5
+
+[layout.struts]
+left = 0
+right = 0
+top = 0
+bottom = 0
+
+[layout.scrolling]
+default_extent_fraction = 0.5
+center_underfull_strip = true
+center_focused = "never"
+
+[layout.dwindle]
+preserve_split = false
+
+[layout.master]
+position = "center"
+default_width_fraction = 0.55
+new_on_top = true
+new_becomes_master = false
+
+####################################################
+# Outputs (monitor-specific display configuration) #
+####################################################
+
+[output."BNQ BenQ EX2710R ETJ7M00325SL0"]
+mode = "2560x1440@144"
+position = [2560, 0]
+scale = 1
+workspace_axis = "horizontal"
+cyclic_workspaces = true
+vrr = "disabled"
+tearing = true
+direct_scanout = true
+hdr = "auto"
+sdr_white = 203
+enabled = true
+
+[output."BNQ BenQ EX2710R ETD7P00685SL0"]
+mode = "2560x1440@144"
+position = [0, 0]
+scale = 1
+workspace_axis = "horizontal"
+cyclic_workspaces = true
+vrr = "disabled"
+tearing = true
+direct_scanout = true
+hdr = "auto"
+sdr_white = 203
+enabled = true
+
+[output.eDP-1]
+mode = "1920x1200@60"
+scale = 1.25
+workspace_axis = "horizontal"
+cyclic_workspaces = true
+vrr = "disabled"
+tearing = true
+direct_scanout = true
+hdr = "off"
+enabled = true
+
+#####################
+# Laptop lid events #
+#####################
+
+[events]
+lid_close = "umbriel msg output-disable:eDP-1; notify-send 'Laptop' 'Internal screen disabled (lid closed)' -i display"
+lid_open = "umbriel msg output-enable:eDP-1; notify-send 'Laptop' 'Internal screen enabled (lid opened)' -i display"
+
+#########
+# Input #
+#########
+
+[input]
+middle_click_paste = true
+
+[input.keyboard]
+layout = "us"
+variant = ""
+options = ""
+repeat_rate = 25
+repeat_delay = 600
+numlock_toggle = true
+track_layout = "global"
+
+[input.touchpad]
+tap = true
+natural_scroll = false
+accel_profile = "adaptive"
+sensitivity = 0.0
+
+[input.mouse]
+natural_scroll = false
+accel_profile = "flat"
+sensitivity = 0.0
+scroll_wheel_step = 60
+
+[input.tablet]
+enabled = false
+
+[input.cursor]
+theme = "vimix-cursors-dark-scalable"
+size = 24
+hardware_cursor = true
+follows_focus = true
+hide_when_typing = false
+hide_timeout_ms = 0
+
+# Per-device override: ThinkPad trackpoint (T14 Gen 4 AMD)
+[[input.device]]
+name = "TPPS/2 Elan TrackPoint"
+accel_profile = "flat"
+sensitivity = 0.3
+
+[input.focus]
+follows_mouse = true
+
+###############################################
+# Keybinds                                    #
+# https://docs.noctalia.dev/umbriel/keybinds/ #
+# https://docs.noctalia.dev/umbriel/actions/  #
+###############################################
+
+[keybinds]
+
+# Application launchers
+
+"Mod+Escape" = "spawn:ghostty +new-window -e btop"
+"Mod+Return" = "spawn:ghostty +new-window"
+"Mod+A" = "spawn:claude-desktop --toggle"
+"Mod+B" = "spawn:~/.local/bin/browser-launcher browser"
+"Mod+E" = "spawn:ghostty +new-window -e yazi"
+"Mod+G" = "spawn:~/.local/bin/browser-launcher gemini"
+"Mod+M" = "spawn:proton-mail"
+"Mod+O" = { action = "overview-toggle", repeat = false }
+"Mod+T" = "spawn:Thunar"
+"Mod+Ctrl+T" = "spawn:~/.local/bin/browser-launcher torrent"
+"Mod+Ctrl+U" = "spawn:ghostty +new-window -e arch-update"
+"Mod+SHIFT+A" = "spawn:~/.local/bin/browser-launcher kagi-assistant"
+"Mod+Shift+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+"Mod+Shift+E" = "spawn:ghostty +new-window -e nvim"
+"Mod+Shift+S" = "spawn:steam"
+"Mod+Shift+Ctrl+W" = "spawn:noctalia msg panel-toggle umedbazarov/webapp-maker:panel"
+
+# Noctalia Shell IPC
+
+"Mod" = "spawn:noctalia msg panel-toggle launcher"
+"Mod+Comma" = "spawn:noctalia msg settings-toggle"
+"Mod+N" = "spawn:noctalia msg panel-toggle notifications"
+"Mod+V" = "spawn:noctalia msg panel-toggle clipboard"
+"Mod+Y" = "spawn:noctalia msg panel-toggle wallpaper"
+"Mod+Alt+L" = "spawn:noctalia msg session lock"
+"Mod+Ctrl+S" = "spawn:pkill -x noctalia; sleep 0.15; noctalia &"
+"Mod+Shift+N" = "spawn:noctalia msg panel-toggle control-center"
+"Mod+Ctrl+C" = "spawn:noctalia msg config-reload"
+"Mod+Shift+X" = "spawn:noctalia msg caffeine-toggle"
+"Mod+Shift+Y" = "spawn:noctalia msg panel-toggle noctalia/wallhaven:browser"
+"Ctrl+Alt+Delete" = "spawn:noctalia msg panel-toggle session"
+
+# Audio controls (allow when locked)
+
+"XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
+"XF86AudioRaiseVolume" = { action = "spawn:noctalia msg volume-up", allow_when_locked = true }
+"XF86AudioMicMute" = { action = "spawn:noctalia msg mic-mute", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true }
+
+# Brightness controls (allow when locked)
+
+"XF86MonBrightnessUp" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn:noctalia msg brightness-down", allow_when_locked = true }
+
+# Window management
+
+"Mod+F" = "window-toggle-maximize-to-edges"
+"Mod+Q" = "window-close"
+"Mod+Shift+F" = "window-toggle-fullscreen"
+"Mod+Shift+T" = "window-toggle-floating"
+
+# Focus navigation
+
+"Mod+Left" = "window-focus-left"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+"Mod+Right" = "window-focus-right"
+"Mod+H" = "window-focus-left"
+"Mod+J" = "window-focus-down"
+"Mod+K" = "window-focus-up"
+"Mod+L" = "window-focus-right"
+
+# Window movement (swap / reposition)
+
+"Mod+Shift+Left" = "column-move-left"
+"Mod+Shift+Down" = "window-move-down"
+"Mod+Shift+Up" = "window-move-up"
+"Mod+Shift+Right" = "column-move-right"
+"Mod+Shift+H" = "column-move-left"
+"Mod+Shift+J" = "window-move-down"
+"Mod+Shift+K" = "window-move-up"
+"Mod+Shift+L" = "column-move-right"
+
+# Stack navigation (first / last)
+
+"Mod+Home" = "column-focus-first"
+"Mod+End" = "column-focus-last"
+
+# Monitor navigation
+
+"Mod+Ctrl+Left" = "output-focus-left"
+"Mod+Ctrl+Right" = "output-focus-right"
+"Mod+Ctrl+H" = "output-focus-left"
+"Mod+Ctrl+L" = "output-focus-right"
+
+# Move window to monitor
+
+"Mod+Shift+Ctrl+Left" = "window-move-to-output-left"
+"Mod+Shift+Ctrl+Right" = "window-move-to-output-right"
+"Mod+Shift+Ctrl+H" = "window-move-to-output-left"
+"Mod+Shift+Ctrl+L" = "window-move-to-output-right"
+
+# Secondary monitor toggle
+
+"Mod+Ctrl+M" = { action = "spawn:umbriel msg output-toggle:BNQ BenQ EX2710R ETJ7M00325SL0", allow_when_locked = true }
+
+# Workspace change layout
+"Mod+Shift+D" = "workspace-set-layout:toggle"
+
+# Workspace navigation (directional)
+
+"Mod+Page_Down" = "workspace-next"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+I" = "workspace-previous"
+"Mod+U" = "workspace-next"
+
+# Move window to adjacent workspace
+
+"Mod+Shift+Page_Down" = "window-move-to-workspace-next"
+"Mod+Shift+Page_Up" = "window-move-to-workspace-previous"
+"Mod+Shift+I" = "window-move-to-workspace-previous"
+"Mod+Shift+U" = "window-move-to-workspace-next"
+
+# Switch to workspace by number
+
+"Mod+1" = "workspace-switch:1"
+"Mod+2" = "workspace-switch:2"
+"Mod+3" = "workspace-switch:3"
+"Mod+4" = "workspace-switch:4"
+"Mod+5" = "workspace-switch:5"
+"Mod+6" = "workspace-switch:6"
+"Mod+7" = "workspace-switch:7"
+"Mod+8" = "workspace-switch:8"
+"Mod+9" = "workspace-switch:9"
+
+# Move window to workspace by number
+
+"Mod+Shift+1" = "window-move-to-workspace:1"
+"Mod+Shift+2" = "window-move-to-workspace:2"
+"Mod+Shift+3" = "window-move-to-workspace:3"
+"Mod+Shift+4" = "window-move-to-workspace:4"
+"Mod+Shift+5" = "window-move-to-workspace:5"
+"Mod+Shift+6" = "window-move-to-workspace:6"
+"Mod+Shift+7" = "window-move-to-workspace:7"
+"Mod+Shift+8" = "window-move-to-workspace:8"
+"Mod+Shift+9" = "window-move-to-workspace:9"
+
+# Scratchpad
+"Mod+Shift+Space" = { action = "window-move-to-scratchpad", repeat = false }
+"Mod+Space" = "scratchpad-toggle"
+"Mod+Ctrl+Space" = { action = "window-restore-from-scratchpad", repeat = false }
+"Mod+Tab" = "scratchpad-focus-next"
+
+# Layout management (dwindle / column manipulation)
+
+"Mod+BracketLeft" = "window-consume-or-expel-left"
+"Mod+BracketRight" = "window-consume-or-expel-right"
+"Mod+R" = "window-cycle-primary-extent"
+"Mod+Shift+R" = "window-cycle-primary-extent-back"
+
+# Coarse resize (default map)
+
+"Mod+Minus" = "window-modify-primary-extent:-0.05"
+"Mod+Equal" = "window-modify-primary-extent:0.05"
+
+# Screenshots
+
+"Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh monitor"
+"Ctrl+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh fullscreen"
+"Shift+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh region"
+"Alt+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh window"
+"Mod+Ctrl+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh freeze"
+"Mod+Shift+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh freeze-region"
+"Mod+Print" = "spawn:$HOME/.config/umbriel/scripts/screenshot.sh annotate"
+
+# Scroll wheel workspace navigation
+
+"Mod+WheelDown" = "workspace-next"
+"Mod+WheelUp" = "workspace-previous"
+"Mod+Ctrl+WheelDown" = "window-move-to-workspace-next"
+"Mod+Ctrl+WheelUp" = "window-move-to-workspace-previous"
+
+# Config reload (always available)
+
+"Mod+Alt+R" = "spawn:umbriel msg config-reload"
+
+# Resize submap
+
+"Mod+W" = { action = "submap:resize", repeat = false }
+
+"submap[resize],Left" = { action = "window-modify-primary-extent:-0.05", repeat = true }
+"submap[resize],Right" = { action = "window-modify-primary-extent:0.05", repeat = true }
+"submap[resize],Up" = { action = "window-modify-secondary-extent:-0.05", repeat = true }
+"submap[resize],Down" = { action = "window-modify-secondary-extent:0.05", repeat = true }
+"submap[resize],Minus" = { action = "window-modify-primary-extent:-0.05", repeat = true }
+"submap[resize],Equal" = { action = "window-modify-primary-extent:0.05", repeat = true }
+"submap[resize],Shift+Minus" = { action = "window-modify-secondary-extent:-0.05", repeat = true }
+"submap[resize],Shift+Equal" = { action = "window-modify-secondary-extent:0.05", repeat = true }
+"submap[resize],Escape" = "submap:reset"
+
+###################################################
+# Window Rules                                    #
+# https://docs.noctalia.dev/umbriel/window-rules/ #
+###################################################
+
+# Global: blur all windows
+
+[[window_rule]]
+blur = false
+blur_optimized = true
+
+# Noctalia & Umbriel internal windows
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
+default_floating_size_px = { width = 1020, height = 900 }
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.UmbrielSharePicker$"
+default_floating = true
+default_floating_size_px = { width = 800, height = 600 }
+
+# Picture-in-Picture
+
+[[window_rule]]
+match.title = "^(Picture-in-Picture|Picture in picture)$"
+default_floating = true
+default_maximize = false
+default_position = { x = 20, y = 20, anchor = "bottom_right" }
+
+# Float by app_id
+
+[[window_rule]]
+match.app_id = "xdg-desktop-portal.*"
+default_floating = true
+default_floating_size = { width = 0.65, height = 0.65 }
+
+[[window_rule]]
+match.app_id = "org.gnome.Loupe"
+default_floating = true
+default_floating_size = { width = 0.75, height = 0.75 }
+
+[[window_rule]]
+match.app_id = "pavucontrol"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.app_id = "steam"
+default_floating = true
+
+[[window_rule]]
+match.app_id = "claude-quick-entry"
+default_floating = true
+shadow = false
+opacity = 0.9
+border_width = 0
+blur = false
+border_effect = "off"
+window_effect = "off"
+
+# Float by title (dialogs & file pickers)
+
+[[window_rule]]
+match.title = "^(Open File)(.*)$"
+default_floating = true
+
+[[window_rule]]
+match.title = "^(Save File)(.*)$"
+default_floating = true
+
+[[window_rule]]
+match.title = "^(Select a File)(.*)$"
+default_floating = true
+
+[[window_rule]]
+match.title = "^(Open (Folder|Workspace|File))(.*)$"
+default_floating = true
+default_floating_size = { width = 0.65, height = 0.65 }
+
+[[window_rule]]
+match.title = "^(Save (As|Workspace|File))(.*)$"
+default_floating = true
+default_floating_size = { width = 0.65, height = 0.65 }
+
+[[window_rule]]
+match.title = "^(Add Folder to Workspace)(.*)$"
+default_floating = true
+
+[[window_rule]]
+match.title = "^(Library)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Opening)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Extract)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.25, height = 0.15 }
+
+[[window_rule]]
+match.title = "^(Confirm to replace files)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.25, height = 0.25 }
+
+[[window_rule]]
+match.title = "^(File Upload)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.65, height = 0.65 }
+
+[[window_rule]]
+match.title = "^(.*wants to save.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(.*wants to open.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Print preview.*)$"
+default_floating = true
+default_floating_size = { width = 0.9, height = 0.9 }
+
+[[window_rule]]
+match.title = "^(Rename)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.25, height = 0.15 }
+
+[[window_rule]]
+match.title = "^(File Operation)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.2, height = 0.25 }
+
+[[window_rule]]
+match.title = "^(Settings)(.*)$"
+default_floating = true
+
+[[window_rule]]
+match.title = "^(Protontricks)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.25, height = 0.25 }
+
+[[window_rule]]
+match.title = "^(Print)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.85, height = 0.85 }
+
+[[window_rule]]
+match.title = "^(Pick a Font)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.35, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Select a (File|Folder))(.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Choose wallpaper)(.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+
+[[window_rule]]
+match.title = "^(Steam Settings)$"
+default_floating_size = { width = 0.5, height = 0.5 }
+
+# Opacity
+
+[[window_rule]]
+match.app_id = "vesktop"
+opacity = 0.9
+
+[[window_rule]]
+match.app_id = "Thunar"
+match.is_scratchpad = false
+opacity = 0.9
+
+[[window_rule]]
+match.app_id = "Thunar"
+match.is_scratchpad = true
+opacity = 1.0
+
+[[window_rule]]
+match.app_id = "com.anthropic.Claude"
+opacity = 0.9
+
+##################################################
+# Layer Rules                                    #
+# https://docs.noctalia.dev/umbriel/layer-rules/ #
+##################################################
+
+# Noctalia shell panels — blur through
+[[layer_rule]]
+match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+blur = true
+blur_ignore_alpha = 0.5
+blur_optimized = false
+
+# Disable blur for slurp selection layer (screenshot overlay)
+[[layer_rule]]
+match.namespace = "^selection$"
+blur = false
+
+[include.optional]
+files = ["noctalia.toml"]

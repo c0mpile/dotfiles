@@ -1,0 +1,49 @@
+[mgr]
+ratio = [1, 3, 4]
+
+[preview]
+max_width = 2048
+max_height = 2048
+image_delay = 0
+
+[tasks]
+image_bound = [0, 0]
+
+[opener]
+extract = [{ run = '~/.config/yazi/scripts/extract.sh %s', orphan = true }]
+play = [{ run = 'vlc "$@"', orphan = true, desc = "VLC" }]
+
+[open]
+rules = [
+  { url = "*.zip", use = "extract" },
+  { url = "*.7z", use = "extract" },
+  { url = "*.rar", use = "extract" },
+  { url = "*.tar", use = "extract" },
+  { url = "*.gz", use = "extract" },
+  { url = "*.tgz", use = "extract" },
+  { url = "*.bz2", use = "extract" },
+  { url = "*.tbz2", use = "extract" },
+  { url = "*.xz", use = "extract" },
+  { url = "*.txz", use = "extract" },
+  { url = "*.zst", use = "extract" },
+  { url = "*.lzma", use = "extract" },
+  { url = "*.cab", use = "extract" },
+  { url = "*.iso", use = "extract" },
+  { url = "*.arj", use = "extract" },
+  { url = "*.lzh", use = "extract" },
+  { url = "*.lha", use = "extract" },
+  { url = "*.cpio", use = "extract" },
+  { url = "*.rpm", use = "extract" },
+  { url = "*.deb", use = "extract" },
+  { url = "*.wim", use = "extract" },
+  { url = "*.swm", use = "extract" },
+  { mime = "text/*", use = "edit" },
+  { mime = "video/*", use = "play" },
+  { mime = "audio/*", use = "play" },
+  { mime = "image/*", use = "open" },
+  { url = "*", use = "open" },
+]
+
+[plugin]
+prepend_preloaders = [{ url = "*.ttf", run = "font" }]
+prepend_previewers = [{ url = "*.ttf", run = "font" }]

@@ -1,0 +1,275 @@
+# Default ZDOTDIR
+ZDOTDIR=${ZDOTDIR:-$HOME/.config/zsh}
+
+# If running a command string (zsh -c), source aliases and exit early
+if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
+  [[ -f "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
+  return
+fi
+
+# ── Zinit bootstrap ──────────────────────────────────────────────────────────
+typeset -gx ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ ! -d "$ZINIT_HOME" ]]; then
+  print -P "%F{33}Installing zinit...%f"
+  command mkdir -p "${ZINIT_HOME:h}"
+  command git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# ── Shell options ─────────────────────────────────────────────────────────────
+setopt extendedglob   # Enable advanced glob qualifiers like (#q...)
+setopt autocd         # Change directory by typing its path without cd
+
+# ── Completions ───────────────────────────────────────────────────────────────
+# Add custom completion paths before compinit
+fpath=(
+  $ZDOTDIR/completions
+  ~/.local/share/zsh/site-functions
+  $fpath
+)
+
+# zsh-completions: must be synchronous and add its src/ to fpath before compinit
+zinit ice blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
+# Rebuild compdump at most once a day
+autoload -Uz compinit
+local _zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump"
+if [[ -n ${~_zcompdump}(#qN.mh+24) || ! -s "$_zcompdump" ]]; then
+  compinit -u -d "$_zcompdump"
+  touch "$_zcompdump"
+  { zcompile "$_zcompdump" } &!
+else
+  compinit -C -d "$_zcompdump"
+fi
+
+# fzf-tab: must load after compinit, synchronous (it wraps the Tab widget)
+zinit light Aloxaf/fzf-tab
+
+# ── Prompt ────────────────────────────────────────────────────────────────────
+# Starship (~/.config/starship.toml, colors from Noctalia's starship template).
+# zinit fetches the static musl release binary from GitHub and regenerates the
+# init script on every install/update, so no system package is needed.
+# Linux VTs can't render Nerd Font glyphs, so they get a plain ASCII prompt
+# (also used if the download failed).
+if [[ $TERM != (linux|vt*|dumb) ]]; then
+  zinit ice as"command" from"gh-r" bpick"*-linux-musl*" \
+    atclone"./starship init zsh --print-full-init >| init.zsh; ./starship completions zsh >| _starship" \
+    atpull"%atclone" src"init.zsh"
+  zinit light starship/starship
+fi
+if (( ! $+functions[prompt_starship_precmd] )); then
+  # 2-line layout: path + git branch/state, then the prompt character.
+  # Git markers: + staged, * unstaged (ASCII only).
+  autoload -Uz vcs_info add-zsh-hook
+  setopt promptsubst
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:git:*' check-for-changes true
+  zstyle ':vcs_info:git:*' stagedstr '%F{green}+%f'
+  zstyle ':vcs_info:git:*' unstagedstr '%F{yellow}*%f'
+  zstyle ':vcs_info:git:*' formats ' %F{magenta}%b%f%c%u'
+  zstyle ':vcs_info:git:*' actionformats ' %F{magenta}%b%f %F{yellow}(%a)%f%c%u'
+  add-zsh-hook precmd vcs_info
+  # user@host only over SSH (yellow) or as root (red), like the Starship prompt
+  local _ctx=''
+  [[ -n $SSH_CONNECTION ]] && _ctx='%F{yellow}%n@%m%f '
+  (( EUID == 0 )) && _ctx='%F{red}%n@%m%f '
+  PROMPT="$_ctx"'%B%F{blue}%~%f%b${vcs_info_msg_0_}%(?.. %F{red}[%?]%f)'$'\n''%(?.%F{green}.%F{red})>%f '
+  unset _ctx
+fi
+
+# Blank line between prompts, but not above the first one (like p10k's
+# PROMPT_ADD_NEWLINE). Registered last and preserves $? for later hooks.
+autoload -Uz add-zsh-hook
+typeset -gi _prompt_count=0
+_prompt_spacer() { local s=$?; (( _prompt_count++ )) && print; return s }
+add-zsh-hook precmd _prompt_spacer
+
+# ── Completion styles ─────────────────────────────────────────────────────────
+# Case-insensitive tab completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# Custom keybindings in fzf-tab completions:
+# - ctrl-a: toggle all selections
+# - ctrl-space: select entry and move down to next
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-a:toggle-all' 'ctrl-space:toggle+down'
+
+# Fallback completion function: extracts subcommands and options from --help text
+_smart_generic() {
+  if [[ "$PREFIX" == -* ]]; then
+    _gnu_generic "$@"
+    return
+  fi
+  if (( CURRENT == 2 )); then
+    local cmd="$words[1]"
+    local -a subcmds
+    local help_out line in_cmds=0
+    help_out=$($cmd --help 2>&1)
+    while IFS= read -r line; do
+      if [[ "$line" == (#i)*("available commands"|"commands:")* ]]; then
+        in_cmds=1
+        continue
+      fi
+      if (( in_cmds )); then
+        [[ -z "${line// }" || "$line" == [[:space:]]#[Rr]un* || "$line" == [[:space:]]#[Ff]lags* || "$line" == [[:space:]]#[Oo]ptions* ]] && break
+        if [[ "$line" =~ "^[[:space:]]{2,}([a-zA-Z0-9_-]+)[[:space:]]{2,}(.*)$" ]]; then
+          local cname="${match[1]}"
+          local cdesc="${match[2]}"
+          cdesc="${cdesc//:/-}"
+          subcmds+=("${cname}:${cdesc}")
+        fi
+      fi
+    done <<< "$help_out"
+
+    if (( ${#subcmds} )); then
+      _describe -t commands "$cmd command" subcmds
+      return
+    fi
+  fi
+  _default "$@"
+}
+compdef _smart_generic -default- 2>/dev/null
+
+# ── Deferred plugins (turbo mode) ─────────────────────────────────────────────
+# Syntax highlighting and autosuggestions styles (set before plugins load)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=167,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+
+zinit ice wait lucid atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-history-substring-search
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-syntax-highlighting
+
+# ── Keybindings ───────────────────────────────────────────────────────────────
+# Emacs keybindings
+bindkey -e
+
+# Treat '/' as a word boundary in word navigation
+WORDCHARS="${WORDCHARS//\//}"
+
+# Arrow keys
+bindkey '^[[A' up-line-or-history
+bindkey '^[[B' down-line-or-history
+bindkey '^[[C' forward-char
+bindkey '^[[D' backward-char
+bindkey '^[OA' up-line-or-history
+bindkey '^[OB' down-line-or-history
+bindkey '^[OC' forward-char
+bindkey '^[OD' backward-char
+
+# Ctrl+Right
+bindkey '^[[1;5C' forward-word
+bindkey '^[[5C'   forward-word
+bindkey '^[^[[C'  forward-word
+
+# Ctrl+Left
+bindkey '^[[1;5D' backward-word
+bindkey '^[[5D'   backward-word
+bindkey '^[^[[D'  backward-word
+
+# Alt+Right / Alt+Left
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+bindkey '^[f'     forward-word
+bindkey '^[b'     backward-word
+
+# Home / End
+bindkey '^[[H'  beginning-of-line
+bindkey '^[[F'  end-of-line
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[OH'  beginning-of-line
+bindkey '^[OF'  end-of-line
+
+# Delete / Ctrl+Delete / Backspace
+bindkey '^[[3~'   delete-char
+bindkey '^[[3;5~' kill-word
+bindkey '^?'      backward-delete-char
+
+# Alt-s runs sudo-command-line
+bindkey -M emacs '^[s' sudo-command-line
+bindkey '^[s' sudo-command-line
+
+# ── History ───────────────────────────────────────────────────────────────────
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=${XDG_CACHE_HOME:-$HOME/.cache}/zsh_history
+setopt appendhistory      # Append history entries rather than overwriting file
+setopt sharehistory       # Share command history concurrently across all sessions
+setopt incappendhistory   # Write commands to history immediately when executed
+setopt histignorealldups  # Delete older duplicate entry when adding a new duplicate
+setopt histignorespace    # Ignore commands starting with a leading space
+
+# ── Deferred CLI integrations ─────────────────────────────────────────────────
+# Aliases: loaded after the first prompt renders via zinit turbo
+zinit ice wait lucid
+zinit snippet "$ZDOTDIR/aliases.zsh"
+
+# Cache static CLI init scripts and source them deferred.
+# On first run each tool generates its file; subsequent startups just source it.
+typeset -g _static_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-static"
+[[ -d "$_static_cache" ]] || mkdir -p "$_static_cache"
+
+zinit ice wait lucid atload'
+  # pay-respects (error correction)
+  if [[ -s "$_static_cache/pay-respects.zsh" ]]; then
+    source "$_static_cache/pay-respects.zsh"
+  elif (( $+commands[pay-respects] )); then
+    pay-respects zsh >| "$_static_cache/pay-respects.zsh"
+    source "$_static_cache/pay-respects.zsh"
+    { zcompile "$_static_cache/pay-respects.zsh" } &!
+  fi
+
+  # zoxide (smart cd)
+  if [[ -s "$_static_cache/zoxide.zsh" ]]; then
+    source "$_static_cache/zoxide.zsh"
+  elif (( $+commands[zoxide] )); then
+    zoxide init zsh >| "$_static_cache/zoxide.zsh"
+    source "$_static_cache/zoxide.zsh"
+    { zcompile "$_static_cache/zoxide.zsh" } &!
+  fi
+
+  # fzf shell integration
+  if [[ -s "$_static_cache/fzf.zsh" ]]; then
+    source "$_static_cache/fzf.zsh"
+  elif (( $+commands[fzf] )); then
+    fzf --zsh >| "$_static_cache/fzf.zsh" 2>/dev/null
+    source "$_static_cache/fzf.zsh"
+    { zcompile "$_static_cache/fzf.zsh" } &!
+  fi
+'
+zinit light zdharma-continuum/null
+
+# Run zinit plugin updates once a week in the background
+local _zinit_stamp="${XDG_CACHE_HOME:-$HOME/.cache}/zinit_last_update"
+if [[ -n ${~_zinit_stamp}(#qN.mw+1) || ! -f "$_zinit_stamp" ]]; then
+  {
+    touch "$_zinit_stamp"
+    "$HOME/.local/bin/zinit-update" >/dev/null 2>&1
+  } &!
+fi
+
+# ── Secrets ───────────────────────────────────────────────────────────────────
+if [[ -f "$ZDOTDIR/.zsh_secrets" ]]; then
+    source "$ZDOTDIR/.zsh_secrets"
+fi
+
+# Disable window title overrides
+DISABLE_AUTO_TITLE="true"
+
+# ── Background recompile ──────────────────────────────────────────────────────
+{
+  autoload -Uz zrecompile
+  for _f in "$ZDOTDIR"/.zshrc "$ZDOTDIR"/aliases.zsh; do
+    [[ -f "$_f" ]] && zrecompile -pq "$_f"
+  done
+  unset _f
+} &!

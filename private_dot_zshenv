@@ -1,0 +1,37 @@
+# XDG base directories
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}
+
+# Default editors for CLI and sudo
+export EDITOR="nvim"
+export VISUAL="nvim"
+export SUDO_EDITOR="nvim"
+
+# ROCm / HIP compute compatibility override for AMD RDNA3 GPUs
+export HSA_OVERRIDE_GFX_VERSION=11.0.0
+export HIP_VISIBLE_DEVICES=0
+
+# Save directory for desktop screenshots
+export SCREENSHOT_TARGET_DIR="$HOME/Pictures/Screenshots"
+
+# Secret service backend for password storage
+export PASSWORD_STORE="gnome-libsecret"
+export SECRET_SERVICE_BUS_NAME="org.freedesktop.secrets"
+
+# Terminal device for GPG pinentry prompts
+export GPG_TTY="${TTY:-}"
+
+# Prevent duplicate entries when appending to path and fpath
+typeset -U path fpath
+
+# Add local, cargo, python, and node binaries to executable path
+export PATH="$HOME/.local/bin:/opt/cargo/bin:$HOME/.cargo/bin:$HOME/.lmstudio/bin:$HOME/.venv/bin:$HOME/.npm-global/bin:$PATH"
+
+# Load Cargo environment if installed
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# Android SDK and JDK 21 for app development
+[[ -f "$ZDOTDIR/android-env.zsh" ]] && source "$ZDOTDIR/android-env.zsh"

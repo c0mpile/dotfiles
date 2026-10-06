@@ -1,0 +1,23 @@
+~/.ssh
+~/.config/nvim/lazy-lock.json
+~/.config/nvim/lua/matugen.lua
+~/.config/yazi/flavors/noctalia.yazi
+~/.config/ghostty/themes/noctalia
+~/.config/btop/themes/noctalia.theme
+./AGENTS.md
+
+{{- if eq .profile "nas" }}
+.config/ghostty
+.config/noctalia
+.config/pipewire
+.config/systemd
+.config/umbriel
+{{- end }}
+
+{{- if eq .profile "oci" }}
+.config/ghostty
+.config/noctalia
+.config/pipewire
+.config/systemd
+.config/umbriel
+{{- end }}

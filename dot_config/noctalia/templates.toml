@@ -1,0 +1,4 @@
+# Claude Desktop Extra - full theme rendered from the wallpaper
+[theme.templates.user.claude_desktop]
+input_path  = "$XDG_CONFIG_HOME/noctalia/templates/claude-desktop.json"
+output_path = "$XDG_CONFIG_HOME/Claude/themes.d/noctalia.json"
