@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# bootstrap-bw: chezmoi read-source-state.pre hook. Make sure the Bitwarden CLI
+# exists before chezmoi renders private_dot_zsh_secrets.tmpl (templates are
+# rendered before any run_ script, so this has to be a hook). No-op if `bw` is
+# already in PATH. Failures only warn; the apply still proceeds so the keyring
+# path of the secrets template can work without bw.
+set -euo pipefail
+
+DEST="${BW_BOOTSTRAP_DIR:-$HOME/.local/bin}"
+URL="https://vault.bitwarden.com/download/?app=cli&platform=linux"
+
+# ~/.local/bin is on PATH via .zshenv, but chezmoi may be launched without it.
+export PATH="$DEST:$PATH"
+command -v bw >/dev/null 2>&1 && exit 0
+
+warn() { echo "bootstrap-bw: $*" >&2; exit 0; }
+
+[[ $(uname -s) == Linux && $(uname -m) == x86_64 ]] || warn "no official bw binary for $(uname -s)/$(uname -m); install it manually"
+command -v curl >/dev/null || warn "curl not found, cannot download bw"
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+echo "bootstrap-bw: bw not found, downloading to $DEST" >&2
+curl -fsSL --proto '=https' --tlsv1.2 -o "$tmp/bw.zip" "$URL" || warn "download failed"
+
+if command -v unzip >/dev/null; then
+    unzip -q -o "$tmp/bw.zip" bw -d "$tmp/out"
+elif command -v bsdtar >/dev/null; then
+    mkdir "$tmp/out" && bsdtar -xf "$tmp/bw.zip" -C "$tmp/out" bw
+else
+    python3 -I -c 'import sys, zipfile; zipfile.ZipFile(sys.argv[1]).extract("bw", sys.argv[2])' "$tmp/bw.zip" "$tmp/out" \
+        || warn "need unzip, bsdtar or python3 to extract bw"
+fi
+
+mkdir -p "$DEST"
+install -m 0755 "$tmp/out/bw" "$DEST/bw"
+"$DEST/bw" --version >/dev/null || warn "downloaded bw does not run"
+echo "bootstrap-bw: installed bw $("$DEST/bw" --version) to $DEST/bw" >&2
