@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# bootstrap-rbw: chezmoi read-source-state.pre hook. Make sure rbw (unofficial
+# Bitwarden CLI) exists before chezmoi renders private_dot_zsh_secrets.tmpl
+# (templates are rendered before any run_ script, so this has to be a hook).
+# No-op if `rbw` is already in PATH. rbw has no prebuilt binaries, so it is built
+# from crates.io with cargo, which works on any architecture. Failures only warn;
+# the apply still proceeds so the keyring path of the secrets template keeps working.
+set -euo pipefail
+
+ROOT="${RBW_BOOTSTRAP_ROOT:-$HOME/.local}"
+
+# ~/.local/bin is on PATH via .zshenv, but chezmoi may be launched without it.
+export PATH="$ROOT/bin:$PATH"
+command -v rbw >/dev/null 2>&1 && exit 0
+
+warn() { echo "bootstrap-rbw: $*" >&2; exit 0; }
+
+command -v cargo >/dev/null || warn "rbw not found and cargo is missing; install rbw (e.g. pacman -S rbw) or rustup"
+
+echo "bootstrap-rbw: rbw not found, building it with cargo into $ROOT (this takes a few minutes)" >&2
+cargo install --locked --root "$ROOT" rbw >&2 || warn "cargo install rbw failed"
+
+command -v rbw >/dev/null || warn "rbw installed but not found in PATH"
+echo "bootstrap-rbw: installed $(rbw --version) to $ROOT/bin" >&2
+command -v pinentry >/dev/null || echo "bootstrap-rbw: note: rbw needs a pinentry program installed to unlock the vault" >&2
+echo "bootstrap-rbw: run 'rbw config set email <you>' and 'rbw login' once to use it" >&2

@@ -1,6 +1,6 @@
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 umask = 0o077
 
-# Runs before templates are rendered, so private_dot_zsh_secrets.tmpl can rely on `bw`.
+# Runs before templates are rendered, so private_dot_zsh_secrets.tmpl can rely on `rbw`.
 [hooks.read-source-state.pre]
-    command = {{ joinPath .chezmoi.sourceDir ".chezmoihooks" "bootstrap-bw" | quote }}
+    command = {{ joinPath .chezmoi.sourceDir ".chezmoihooks" "bootstrap-rbw" | quote }}

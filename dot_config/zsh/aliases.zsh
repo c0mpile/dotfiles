@@ -772,8 +772,8 @@ if (( $+commands[uv] )); then
   alias uvv='uv venv'                                             # Create virtual environment
 fi
 
-# Update standalone bitwarden CLI binary
-alias bw-update='(set -e; d=$(mktemp -d); trap "rm -rf $d" EXIT; cd $d; curl -fsSL -o bw.zip "https://vault.bitwarden.com/download/?app=cli&platform=linux"; unzip -q bw.zip; install -m 755 bw ~/.local/bin/bw; ~/.local/bin/bw --version)'
+# Rebuild/update rbw (unofficial Bitwarden CLI) from crates.io
+alias rbw-update='cargo install --locked --force --root ~/.local rbw'
 
 # Base64 encode and decode
 # Base64 encode string or piped input

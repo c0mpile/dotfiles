@@ -29,7 +29,7 @@ This repository is located at `~/dotfiles` and managed via **chezmoi**. It house
    * Maintain chezmoi prefix conventions:
      * `dot_` represents a leading dot in target output.
      * `executable_` must be prefixed to any newly created scripts in `dot_local/bin/` to ensure executable permissions on deploy.
-     * `private_` restricts the target to owner-only permissions. Secrets are never stored in the repo: `private_dot_zsh_secrets.tmpl` renders them at apply time from the system keyring (populated by `bw-keyring-sync`) with a Bitwarden fallback. Never write plaintext secrets into source files.
+     * `private_` restricts the target to owner-only permissions. Secrets are never stored in the repo: `private_dot_zsh_secrets.tmpl` renders them at apply time from the system keyring (populated by `bw-keyring-sync`) with an rbw (Bitwarden) fallback. Never write plaintext secrets into source files.
      * `.tmpl` denotes Golang template evaluation.
 
 2. **Scoped Context Reads:**
@@ -52,7 +52,7 @@ This repository is located at `~/dotfiles` and managed via **chezmoi**. It house
   * Starship prompt: `dot_config/modify_starship.toml` (chezmoi modify-template; colors are injected by Noctalia's built-in `starship` template, keep its palette markers intact).
   * Color schemes: `colors.template`.
 * **Completions & Aliases:** Custom shell aliases belong in `aliases.zsh`, and standalone completions reside in `completions/`.
-* **Secrets:** `private_dot_zsh_secrets.tmpl` exports API keys read via `secret-tool` (keyring service `chezmoi-zsh-secrets`) or the Bitwarden item `chezmoi/zsh-secrets`. Add new keys to its name list and to the Bitwarden item, then run `bw-keyring-sync`; never inline values.
+* **Secrets:** `private_dot_zsh_secrets.tmpl` exports API keys read via `secret-tool` (keyring service `chezmoi-zsh-secrets`) or the Bitwarden item `chezmoi/zsh-secrets` (via `rbw`). Add new keys to its name list and to the Bitwarden item, then run `bw-keyring-sync`; never inline values.
 * **Helper Binaries:** All helper scripts inside `dot_local/bin/` must contain valid shebangs (`#!/usr/bin/env bash` or `#!/usr/bin/env zsh`) and strict error handling (`set -euo pipefail`).
 
 ### Editor & Plugin Maintenance (`dot_config/nvim/`, `~/.local/share/nvim/`)
