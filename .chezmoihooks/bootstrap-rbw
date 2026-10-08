@@ -3,7 +3,8 @@
 # Bitwarden CLI) exists before chezmoi renders private_dot_zsh_secrets.tmpl
 # (templates are rendered before any run_ script, so this has to be a hook).
 # No-op if `rbw` is already in PATH. rbw has no prebuilt binaries, so it is built
-# from crates.io with cargo, which works on any architecture. Failures only warn;
+# from crates.io with cargo (itself bootstrapped with rustup if missing), which
+# works on any architecture. Failures only warn;
 # the apply still proceeds so the keyring path of the secrets template keeps working.
 set -euo pipefail
 
@@ -15,7 +16,21 @@ command -v rbw >/dev/null 2>&1 && exit 0
 
 warn() { echo "bootstrap-rbw: $*" >&2; exit 0; }
 
-command -v cargo >/dev/null || warn "rbw not found and cargo is missing; install rbw (e.g. pacman -S rbw) or rustup"
+# `cargo` can exist as a rustup shim with no toolchain installed, so test that it runs.
+export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
+if ! cargo --version >/dev/null 2>&1; then
+    if command -v rustup >/dev/null; then
+        echo "bootstrap-rbw: no Rust toolchain, installing stable with rustup" >&2
+        rustup default stable >&2 || warn "rustup default stable failed"
+    else
+        command -v curl >/dev/null || warn "cargo and curl are missing; install rbw (e.g. pacman -S rbw) or rustup"
+        echo "bootstrap-rbw: cargo not found, installing Rust with rustup" >&2
+        curl -fsSL --proto '=https' --tlsv1.2 https://sh.rustup.rs \
+            | sh -s -- -y --profile minimal --no-modify-path >&2 || warn "rustup install failed"
+    fi
+    cargo --version >/dev/null 2>&1 || warn "cargo still unavailable after rustup"
+fi
+command -v cc >/dev/null || warn "no C compiler (cc) found, which building rbw needs; install gcc/clang"
 
 echo "bootstrap-rbw: rbw not found, building it with cargo into $ROOT (this takes a few minutes)" >&2
 cargo install --locked --root "$ROOT" rbw >&2 || warn "cargo install rbw failed"
