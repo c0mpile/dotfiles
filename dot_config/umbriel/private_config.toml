@@ -19,7 +19,7 @@ ELECTRON_OZONE_PLATFORM_HINT = "auto"
 SDL_VIDEODRIVER = "wayland"
 QT_QPA_PLATFORMTHEME = "qt6ct"
 QT_QPA_PLATFORMTHEME_QT6 = "qt6ct"
-TERMINAL = "ghostty"
+TERMINAL = "kitty"
 SECRET_SERVICE_BUS_NAME = "org.freedesktop.secrets"
 
 ###########
@@ -288,20 +288,20 @@ follows_mouse = true
 
 # Application launchers
 
-"Mod+Escape" = "spawn:ghostty +new-window -e btop"
-"Mod+Return" = "spawn:ghostty +new-window"
+"Mod+Escape" = "spawn:kitty -e btop"
+"Mod+Return" = "spawn:kitty"
 "Mod+A" = "spawn:claude-desktop --toggle"
 "Mod+B" = "spawn:~/.local/bin/browser-launcher browser"
-"Mod+E" = "spawn:ghostty +new-window -e yazi"
+"Mod+E" = "spawn:kitty -e yazi"
 "Mod+G" = "spawn:~/.local/bin/browser-launcher gemini"
 "Mod+M" = "spawn:proton-mail"
 "Mod+O" = { action = "overview-toggle", repeat = false }
 "Mod+T" = "spawn:Thunar"
 "Mod+Ctrl+T" = "spawn:~/.local/bin/browser-launcher torrent"
-"Mod+Ctrl+U" = "spawn:ghostty +new-window -e arch-update"
+"Mod+Ctrl+U" = "spawn:kitty -e arch-update"
 "Mod+SHIFT+A" = "spawn:~/.local/bin/browser-launcher kagi-assistant"
 "Mod+Shift+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
-"Mod+Shift+E" = "spawn:ghostty +new-window -e nvim"
+"Mod+Shift+E" = "spawn:kitty -e nvim"
 "Mod+Shift+S" = "spawn:steam"
 "Mod+Shift+Ctrl+W" = "spawn:noctalia msg panel-toggle umedbazarov/webapp-maker:panel"
 

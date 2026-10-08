@@ -44,6 +44,7 @@ keybind = ctrl+shift+home=scroll_to_top
 keybind = ctrl+shift+end=scroll_to_bottom
 keybind = ctrl+shift+h=write_scrollback_file:open
 keybind = ctrl+shift+backspace=reset_font_size
+keybind = ctrl+enter=unbind
 
 # Links
 link-previews = true

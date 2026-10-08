@@ -4,6 +4,7 @@
 ~/.config/yazi/flavors/noctalia.yazi
 ~/.config/ghostty/themes/noctalia
 ~/.config/btop/themes/noctalia.theme
+~/.config/kitty/themes/noctalia.conf
 ./AGENTS.md
 
 {{- if eq .profile "nas" }}
