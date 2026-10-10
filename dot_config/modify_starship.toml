@@ -24,6 +24,9 @@ palette = "noctalia"
 # blank line above it
 add_newline = false
 
+# Allow slower directory scans (large dirs) before starship gives up and warns
+scan_timeout = 200
+
 # Line 1: context + git on the left, runtime info on the right
 # Line 2: prompt character
 format = """
