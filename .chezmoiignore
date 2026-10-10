@@ -2,13 +2,13 @@
 ~/.config/nvim/lazy-lock.json
 ~/.config/nvim/lua/matugen.lua
 ~/.config/yazi/flavors/noctalia.yazi
-~/.config/ghostty/themes/noctalia
+~/.config/fastfetch/config.jsonc
 ~/.config/btop/themes/noctalia.theme
 ~/.config/kitty/themes/noctalia.conf
 ./AGENTS.md
 
 {{- if eq .profile "nas" }}
-.config/ghostty
+.config/kitty
 .config/noctalia
 .config/pipewire
 .config/systemd
@@ -16,7 +16,7 @@
 {{- end }}
 
 {{- if eq .profile "oci" }}
-.config/ghostty
+.config/kitty
 .config/noctalia
 .config/pipewire
 .config/systemd

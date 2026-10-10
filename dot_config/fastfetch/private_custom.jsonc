@@ -59,13 +59,13 @@
   ],
   "display": {
     "color": {
-      "keys": "#9ecafc",
-      "title": "#bac8db"
+      "keys": "#81d3de",
+      "title": "#b1cbcf"
     },
     "percent": {
       "color": {
-        "green": "#d5bee5",
-        "yellow": "#9ecafc",
+        "green": "#b9c6ea",
+        "yellow": "#81d3de",
         "red": "#ffb4ab"
       }
     }
