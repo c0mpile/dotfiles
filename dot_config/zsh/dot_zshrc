@@ -209,16 +209,16 @@ setopt histignorealldups  # Delete older duplicate entry when adding a new dupli
 setopt histignorespace    # Ignore commands starting with a leading space
 
 # ── Deferred CLI integrations ─────────────────────────────────────────────────
-# Aliases: loaded after the first prompt renders via zinit turbo
-zinit ice wait lucid
-zinit snippet "$ZDOTDIR/aliases.zsh"
-
 # Cache static CLI init scripts and source them deferred.
 # On first run each tool generates its file; subsequent startups just source it.
 typeset -g _static_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-static"
 [[ -d "$_static_cache" ]] || mkdir -p "$_static_cache"
 
 zinit ice wait lucid atload'
+  # Aliases: sourced directly (not via `zinit snippet`, which keeps a cached
+  # copy that goes stale whenever aliases.zsh is edited)
+  [[ -f "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
+
   # pay-respects (error correction)
   if [[ -s "$_static_cache/pay-respects.zsh" ]]; then
     source "$_static_cache/pay-respects.zsh"
