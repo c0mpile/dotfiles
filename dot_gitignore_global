@@ -4,3 +4,10 @@ Thumbs.db
 
 # AGENTS.md
 AGENTS.md
+
+# Agent docs (kept out of project repos; tracked in AgentDocs)
+CLAUDE.md
+PLAN.md
+HANDOFF.md
+CLAUDE.local.md
+.claude/
