@@ -9,7 +9,7 @@
 	email = 16279275+c0mpile@users.noreply.github.com
 	signingkey = 941E0979FEC7A90E
 [core]
-	excludesfile = $HOME/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [init]
 	defaultBranch = main
 [url "https://github.com/"]
