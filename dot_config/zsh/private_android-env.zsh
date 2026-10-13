@@ -11,4 +11,8 @@ else
 fi
 
 # cmdline-tools and emulator first; platform-tools last so /usr/bin/adb stays primary
-path=("$ANDROID_HOME/cmdline-tools/latest/bin" "$ANDROID_HOME/emulator" $path "$ANDROID_HOME/platform-tools")
+# Newest installed build-tools (zipalign, apksigner, aapt2); sorts by name, highest first
+android_build_tools=("$ANDROID_HOME"/build-tools/*(N/On[1]))
+
+path=("$ANDROID_HOME/cmdline-tools/latest/bin" "$ANDROID_HOME/emulator" $android_build_tools $path "$ANDROID_HOME/platform-tools")
+unset android_build_tools

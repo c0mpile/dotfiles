@@ -173,7 +173,7 @@ center_underfull_strip = true
 center_focused = "never"
 
 [layout.dwindle]
-preserve_split = false
+preserve_split = true 
 
 [layout.master]
 position = "center"
@@ -435,8 +435,8 @@ follows_mouse = true
 
 "Mod+BracketLeft" = "window-consume-or-expel-left"
 "Mod+BracketRight" = "window-consume-or-expel-right"
-"Mod+R" = "window-cycle-primary-extent"
-"Mod+Shift+R" = "window-cycle-primary-extent-back"
+"Mod+Shift+R" = "window-cycle-primary-extent"
+"Mod+Ctrl+R" = "window-cycle-primary-extent-back"
 
 # Coarse resize (default map)
 
@@ -555,72 +555,87 @@ match.title = "^(Select a File)(.*)$"
 default_floating = true
 
 [[window_rule]]
-match.title = "^(Open (Folder|Workspace|File))(.*)$"
+match.title = "^(Open ([Ff]older|[Ff]ile|[Ww]orkspace|[Ii]mage))(.*)$"
 default_floating = true
-default_floating_size = { width = 0.65, height = 0.65 }
+default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
-match.title = "^(Save (As|Workspace|File))(.*)$"
+match.title = "^(Add ([Ff]older|[Ff]ile|[Ww]orkspace|[Ii]mage))(.*)$"
 default_floating = true
-default_floating_size = { width = 0.65, height = 0.65 }
+default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
-match.title = "^(Add Folder to Workspace)(.*)$"
+match.title = "^(Select ([Ff]older|[Ff]ile|[Ww]orkspace|[Ii]mage))(.*)$"
 default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
+
+[[window_rule]]
+match.title = "^(Save ([Aa]s|[Ff]older|[Ff]ile|[Ww]orkspace|[Ii]mage))(.*)$"
+default_floating = true
+default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Library)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Opening)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Extract)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.25, height = 0.15 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
-match.title = "^(Confirm to replace files)(.*)$"
+match.title = "^(Confirm to replace)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.25, height = 0.25 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
-match.title = "^(File Upload)(.*)$"
+match.title = "^(File [Uu]pload)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.65, height = 0.65 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
-match.title = "^(.*wants to save.*)$"
+match.title = "^(.*wants to (save|open|extract).*)$"
 default_floating = true
 default_floating_size = { width = 0.5, height = 0.5 }
-
-[[window_rule]]
-match.title = "^(.*wants to open.*)$"
-default_floating = true
-default_floating_size = { width = 0.5, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Print preview.*)$"
 default_floating = true
 default_floating_size = { width = 0.9, height = 0.9 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Rename)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.25, height = 0.15 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(File Operation)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.2, height = 0.25 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Settings)(.*)$"
 default_floating = true
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Protontricks)(.*)$"
@@ -631,11 +646,13 @@ default_floating_size = { width = 0.25, height = 0.25 }
 match.title = "^(Print)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.85, height = 0.85 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Pick a Font)(.*)$"
 default_floating = true
 default_floating_size = { width = 0.35, height = 0.5 }
+default_position = { x = 0, y = 0, anchor = "center" }
 
 [[window_rule]]
 match.title = "^(Select a (File|Folder))(.*)$"
