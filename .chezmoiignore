@@ -5,7 +5,20 @@
 ~/.config/fastfetch/config.jsonc
 ~/.config/btop/themes/noctalia.theme
 ~/.config/kitty/themes/noctalia.conf
-./AGENTS.md
+
+# Agent docs (kept out of project repos; tracked in AgentDocs)
+.agents/
+.agy/
+.antigravity/
+.claude/
+.gemini/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+HANDOFF.md
+PLAN.md
+AGENTS.local.md
+CLAUDE.local.md
 
 {{- if eq .profile "nas" }}
 .config/kitty
