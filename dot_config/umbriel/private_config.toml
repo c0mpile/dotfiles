@@ -173,7 +173,7 @@ center_underfull_strip = true
 center_focused = "never"
 
 [layout.dwindle]
-preserve_split = true 
+preserve_split = false 
 
 [layout.master]
 position = "center"
@@ -338,6 +338,7 @@ follows_mouse = true
 "Mod+Q" = "window-close"
 "Mod+Shift+F" = "window-toggle-fullscreen"
 "Mod+Shift+T" = "window-toggle-floating"
+"Mod+R" = "layout-toggle-split"
 
 # Focus navigation
 

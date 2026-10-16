@@ -15,3 +15,7 @@ HANDOFF.md
 PLAN.md
 AGENTS.local.md
 CLAUDE.local.md
+DRIVE.md
+
+# Local development files
+.local/
