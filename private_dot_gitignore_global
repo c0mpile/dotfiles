@@ -3,11 +3,11 @@
 Thumbs.db
 
 # Agent docs (kept out of project repos; tracked in AgentDocs)
-.agents/
-.agy/
-.antigravity/
+.agents
+.agy
+.antigravity
 .claude/
-.gemini/
+.gemini
 AGENTS.md
 CLAUDE.md
 GEMINI.md
