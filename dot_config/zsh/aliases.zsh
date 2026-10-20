@@ -658,7 +658,7 @@ alias dnfgr='sudo dnf group remove -y'
 alias dnfd='dnf deplist'
 alias dnfcount='dnf list --installed | wc -l'
 alias dnfrecent='dnf history list | head -20'
-alias dnfnok='sudo dnf update -y --exclude=kernel*'
+alias dnfnok='sudo dnf update -y --exclude=kernel\*'
 alias dnfrs='sudo dnf remove --noautoremove'
 
 # Systemd

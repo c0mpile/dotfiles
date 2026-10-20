@@ -1,0 +1,9 @@
+# ~/.bash_profile — bash login shell setup.
+# Login bash reads /etc/profile (system-wide environment) before this file, so
+# login initialization is already complete; this file just hands interactive
+# logins over to fish via ~/.bashrc. Non-interactive logins are unaffected.
+
+# Source .bashrc so interactive login shells get the fish handoff.
+if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+fi

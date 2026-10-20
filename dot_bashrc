@@ -1,0 +1,28 @@
+# ~/.bashrc — hand interactive bash sessions off to fish.
+#
+# Runs for every interactive bash (login shells reach it through .bash_profile).
+# The handoff checks the parent process instead of an exported marker, so a
+# bash started from inside fish stays bash, while terminals and login managers
+# (whose parent is not fish) get fish. Login shells keep login status via
+# `fish --login`. Set FISH_HANDOFF=1 to force bash for a session.
+#
+# Everything below the handoff is plain-bash fallback for systems where fish is
+# not installed.
+
+# Source system bashrc (Fedora) before handing off, so its environment is set
+[[ -r /etc/bashrc ]] && . /etc/bashrc
+
+if [[ $- == *i* ]] && command -v fish >/dev/null 2>&1 && [[ -z "$FISH_HANDOFF" ]]; then
+    if [[ "$(ps -o comm= -p "$PPID" 2>/dev/null)" == fish* ]]; then
+        # Parent is fish: this bash was started from inside fish; stay bash
+        :
+    elif shopt -q login_shell; then
+        exec fish --login
+    else
+        exec fish
+    fi
+fi
+
+# ── Plain bash fallback ───────────────────────────────────────────────────────
+# The rest of the environment (PATH, editors, aliases, prompt) is intentionally
+# not duplicated here — with fish installed it is never reached.
