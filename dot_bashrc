@@ -10,18 +10,18 @@
 # not installed.
 
 # Source system bashrc (Fedora) before handing off, so its environment is set
-[[ -r /etc/bashrc ]] && . /etc/bashrc
+#[[ -r /etc/bashrc ]] && . /etc/bashrc
 
-if [[ $- == *i* ]] && command -v fish >/dev/null 2>&1 && [[ -z "$FISH_HANDOFF" ]]; then
-    if [[ "$(ps -o comm= -p "$PPID" 2>/dev/null)" == fish* ]]; then
+#if [[ $- == *i* ]] && command -v fish >/dev/null 2>&1 && [[ -z "$FISH_HANDOFF" ]]; then
+#    if [[ "$(ps -o comm= -p "$PPID" 2>/dev/null)" == fish* ]]; then
         # Parent is fish: this bash was started from inside fish; stay bash
-        :
-    elif shopt -q login_shell; then
-        exec fish --login
-    else
-        exec fish
-    fi
-fi
+#        :
+#    elif shopt -q login_shell; then
+#        exec fish --login
+#    else
+#        exec fish
+#    fi
+#fi
 
 # ── Plain bash fallback ───────────────────────────────────────────────────────
 # The rest of the environment (PATH, editors, aliases, prompt) is intentionally
