@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+# claude-sync: sync Claude Code session state with another machine over SSH.
+#
+#   -i HOST   incoming: HOST (alias from ~/.ssh/config) overwrites local
+#   -o HOST   outgoing: local overwrites HOST
+#   -n        dry run (show what would change)
+#   -D        also delete files on the destination that don't exist on the source
+#   -p        also merge the "projects" map of ~/.claude.json (needs jq locally)
+#   -h        help
+#
+# Never touches credentials or settings. ~/.claude.json is only touched with -p,
+# and then only its .projects key; the rest of the destination's file is kept.
+
+set -euo pipefail
+
+SUBDIRS=(projects todos tasks file-history shell-snapshots paste-cache image-cache session-env)
+LOCAL_BASE="$HOME/.claude"
+REMOTE_BASE=".claude"   # relative to the remote $HOME
+
+usage() {
+  cat >&2 <<EOF
+Usage: ${0##*/} (-i HOST | -o HOST) [-n] [-D] [-p]
+
+  -i HOST   incoming: HOST (alias from ~/.ssh/config) overwrites local
+  -o HOST   outgoing: local overwrites HOST
+  -n        dry run
+  -D        mirror mode: delete destination files absent from source
+  -p        merge .projects of ~/.claude.json (union; source wins per project key)
+  -h        this help
+
+Synced under ~/.claude: ${SUBDIRS[*]}
+EOF
+}
+
+die() { echo "error: $*" >&2; exit 1; }
+
+direction=""
+host=""
+rsync_extra=()
+merge=0
+dry=0
+LOCAL_JSON="$HOME/.claude.json"
+
+while getopts ":i:o:nDph" opt; do
+  case "$opt" in
+    i) [[ -z $direction ]] || die "specify only one of -i or -o"; direction=in;  host=$OPTARG ;;
+    o) [[ -z $direction ]] || die "specify only one of -i or -o"; direction=out; host=$OPTARG ;;
+    n) rsync_extra+=(--dry-run); dry=1 ;;
+    D) rsync_extra+=(--delete) ;;
+    p) merge=1 ;;
+    h) usage; exit 0 ;;
+    :) usage; die "option -$OPTARG requires an argument" ;;
+    \?) usage; die "unknown option -$OPTARG" ;;
+  esac
+done
+
+[[ -n $direction ]] || { usage; die "specify -i HOST or -o HOST"; }
+[[ $host != -* ]]   || die "-i/-o needs a hostname, got '$host'"
+
+command -v rsync >/dev/null || die "rsync not found"
+if ((merge)); then command -v jq >/dev/null || die "-p requires jq"; fi
+
+ssh -o BatchMode=yes -o ConnectTimeout=5 "$host" true 2>/dev/null \
+  || die "cannot reach '$host' via ssh (check ~/.ssh/config, keys, agent)"
+
+if [[ $direction == in ]]; then
+  running=0; pgrep -x claude >/dev/null 2>&1 && running=1
+  where="local"
+else
+  running=0; ssh -o BatchMode=yes "$host" 'pgrep -x claude >/dev/null 2>&1' && running=1
+  where="$host"
+fi
+if ((running)); then
+  echo "warning: a 'claude' process is running on $where (destination); it may overwrite synced session files and ~/.claude.json" >&2
+fi
+
+# Which subdirs exist on the source side?
+dirs=()
+if [[ $direction == out ]]; then
+  for d in "${SUBDIRS[@]}"; do
+    [[ -d $LOCAL_BASE/$d ]] && dirs+=("$d")
+  done
+  ssh "$host" "mkdir -p '$REMOTE_BASE'"
+else
+  mapfile -t dirs < <(ssh -o BatchMode=yes "$host" \
+    "cd '$REMOTE_BASE' 2>/dev/null || exit 0; for d in ${SUBDIRS[*]}; do [ -d \"\$d\" ] && echo \"\$d\"; done; exit 0")
+  mkdir -p "$LOCAL_BASE"
+fi
+
+((${#dirs[@]})) || die "nothing to sync: no matching directories on the source"
+
+label=$([[ $direction == out ]] && echo "local -> $host" || echo "$host -> local")
+echo "==> $label  (${dirs[*]})"
+
+for d in "${dirs[@]}"; do
+  if [[ $direction == out ]]; then
+    src="$LOCAL_BASE/$d/"
+    dst="$host:$REMOTE_BASE/$d/"
+  else
+    src="$host:$REMOTE_BASE/$d/"
+    dst="$LOCAL_BASE/$d/"
+  fi
+  echo "--- $d"
+  rsync -ah --info=progress2,stats1 "${rsync_extra[@]}" "$src" "$dst"
+done
+
+if ((merge)); then
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' EXIT
+
+  fetch_local() {
+    if [[ -f $LOCAL_JSON ]]; then cat "$LOCAL_JSON"; else echo '{}'; fi
+  }
+  fetch_remote() {
+    ssh -o BatchMode=yes "$host" 'if [ -f .claude.json ]; then cat .claude.json; else echo "{}"; fi'
+  }
+
+  # src = side whose project entries win; base = destination file we keep otherwise
+  if [[ $direction == out ]]; then
+    fetch_local  > "$tmp/src.json"
+    fetch_remote > "$tmp/base.json"
+    dest_label="$host"
+  else
+    fetch_remote > "$tmp/src.json"
+    fetch_local  > "$tmp/base.json"
+    dest_label="local"
+  fi
+
+  for f in src base; do
+    jq -e . "$tmp/$f.json" >/dev/null 2>&1 || die "$f ~/.claude.json is not valid JSON; refusing to merge"
+  done
+
+  jq --slurpfile s "$tmp/src.json" \
+    '.projects = ((.projects // {}) + ($s[0].projects // {}))' \
+    "$tmp/base.json" > "$tmp/merged.json"
+
+  before=$(jq '(.projects // {}) | length' "$tmp/base.json")
+  after=$(jq '.projects | length' "$tmp/merged.json")
+  echo "--- ~/.claude.json .projects on $dest_label: $before -> $after entries"
+
+  if ((dry)); then
+    echo "(dry run: ~/.claude.json not written)"
+  elif [[ $(jq -n --slurpfile a "$tmp/base.json" --slurpfile b "$tmp/merged.json" '$a[0] == $b[0]') == true ]]; then
+    echo "(already up to date)"
+  elif [[ $direction == out ]]; then
+    ssh -o BatchMode=yes "$host" \
+      '[ -f .claude.json ] && cp -p .claude.json .claude.json.bak; cat > .claude.json.tmp && mv .claude.json.tmp .claude.json' \
+      < "$tmp/merged.json"
+    echo "(written; previous remote file saved as ~/.claude.json.bak)"
+  else
+    [[ -f $LOCAL_JSON ]] && cp -p "$LOCAL_JSON" "$LOCAL_JSON.bak"
+    cp "$tmp/merged.json" "$LOCAL_JSON.tmp" && mv "$LOCAL_JSON.tmp" "$LOCAL_JSON"
+    echo "(written; previous local file saved as ~/.claude.json.bak)"
+  fi
+fi
+
+echo "==> done"
