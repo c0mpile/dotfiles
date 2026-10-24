@@ -324,6 +324,13 @@ follows_mouse = true
 "XF86AudioMicMute" = { action = "spawn:noctalia msg mic-mute", allow_when_locked = true }
 "XF86AudioMute" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true }
 
+# Media controls (allow when locked)
+
+"XF86AudioPlay" = { action = "spawn:noctalia msg media toggle", allow_when_locked = true }
+"XF86AudioPause" = { action = "spawn:noctalia msg media pause", allow_when_locked = true }
+"XF86AudioNext" = { action = "spawn:noctalia msg media next", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn:noctalia msg media previous", allow_when_locked = true }
+
 # Brightness controls (allow when locked)
 
 "XF86MonBrightnessUp" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
