@@ -14,6 +14,14 @@
 	defaultBranch = main
 [url "https://github.com/"]
 	insteadOf = git@github.com:
+[includeIf "hasconfig:remote.*.url:ssh://git@codeberg.org/**"]
+  path = ~/.gitconfig-codeberg
+[includeIf "hasconfig:remote.*.url:git@codeberg.org*/**"]
+  path = ~/.gitconfig-codeberg
+[includeIf "hasconfig:remote.*.url:https://codeberg.org/**"]
+  path = ~/.gitconfig-codeberg
+[url "ssh://git@codeberg.org/"]
+	insteadOf = https://codeberg.org/
 [safe]
 	directory = *
 [commit]

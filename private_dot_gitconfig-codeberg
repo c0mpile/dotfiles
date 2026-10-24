@@ -1,0 +1,6 @@
+[user]
+  name = c0mpile
+  email = c0mpile@noreply.codeberg.org
+  signingkey = 3AEB89BE139E1A73
+[commit]
+  gpgsign = true
